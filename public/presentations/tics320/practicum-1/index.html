@@ -5,30 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Practicum 1 — TICS320</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
 
     <style>
       :root {
-        --accent:       #7c3aed;
+        --accent: #7c3aed;
         --accent-light: #a78bfa;
-        --accent-dim:   rgba(124, 58, 237, 0.18);
-        --bg:           #0d1117;
-        --surface:      #161b22;
-        --border:       #21262d;
-        --muted:        #848d97;
-        --red:          #ef4444;
-        --red-dim:      rgba(239, 68, 68, 0.12);
-        --green:        #22c55e;
-        --green-dim:    rgba(34, 197, 94, 0.12);
-        --strip-h:      88px;
-        --toggle-h:     28px;
-        --arrow-w:      56px;
-        --transition:   0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+        --red: #ef4444;
+        --red-dim: rgba(239, 68, 68, 0.12);
+        --green: #22c55e;
+        --green-dim: rgba(34, 197, 94, 0.12);
+        --strip-h: 88px;
+        --toggle-h: 28px;
+        --arrow-w: 56px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body { width: 100%; height: 100%; background: var(--bg); overflow: hidden; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+      }
 
       .reveal-viewport {
         background: var(--bg) !important;
@@ -38,7 +56,9 @@
       .reveal-viewport.strip-collapsed {
         height: calc(100vh - var(--toggle-h)) !important;
       }
-      .reveal { height: 100% !important; }
+      .reveal {
+        height: 100% !important;
+      }
 
       .reveal .slides {
         width: 100% !important;
@@ -62,15 +82,30 @@
       }
 
       /* ── Typography ── */
-      .reveal h1, .reveal h2, .reveal h3 {
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
         text-transform: none;
         letter-spacing: -0.02em;
         color: #fff;
       }
-      .reveal h1 { font-size: 3.8rem; line-height: 1.1; }
-      .reveal h2 { font-size: 2.6rem; line-height: 1.15; }
-      .reveal h3 { font-size: 1.7rem; color: var(--accent-light); }
-      .reveal p  { color: #c9d1d9; font-size: 1.37rem; line-height: 1.75; }
+      .reveal h1 {
+        font-size: 3.8rem;
+        line-height: 1.1;
+      }
+      .reveal h2 {
+        font-size: 2.6rem;
+        line-height: 1.15;
+      }
+      .reveal h3 {
+        font-size: 1.7rem;
+        color: var(--accent-light);
+      }
+      .reveal p {
+        color: #c9d1d9;
+        font-size: 1.37rem;
+        line-height: 1.75;
+      }
 
       /* ── Utilities ── */
       .label {
@@ -80,24 +115,30 @@
         letter-spacing: 0.14em;
         text-transform: uppercase;
         color: var(--accent-light);
-        border: 1px solid rgba(124,58,237,0.45);
+        border: 1px solid rgba(124, 58, 237, 0.45);
         background: var(--accent-dim);
         padding: 0.22em 0.85em;
         border-radius: 999px;
         margin-bottom: 1rem;
       }
       .divider {
-        width: 2.5rem; height: 3px;
+        width: 2.5rem;
+        height: 3px;
         background: var(--accent);
         border-radius: 2px;
         margin: 0.8rem auto 1.1rem;
       }
-      .muted { color: var(--muted) !important; font-size: 1.3rem; }
+      .muted {
+        color: var(--muted) !important;
+        font-size: 1.3rem;
+      }
 
       /* ── Data table ── */
       .db-table {
-        width: 100%; border-collapse: collapse;
-        margin: 0.8rem 0; font-size: 1rem;
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0.8rem 0;
+        font-size: 1rem;
       }
       .db-table th {
         background: var(--accent-dim);
@@ -117,27 +158,71 @@
         border-bottom: 1px solid var(--border);
         white-space: nowrap;
       }
-      .db-table tr:last-child td { border-bottom: none; }
-      .db-table tr.row-ok   td { background: rgba(34,197,94,0.06); }
-      .db-table tr.row-warn td { background: rgba(234,179,8,0.07); }
-      .db-table tr.row-dead td { background: rgba(239,68,68,0.08); text-decoration: line-through; color: var(--muted); }
-      .db-table tr.row-ghost td { opacity: 0.35; font-style: italic; }
-      .db-table td.cell-warn  { background: rgba(234,179,8,0.18);  color: #fbbf24; font-weight: 600; }
-      .db-table td.cell-bad   { background: rgba(239,68,68,0.18);  color: var(--red); font-weight: 600; }
-      .db-table td.cell-good  { background: rgba(34,197,94,0.18);  color: var(--green); font-weight: 600; }
+      .db-table tr:last-child td {
+        border-bottom: none;
+      }
+      .db-table tr.row-ok td {
+        background: rgba(34, 197, 94, 0.06);
+      }
+      .db-table tr.row-warn td {
+        background: rgba(234, 179, 8, 0.07);
+      }
+      .db-table tr.row-dead td {
+        background: rgba(239, 68, 68, 0.08);
+        text-decoration: line-through;
+        color: var(--muted);
+      }
+      .db-table tr.row-ghost td {
+        opacity: 0.35;
+        font-style: italic;
+      }
+      .db-table td.cell-warn {
+        background: rgba(234, 179, 8, 0.18);
+        color: #fbbf24;
+        font-weight: 600;
+      }
+      .db-table td.cell-bad {
+        background: rgba(239, 68, 68, 0.18);
+        color: var(--red);
+        font-weight: 600;
+      }
+      .db-table td.cell-good {
+        background: rgba(34, 197, 94, 0.18);
+        color: var(--green);
+        font-weight: 600;
+      }
 
       /* ── Anomaly callout ── */
       .callout {
-        display: flex; align-items: flex-start; gap: 0.8rem;
-        border-radius: 10px; padding: 0.7rem 1rem;
-        font-size: 1.05rem; color: #c9d1d9; text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 1.05rem;
+        color: #c9d1d9;
+        text-align: left;
         margin-top: 0.7rem;
       }
-      .callout.warn { background: rgba(234,179,8,0.08);  border: 1px solid rgba(234,179,8,0.3); }
-      .callout.bad  { background: var(--red-dim);         border: 1px solid rgba(239,68,68,0.3); }
-      .callout.info { background: var(--accent-dim);      border: 1px solid rgba(124,58,237,0.3); }
-      .callout .icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.05rem; }
-      .callout strong { color: #fff; }
+      .callout.warn {
+        background: rgba(234, 179, 8, 0.08);
+        border: 1px solid rgba(234, 179, 8, 0.3);
+      }
+      .callout.bad {
+        background: var(--red-dim);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+      .callout.info {
+        background: var(--accent-dim);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+      }
+      .callout .icon {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .callout strong {
+        color: #fff;
+      }
 
       /* ── Cards ── */
       .card {
@@ -147,23 +232,54 @@
         padding: 1.4rem 1.6rem;
         text-align: left;
       }
-      .card p, .card div { color: #c9d1d9; font-size: 1.37rem; line-height: 1.75; margin: 0; }
-      .card strong { color: #fff; }
-      .card-list {
-        list-style: none; padding: 0; margin: 0 0 0.8rem 0;
-        color: #c9d1d9; font-size: 1.37rem; line-height: 1.75;
+      .card p,
+      .card div {
+        color: #c9d1d9;
+        font-size: 1.37rem;
+        line-height: 1.75;
+        margin: 0;
       }
-      .card-list li { padding: 0.15rem 0 0.15rem 1.2rem; position: relative; }
+      .card strong {
+        color: #fff;
+      }
+      .card-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0.8rem 0;
+        color: #c9d1d9;
+        font-size: 1.37rem;
+        line-height: 1.75;
+      }
+      .card-list li {
+        padding: 0.15rem 0 0.15rem 1.2rem;
+        position: relative;
+      }
       .card-list li::before {
-        content: '—'; position: absolute; left: 0;
+        content: "—";
+        position: absolute;
+        left: 0;
         color: var(--accent-light);
       }
-      .card.red   { border-color: rgba(239,68,68,0.35); background: var(--red-dim); }
-      .card.green { border-color: rgba(34,197,94,0.35);  background: var(--green-dim); }
+      .card.red {
+        border-color: rgba(239, 68, 68, 0.35);
+        background: var(--red-dim);
+      }
+      .card.green {
+        border-color: rgba(34, 197, 94, 0.35);
+        background: var(--green-dim);
+      }
 
       /* ── Grid ── */
-      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-      .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+      }
 
       /* ── Story block ── */
       .story {
@@ -176,7 +292,11 @@
         color: #c9d1d9;
         line-height: 1.85;
       }
-      .story em { color: #fff; font-style: normal; font-weight: 600; }
+      .story em {
+        color: #fff;
+        font-style: normal;
+        font-weight: 600;
+      }
 
       /* ── Big reveal text ── */
       .reveal-text {
@@ -186,8 +306,12 @@
         color: #fff;
         line-height: 1;
       }
-      .reveal-text .accent { color: var(--accent-light); }
-      .reveal-text .red    { color: var(--red); }
+      .reveal-text .accent {
+        color: var(--accent-light);
+      }
+      .reveal-text .red {
+        color: var(--red);
+      }
 
       /* ── Truth list ── */
       .truth-list {
@@ -205,17 +329,34 @@
         align-items: center;
         gap: 0.7rem;
       }
-      .truth-list li:last-child { border-bottom: none; }
-      .truth-list li .icon { font-size: 1.3rem; width: 1.8rem; text-align: center; }
-      .truth-list li strong { color: #fff; }
-      .truth-list li s { color: var(--muted); text-decoration-color: var(--muted); }
+      .truth-list li:last-child {
+        border-bottom: none;
+      }
+      .truth-list li .icon {
+        font-size: 1.3rem;
+        width: 1.8rem;
+        text-align: center;
+      }
+      .truth-list li strong {
+        color: #fff;
+      }
+      .truth-list li s {
+        color: var(--muted);
+        text-decoration-color: var(--muted);
+      }
 
       /* ── Timeline ── */
-      .timeline { text-align: left; position: relative; padding-left: 1.6rem; }
+      .timeline {
+        text-align: left;
+        position: relative;
+        padding-left: 1.6rem;
+      }
       .timeline::before {
-        content: '';
+        content: "";
         position: absolute;
-        left: 0.45rem; top: 0.3rem; bottom: 0.3rem;
+        left: 0.45rem;
+        top: 0.3rem;
+        bottom: 0.3rem;
         width: 2px;
         background: var(--border);
         border-radius: 2px;
@@ -227,25 +368,38 @@
         color: #c9d1d9;
       }
       .timeline-item::before {
-        content: '';
+        content: "";
         position: absolute;
         left: -1.18rem;
         top: 1.3rem;
-        width: 0.85rem; height: 0.85rem;
+        width: 0.85rem;
+        height: 0.85rem;
         border-radius: 50%;
         background: var(--border);
         border: 2px solid var(--surface);
       }
-      .timeline-item.bad::before  { background: var(--red); }
-      .timeline-item.good::before { background: var(--green); }
-      .timeline-item strong { color: #fff; display: block; margin-bottom: 0.2rem; font-size: 1.56rem; }
-      .timeline-item .sub   { color: var(--muted); font-size: 1.3rem; }
+      .timeline-item.bad::before {
+        background: var(--red);
+      }
+      .timeline-item.good::before {
+        background: var(--green);
+      }
+      .timeline-item strong {
+        color: #fff;
+        display: block;
+        margin-bottom: 0.2rem;
+        font-size: 1.56rem;
+      }
+      .timeline-item .sub {
+        color: var(--muted);
+        font-size: 1.3rem;
+      }
 
       /* ── Broken badge ── */
       .broken {
         display: inline-block;
         background: var(--red-dim);
-        border: 1px solid rgba(239,68,68,0.4);
+        border: 1px solid rgba(239, 68, 68, 0.4);
         color: var(--red);
         border-radius: 6px;
         padding: 0.15em 0.6em;
@@ -255,7 +409,7 @@
       .ok {
         display: inline-block;
         background: var(--green-dim);
-        border: 1px solid rgba(34,197,94,0.4);
+        border: 1px solid rgba(34, 197, 94, 0.4);
         color: var(--green);
         border-radius: 6px;
         padding: 0.15em 0.6em;
@@ -266,7 +420,8 @@
       /* ── Language toggle ── */
       #lang-toggle {
         position: fixed;
-        top: 1rem; right: 1rem;
+        top: 1rem;
+        right: 1rem;
         z-index: 300;
         display: flex;
         align-items: center;
@@ -277,14 +432,26 @@
         padding: 3px;
       }
       .lang-btn {
-        border: none; background: transparent; cursor: pointer;
-        font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
-        color: #848d97; border-radius: 999px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #848d97;
+        border-radius: 999px;
         padding: 0.25em 0.75em;
-        transition: background 0.15s, color 0.15s;
+        transition:
+          background 0.15s,
+          color 0.15s;
       }
-      .lang-btn.active { background: #7c3aed; color: #fff; }
-      .lang-btn:not(.active):hover { color: #fff; }
+      .lang-btn.active {
+        background: #7c3aed;
+        color: #fff;
+      }
+      .lang-btn:not(.active):hover {
+        color: #fff;
+      }
 
       /* ── Side arrows ── */
       .nav-arrow {
@@ -292,122 +459,495 @@
         top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
         transform: translateY(-50%);
         z-index: 200;
-        width: var(--arrow-w); height: var(--arrow-w);
-        display: flex; align-items: center; justify-content: center;
+        width: var(--arrow-w);
+        height: var(--arrow-w);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
-        border-radius: 50%;
+        border-radius: 14px;
         border: 1px solid var(--border);
         background: var(--surface);
         color: var(--muted);
-        font-size: 1.2rem;
-        transition: background 0.18s, color 0.18s, border-color 0.18s, opacity 0.18s, top var(--transition);
+        transition:
+          background 0.18s,
+          color 0.18s,
+          border-color 0.18s,
+          opacity 0.18s,
+          top var(--transition);
         user-select: none;
       }
-      .nav-arrow:hover { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-light); }
-      .nav-arrow.hidden { opacity: 0; pointer-events: none; }
-      .nav-arrow.strip-collapsed { top: 50%; }
-      #arrow-prev { left: 1rem; }
-      #arrow-next { right: 1rem; }
+      .nav-arrow:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent-light);
+      }
+      .nav-arrow.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .nav-arrow.strip-collapsed {
+        top: 50%;
+      }
+      #arrow-prev {
+        left: 1rem;
+      }
+      #arrow-next {
+        right: 1rem;
+      }
 
       /* ── Toggle tab ── */
       #strip-toggle {
         position: fixed;
-        bottom: 0; left: 0; right: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
         height: var(--toggle-h);
         background: var(--surface);
         border-top: 1px solid var(--border);
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer; z-index: 101; gap: 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 101;
+        gap: 0.5rem;
         transition: background 0.18s;
       }
-      #strip-toggle:hover { background: var(--accent-dim); }
-      #strip-toggle span { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-      #strip-toggle:hover span { color: var(--accent-light); }
-      #toggle-chevron { transition: transform var(--transition); }
+      #strip-toggle:hover {
+        background: var(--accent-dim);
+      }
+      #toggle-grip {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        opacity: 0.4;
+        transition: opacity 0.18s;
+      }
+      #strip-toggle:hover #toggle-grip {
+        opacity: 0.9;
+      }
+      #toggle-grip span {
+        display: block;
+        width: 18px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--muted);
+      }
+      #strip-toggle:hover #toggle-grip span {
+        background: var(--accent-light);
+      }
+      #toggle-chevron {
+        color: var(--muted);
+        transition: transform var(--transition), color 0.18s;
+      }
+      #strip-toggle:hover #toggle-chevron {
+        color: var(--accent-light);
+      }
+      #toggle-chevron.rotated {
+        transform: rotate(180deg);
+      }
 
       /* ── Filmstrip ── */
       #filmstrip {
         position: fixed;
-        bottom: var(--toggle-h); left: 0; right: 0;
+        bottom: var(--toggle-h);
+        left: 0;
+        right: 0;
         height: var(--strip-h);
         background: var(--surface);
         border-top: 1px solid var(--border);
-        display: flex; align-items: center;
-        z-index: 100; padding: 0 1rem; gap: 0.6rem;
-        overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none;
-        transform: translateY(0); opacity: 1;
-        transition: transform var(--transition), opacity var(--transition);
+        display: flex;
+        align-items: center;
+        z-index: 100;
+        padding: 0 1rem;
+        gap: 0.6rem;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        transform: translateY(0);
+        opacity: 1;
+        transition:
+          transform var(--transition),
+          opacity var(--transition);
       }
-      #filmstrip::-webkit-scrollbar { display: none; }
-      #filmstrip.collapsed { transform: translateY(100%); opacity: 0; pointer-events: none; }
+      #filmstrip::-webkit-scrollbar {
+        display: none;
+      }
+      #filmstrip.collapsed {
+        transform: translateY(100%);
+        opacity: 0;
+        pointer-events: none;
+      }
 
       .thumb {
-        flex-shrink: 0; width: 120px; height: 64px;
-        border-radius: 8px; border: 1px solid var(--border);
-        background: var(--bg); cursor: pointer;
-        display: flex; flex-direction: column;
-        align-items: flex-start; justify-content: flex-end;
-        padding: 0.4rem 0.55rem; gap: 0.2rem;
-        transition: border-color 0.18s, background 0.18s, transform 0.18s;
-        position: relative; overflow: hidden;
+        flex-shrink: 0;
+        width: 120px;
+        height: 64px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-end;
+        padding: 0.4rem 0.55rem;
+        gap: 0.2rem;
+        transition:
+          border-color 0.18s,
+          background 0.18s,
+          transform 0.18s;
+        position: relative;
+        overflow: hidden;
       }
-      .thumb:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-2px); }
-      .thumb.active { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-2px); }
+      .thumb:hover {
+        border-color: var(--accent);
+        background: var(--accent-dim);
+        transform: translateY(-2px);
+      }
+      .thumb.active {
+        border-color: var(--accent);
+        background: var(--accent-dim);
+        transform: translateY(-2px);
+      }
       .thumb.active::before {
-        content: ''; position: absolute;
-        top: 0; left: 0; right: 0; height: 2px;
-        background: var(--accent); border-radius: 2px 2px 0 0;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+        border-radius: 2px 2px 0 0;
       }
-      .thumb-num   { font-size: 0.6rem; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; }
-      .thumb-title { font-size: 0.68rem; color: #c9d1d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-      .thumb.active .thumb-num   { color: var(--accent-light); }
-      .thumb.active .thumb-title { color: #fff; font-weight: 600; }
+      .thumb-num {
+        font-size: 0.6rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.06em;
+      }
+      .thumb-title {
+        font-size: 0.68rem;
+        color: #c9d1d9;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
+      .thumb.active .thumb-num {
+        color: var(--accent-light);
+      }
+      .thumb.active .thumb-title {
+        color: #fff;
+        font-weight: 600;
+      }
+
+      /* ── ER Diagram ── */
+      .er-wrap {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.9rem 1.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0;
+        width: 100%;
+      }
+      .er-entity-box {
+        padding: 0.65rem 1.4rem;
+        border: 2px solid var(--accent);
+        background: var(--accent-dim);
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #fff;
+        min-width: 110px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .er-entity-weak {
+        padding: 0.65rem 1.4rem;
+        border: 2px solid var(--accent);
+        background: var(--accent-dim);
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #fff;
+        min-width: 110px;
+        text-align: center;
+        white-space: nowrap;
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      .er-rel-pill {
+        padding: 0.4rem 1rem;
+        border: 2px solid var(--accent-light);
+        background: var(--surface);
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--accent-light);
+        white-space: nowrap;
+      }
+      .er-seg {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 3rem;
+      }
+      .er-seg-line {
+        flex: 1;
+        height: 2px;
+        background: var(--muted);
+        min-width: 2rem;
+      }
+
+      /* ── ER Diamond (Chen notation) ── */
+      .er-diamond {
+        position: relative; display: flex; align-items: center;
+        justify-content: center; flex-shrink: 0;
+        width: 88px; height: 88px;
+      }
+      .er-diamond::before {
+        content: ''; position: absolute;
+        width: 62px; height: 62px;
+        transform: rotate(45deg);
+        border: 2px solid var(--accent-light);
+        background: var(--surface);
+      }
+      .er-diamond-text {
+        position: relative; z-index: 1;
+        font-size: 0.72rem; font-weight: 600;
+        color: var(--accent-light); text-align: center;
+        max-width: 58px; line-height: 1.3;
+      }
+      .er-seg-n {
+        position: absolute;
+        top: -1.3rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--accent-light);
+      }
+      .er-card-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--muted);
+        padding: 0 0.6rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      /* ── ER Attribute fan (comb-tree: crossbar + per-attr connectors) ── */
+      .er-attr-fan {
+        display: flex;
+        gap: 0.55rem;
+        position: relative;
+        padding-top: 0.9rem;
+        justify-content: center;
+      }
+      .er-attr-fan::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: var(--muted);
+      }
+      .er-attr-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+      }
+      .er-attr-item::before {
+        content: '';
+        position: absolute;
+        top: -0.9rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 0.9rem;
+        background: var(--muted);
+      }
+
+      /* ── Paper stack ── */
+      .stack-group {
+        display: flex;
+        gap: 2.5rem;
+        justify-content: center;
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .stack-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+      }
+      .paper-stack {
+        position: relative;
+        width: 152px;
+        height: 88px;
+        isolation: isolate;
+      }
+      .paper-card {
+        position: absolute;
+        width: 146px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 0.45rem 0.75rem;
+        font-size: 0.72rem;
+        color: #c9d1d9;
+        line-height: 1.6;
+      }
+      .paper-card:nth-child(3) {
+        top: 10px;
+        left: 6px;
+        opacity: 0.28;
+        z-index: 1;
+      }
+      .paper-card:nth-child(2) {
+        top: 5px;
+        left: 3px;
+        opacity: 0.55;
+        z-index: 2;
+      }
+      .paper-card:nth-child(1) {
+        top: 0;
+        left: 0;
+        z-index: 3;
+      }
+      .paper-key {
+        color: var(--accent-light);
+        font-weight: 700;
+        text-decoration: underline;
+      }
+
+      /* ── Attribute tags ── */
+      .attr-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .attr-row {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .attr-tag {
+        padding: 0.25rem 0.7rem;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: #c9d1d9;
+      }
+      .attr-tag.key {
+        border-color: var(--accent);
+        color: var(--accent-light);
+        font-weight: 700;
+        text-decoration: underline;
+      }
+      .attr-tag.derived {
+        border-style: dashed;
+        color: var(--muted);
+        font-style: italic;
+      }
+      .attr-tag.multi {
+        border-width: 3px;
+        border-style: double;
+        border-color: var(--muted);
+      }
+      .attr-tag.composite {
+        border-color: #fbbf24;
+        color: #fbbf24;
+      }
+
+      /* ── Attribute oval (ER notation) ── */
+      .attr-oval {
+        display: inline-block; padding: 0.28rem 0.9rem;
+        border: 1.5px solid var(--accent-light); background: var(--surface);
+        border-radius: 999px; font-size: 0.8rem; color: var(--accent-light);
+        white-space: nowrap;
+      }
+      .attr-oval.key       { border-color: var(--accent); color: var(--accent-light); font-weight: 700; text-decoration: underline; }
+      .attr-oval.simple    { border-color: var(--muted);  color: #c9d1d9; }
+      .attr-oval.composite { border-color: #fbbf24;       color: #fbbf24; }
+      .attr-oval.derived   { border-style: dashed;        color: var(--muted); font-style: italic; }
+      .attr-oval.multi     { border-width: 3px; border-style: double; border-color: var(--muted); color: var(--muted); }
     </style>
   </head>
 
   <body>
-
     <!-- Language toggle -->
     <div id="lang-toggle">
       <button class="lang-btn active" data-lang="en">EN</button>
       <button class="lang-btn" data-lang="es">ES</button>
     </div>
 
-    <button id="arrow-prev" class="nav-arrow" aria-label="Previous">&#8592;</button>
-    <button id="arrow-next" class="nav-arrow" aria-label="Next">&#8594;</button>
+    <button id="arrow-prev" class="nav-arrow" aria-label="Previous">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button id="arrow-next" class="nav-arrow" aria-label="Next">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
 
     <div class="reveal">
       <div class="slides">
-
         <!-- ① Title -->
         <section data-title-en="Title" data-title-es="Título">
           <div class="label" data-i18n="s1_label">TICS320 · Practicum 1</div>
-          <h1 data-i18n-html="s1_title">Data Modeling<br/>and Design</h1>
+          <h1 data-i18n-html="s1_title">Data Modeling<br />and Design</h1>
           <div class="divider"></div>
-          <p class="muted">Vittorio Cancino &nbsp;·&nbsp; Universidad Adolfo Ibáñez</p>
+          <p class="muted">
+            Vittorio Cancino &nbsp;·&nbsp; Universidad Adolfo Ibáñez
+          </p>
         </section>
 
         <!-- ② The story setup -->
         <section data-title-en="The Story" data-title-es="La Historia">
           <div class="label" data-i18n="s2_label">A story</div>
           <h2 data-i18n="s2_title">Meet EduTrack</h2>
-          <p class="muted" style="margin-bottom:1.2rem" data-i18n="s2_sub">An online learning startup. Ambitious team, modern stack, Y Combinator dreams.</p>
+          <p class="muted" style="margin-bottom: 1.2rem" data-i18n="s2_sub">
+            An online learning startup. Ambitious team, modern stack, Y
+            Combinator dreams.
+          </p>
           <div class="timeline">
             <div class="timeline-item good">
               <strong data-i18n="s2_t1_strong">Month 1 — Launch</strong>
-              <span class="sub" data-i18n="s2_t1_sub">200 users. Everything works perfectly. The team celebrates.</span>
+              <span class="sub" data-i18n="s2_t1_sub"
+                >200 users. Everything works perfectly. The team
+                celebrates.</span
+              >
             </div>
             <div class="timeline-item good">
               <strong data-i18n="s2_t2_strong">Month 4 — Growth</strong>
-              <span class="sub" data-i18n="s2_t2_sub">1,000 users. A bit slow, but manageable. They add more servers.</span>
+              <span class="sub" data-i18n="s2_t2_sub"
+                >1,000 users. A bit slow, but manageable. They add more
+                servers.</span
+              >
             </div>
             <div class="timeline-item good">
               <strong data-i18n="s2_t3_strong">Month 8 — Viral moment</strong>
-              <span class="sub" data-i18n="s2_t3_sub">Featured in a newsletter. 5,000 users sign up in a week.</span>
+              <span class="sub" data-i18n="s2_t3_sub"
+                >Featured in a newsletter. 5,000 users sign up in a week.</span
+              >
             </div>
             <div class="timeline-item bad">
               <strong data-i18n="s2_t4_strong">Month 8 + 3 days — Chaos</strong>
-              <span class="sub" data-i18n="s2_t4_sub">Support tickets flood in. Something is very, very wrong.</span>
+              <span class="sub" data-i18n="s2_t4_sub"
+                >Support tickets flood in. Something is very, very wrong.</span
+              >
             </div>
           </div>
         </section>
@@ -416,51 +956,119 @@
         <section data-title-en="The Chaos" data-title-es="El Caos">
           <div class="label" data-i18n="s3_label">What happened</div>
           <h2 data-i18n="s3_title">The support tickets</h2>
-          <div class="grid-3" style="margin-top:1rem">
+          <div class="grid-3" style="margin-top: 1rem">
             <div class="card red">
-              <p style="font-size:2rem;margin-bottom:0.4rem">💸</p>
-              <h3 style="color:var(--red);font-size:1.17rem;margin-bottom:0.3rem" data-i18n="s3_c1_title">Duplicate charges</h3>
-              <p style="font-size:1rem;color:#c9d1d9" data-i18n="s3_c1_body">"I was billed twice for the same course. My bank is calling."</p>
+              <p style="font-size: 2rem; margin-bottom: 0.4rem">💸</p>
+              <h3
+                style="
+                  color: var(--red);
+                  font-size: 1.17rem;
+                  margin-bottom: 0.3rem;
+                "
+                data-i18n="s3_c1_title"
+              >
+                Duplicate charges
+              </h3>
+              <p style="font-size: 1rem; color: #c9d1d9" data-i18n="s3_c1_body">
+                "I was billed twice for the same course. My bank is calling."
+              </p>
             </div>
             <div class="card red">
-              <p style="font-size:2rem;margin-bottom:0.4rem">📋</p>
-              <h3 style="color:var(--red);font-size:1.17rem;margin-bottom:0.3rem" data-i18n="s3_c2_title">Wrong grades</h3>
-              <p style="font-size:1rem;color:#c9d1d9" data-i18n="s3_c2_body">"My transcript shows a course I never took — and I'm missing one I did."</p>
+              <p style="font-size: 2rem; margin-bottom: 0.4rem">📋</p>
+              <h3
+                style="
+                  color: var(--red);
+                  font-size: 1.17rem;
+                  margin-bottom: 0.3rem;
+                "
+                data-i18n="s3_c2_title"
+              >
+                Wrong grades
+              </h3>
+              <p style="font-size: 1rem; color: #c9d1d9" data-i18n="s3_c2_body">
+                "My transcript shows a course I never took — and I'm missing one
+                I did."
+              </p>
             </div>
             <div class="card red">
-              <p style="font-size:2rem;margin-bottom:0.4rem">🔐</p>
-              <h3 style="color:var(--red);font-size:1.17rem;margin-bottom:0.3rem" data-i18n="s3_c3_title">Ghost enrollments</h3>
-              <p style="font-size:1rem;color:#c9d1d9" data-i18n="s3_c3_body">"I enrolled three weeks ago but the system says I don't exist."</p>
+              <p style="font-size: 2rem; margin-bottom: 0.4rem">🔐</p>
+              <h3
+                style="
+                  color: var(--red);
+                  font-size: 1.17rem;
+                  margin-bottom: 0.3rem;
+                "
+                data-i18n="s3_c3_title"
+              >
+                Ghost enrollments
+              </h3>
+              <p style="font-size: 1rem; color: #c9d1d9" data-i18n="s3_c3_body">
+                "I enrolled three weeks ago but the system says I don't exist."
+              </p>
             </div>
           </div>
-          <p class="muted" style="margin-top:1.2rem" data-i18n="s3_footer">1,265 tickets in 72 hours. The CEO is on the phone. The lead dev hasn&apos;t slept.</p>
+          <p class="muted" style="margin-top: 1.2rem" data-i18n="s3_footer">
+            1,265 tickets in 72 hours. The CEO is on the phone. The lead dev
+            hasn&apos;t slept.
+          </p>
         </section>
 
         <!-- ④ The question -->
         <section data-title-en="The Question" data-title-es="La Pregunta">
           <div class="label" data-i18n="s4_label">Stop and think</div>
-          <p class="muted" style="margin-bottom:1.2rem" data-i18n="s4_intro">The team panics. They start looking for the bug.</p>
-          <div class="story" style="margin-bottom:1.2rem" data-i18n-html="s4_story">
-            "It must be the payment service — let's roll back."<br/>
-            "No, it's the enrollment API — I see an error in the logs."<br/>
-            "Maybe it's the load balancer dropping requests?"<br/>
+          <p class="muted" style="margin-bottom: 1.2rem" data-i18n="s4_intro">
+            The team panics. They start looking for the bug.
+          </p>
+          <div
+            class="story"
+            style="margin-bottom: 1.2rem"
+            data-i18n-html="s4_story"
+          >
+            "It must be the payment service — let's roll back."<br />
+            "No, it's the enrollment API — I see an error in the logs."<br />
+            "Maybe it's the load balancer dropping requests?"<br />
             <em>Three engineers. Three different answers. All wrong.</em>
           </div>
-          <p style="font-size:1.95rem;font-weight:700;color:#fff" data-i18n="s4_question">What actually failed?</p>
-          <p class="muted" style="margin-top:0.5rem" data-i18n-html="s4_options">The backend? &nbsp;·&nbsp; The frontend? &nbsp;·&nbsp; The infrastructure?</p>
+          <p
+            style="font-size: 1.95rem; font-weight: 700; color: #fff"
+            data-i18n="s4_question"
+          >
+            What actually failed?
+          </p>
+          <p
+            class="muted"
+            style="margin-top: 0.5rem"
+            data-i18n-html="s4_options"
+          >
+            The backend? &nbsp;·&nbsp; The frontend? &nbsp;·&nbsp; The
+            infrastructure?
+          </p>
         </section>
 
         <!-- ⑤ The reveal -->
         <section data-title-en="The Answer" data-title-es="La Respuesta">
-          <p class="muted" style="margin-bottom:0.3rem" data-i18n="s5_none">None of the above.</p>
-          <div class="reveal-text" data-i18n-html="s5_reveal">The <span class="accent">data</span>.</div>
-          <div class="divider" style="margin:0.4rem auto 0.6rem"></div>
-          <div class="story" style="max-width:620px;margin:0 auto;padding:0.9rem 1.4rem;line-height:1.65" data-i18n-html="s5_story">
-            EduTrack stored users, enrollments, and payments <em>all in one table</em>.
-            When two users shared an email, the system merged their records.
-            When a course was updated, old enrollment rows silently pointed to nothing.
-            There was no foreign key, no constraint, no single source of truth.
-            <br/><br/>
+          <p class="muted" style="margin-bottom: 0.3rem" data-i18n="s5_none">
+            None of the above.
+          </p>
+          <div class="reveal-text" data-i18n-html="s5_reveal">
+            The <span class="accent">data</span>.
+          </div>
+          <div class="divider" style="margin: 0.4rem auto 0.6rem"></div>
+          <div
+            class="story"
+            style="
+              max-width: 620px;
+              margin: 0 auto;
+              padding: 0.9rem 1.4rem;
+              line-height: 1.65;
+            "
+            data-i18n-html="s5_story"
+          >
+            EduTrack stored users, enrollments, and payments
+            <em>all in one table</em>. When two users shared an email, the
+            system merged their records. When a course was updated, old
+            enrollment rows silently pointed to nothing. There was no foreign
+            key, no constraint, no single source of truth. <br /><br />
             The code was fine. <em>The data was broken from day one.</em>
           </div>
         </section>
@@ -469,30 +1077,84 @@
         <section data-title-en="Data = Truth" data-title-es="Datos = Verdad">
           <div class="label" data-i18n="s6_label">Key message</div>
           <h2 data-i18n="s6_title">Data is the source of truth</h2>
-          <ul class="truth-list" style="margin-top:1rem">
-            <li><span class="icon">🔁</span><span data-i18n-html="s6_li1"><strong>Code</strong> can be <s>rewritten</s> &nbsp;<span class="ok">fixable</span></span></li>
-            <li><span class="icon">🎨</span><span data-i18n-html="s6_li2"><strong>UI</strong> can be <s>redesigned</s> &nbsp;<span class="ok">fixable</span></span></li>
-            <li><span class="icon">☁️</span><span data-i18n-html="s6_li3"><strong>Infrastructure</strong> can be <s>replaced</s> &nbsp;<span class="ok">fixable</span></span></li>
-            <li><span class="icon">💾</span><span data-i18n-html="s6_li4"><strong>Corrupted data</strong> &nbsp;<span class="broken">stays broken</span></span></li>
+          <ul class="truth-list" style="margin-top: 1rem">
+            <li>
+              <span class="icon">🔁</span
+              ><span data-i18n-html="s6_li1"
+                ><strong>Code</strong> can be <s>rewritten</s> &nbsp;<span
+                  class="ok"
+                  >fixable</span
+                ></span
+              >
+            </li>
+            <li>
+              <span class="icon">🎨</span
+              ><span data-i18n-html="s6_li2"
+                ><strong>UI</strong> can be <s>redesigned</s> &nbsp;<span
+                  class="ok"
+                  >fixable</span
+                ></span
+              >
+            </li>
+            <li>
+              <span class="icon">☁️</span
+              ><span data-i18n-html="s6_li3"
+                ><strong>Infrastructure</strong> can be
+                <s>replaced</s> &nbsp;<span class="ok">fixable</span></span
+              >
+            </li>
+            <li>
+              <span class="icon">💾</span
+              ><span data-i18n-html="s6_li4"
+                ><strong>Corrupted data</strong> &nbsp;<span class="broken"
+                  >stays broken</span
+                ></span
+              >
+            </li>
           </ul>
-          <p class="muted" style="margin-top:1rem" data-i18n-html="s6_footer">
-            EduTrack spent 3 weeks manually reconciling 5,000 user records.<br/>Two engineers quit. Three customers filed chargebacks.
+          <p class="muted" style="margin-top: 1rem" data-i18n-html="s6_footer">
+            EduTrack spent 3 weeks manually reconciling 5,000 user records.<br />Two
+            engineers quit. 875 customers filed chargebacks.
           </p>
         </section>
 
         <!-- ⑦ You own the data -->
         <section data-title-en="You Own It" data-title-es="Es Tuya">
           <div class="label" data-i18n="s7_label">Your responsibility</div>
-          <p class="muted" style="margin-bottom:0.6rem" data-i18n="s7_sub">Even if you "don't like databases".</p>
-          <h2 style="margin-bottom:0.8rem" data-i18n-html="s7_title">As engineers,<br/>you own the data.</h2>
-          <div class="grid-2" style="margin-top:0.8rem">
+          <p class="muted" style="margin-bottom: 0.6rem" data-i18n="s7_sub">
+            Even if you "don't like databases".
+          </p>
+          <h2 style="margin-bottom: 0.8rem" data-i18n-html="s7_title">
+            As engineers,<br />you own the data.
+          </h2>
+          <div class="grid-2" style="margin-top: 0.8rem">
             <div class="card">
-              <h3 style="margin-bottom:0.5rem" data-i18n="s7_c1_title">Your users trust you with</h3>
-              <p data-i18n-html="s7_c1_body">Your users hand you their identity, their money, and their academic records. When your data model breaks, it doesn't just crash an app — it <strong>destroys trust</strong> that took years to earn.</p>
+              <h3 style="margin-bottom: 0.5rem" data-i18n="s7_c1_title">
+                Your users trust you with
+              </h3>
+              <p data-i18n-html="s7_c1_body">
+                Your users hand you their identity, their money, and their
+                academic records. When your data model breaks, it doesn't just
+                crash an app — it <strong>destroys trust</strong> that took
+                years to earn.
+              </p>
             </div>
             <div class="card">
-              <h3 style="margin-bottom:0.5rem" data-i18n="s7_c2_title">The real cost</h3>
-              <div data-i18n-html="s7_c2_body"><ul class="card-list"><li>Live data migrations are slow and risky</li><li>Cleaning corrupted records takes weeks</li><li>Lost customers rarely come back</li></ul><p style="margin-top:0.6rem"><strong>Great design is cheap. Bad design is permanent.</strong></p></div>
+              <h3 style="margin-bottom: 0.5rem" data-i18n="s7_c2_title">
+                The real cost
+              </h3>
+              <div data-i18n-html="s7_c2_body">
+                <ul class="card-list">
+                  <li>Live data migrations are slow and risky</li>
+                  <li>Cleaning corrupted records takes weeks</li>
+                  <li>Lost customers rarely come back</li>
+                </ul>
+                <p style="margin-top: 0.6rem">
+                  <strong
+                    >Great design is cheap. Bad design is permanent.</strong
+                  >
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -501,122 +1163,408 @@
         <section data-title-en="Flat Table" data-title-es="Tabla Plana">
           <div class="label" data-i18n="s9_label">Looks fine</div>
           <h2 data-i18n="s9_title">This is EduTrack's database</h2>
-          <table class="db-table" style="margin:0.6rem 0">
-            <thead><tr>
-              <th>user_name</th><th>email</th><th>course</th>
-              <th>instructor</th><th>grade</th><th>payment</th>
-            </tr></thead>
+          <table class="db-table" style="margin: 0.6rem 0">
+            <thead>
+              <tr>
+                <th>user_name</th>
+                <th>email</th>
+                <th>course</th>
+                <th>instructor</th>
+                <th>grade</th>
+                <th>payment</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr class="row-ok"><td>Juan</td><td>juan@mail.com</td><td>DB101</td><td>Torres</td><td>5.5</td><td>paid</td></tr>
-              <tr class="row-ok"><td>Juan</td><td>juan@mail.com</td><td>DB102</td><td>Torres</td><td>6.0</td><td>paid</td></tr>
-              <tr class="row-ok"><td>Maria</td><td>maria@mail.com</td><td>DB101</td><td>Torres</td><td>6.5</td><td>pending</td></tr>
-              <tr class="row-ok"><td>Carlos</td><td>carlos@mail.com</td><td>DB102</td><td>Torres</td><td>4.8</td><td>paid</td></tr>
-              <tr class="row-ok"><td>Ana</td><td>ana@mail.com</td><td>DB103</td><td>Torres</td><td>7.0</td><td>paid</td></tr>
-              <tr class="row-ok"><td>Sofia</td><td>sofia@mail.com</td><td>DB101</td><td>Torres</td><td>5.9</td><td>paid</td></tr>
+              <tr class="row-ok">
+                <td>Juan</td>
+                <td>juan@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>5.5</td>
+                <td>paid</td>
+              </tr>
+              <tr class="row-ok">
+                <td>Juan</td>
+                <td>juan@mail.com</td>
+                <td>DB102</td>
+                <td>Torres</td>
+                <td>6.0</td>
+                <td>paid</td>
+              </tr>
+              <tr class="row-ok">
+                <td>Maria</td>
+                <td>maria@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>6.5</td>
+                <td>pending</td>
+              </tr>
+              <tr class="row-ok">
+                <td>Carlos</td>
+                <td>carlos@mail.com</td>
+                <td>DB102</td>
+                <td>Torres</td>
+                <td>4.8</td>
+                <td>paid</td>
+              </tr>
+              <tr class="row-ok">
+                <td>Ana</td>
+                <td>ana@mail.com</td>
+                <td>DB103</td>
+                <td>Torres</td>
+                <td>7.0</td>
+                <td>paid</td>
+              </tr>
+              <tr class="row-ok">
+                <td>Sofia</td>
+                <td>sofia@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>5.9</td>
+                <td>paid</td>
+              </tr>
             </tbody>
           </table>
-          <p class="muted" style="margin-top:0.5rem" data-i18n="s9_sub">The system runs. Everyone is happy.</p>
+          <p class="muted" style="margin-top: 0.5rem" data-i18n="s9_sub">
+            The system runs. Everyone is happy.
+          </p>
         </section>
 
         <!-- ⑩ Update anomaly -->
-        <section data-title-en="Update Problem" data-title-es="Problema Actualización">
+        <section
+          data-title-en="Update Problem"
+          data-title-es="Problema Actualización"
+        >
           <div class="label" data-i18n="s10_label">Problem 1 — Update</div>
           <h2 data-i18n="s10_title">The instructor changes their name</h2>
-          <table class="db-table" style="margin:0.5rem 0">
-            <thead><tr>
-              <th>user_name</th><th>email</th><th>course</th>
-              <th>instructor</th><th>grade</th><th>payment</th>
-            </tr></thead>
+          <table class="db-table" style="margin: 0.5rem 0">
+            <thead>
+              <tr>
+                <th>user_name</th>
+                <th>email</th>
+                <th>course</th>
+                <th>instructor</th>
+                <th>grade</th>
+                <th>payment</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr><td>Juan</td><td>juan@mail.com</td><td>DB101</td><td class="cell-good">Prof. Torres</td><td>5.5</td><td>paid</td></tr>
-              <tr><td>Juan</td><td>juan@mail.com</td><td>DB102</td><td class="cell-warn">Torres</td><td>6.0</td><td>paid</td></tr>
-              <tr><td>Maria</td><td>maria@mail.com</td><td>DB101</td><td class="cell-warn">Torres</td><td>6.5</td><td>pending</td></tr>
-              <tr><td>Carlos</td><td>carlos@mail.com</td><td>DB102</td><td class="cell-warn">Torres</td><td>4.8</td><td>paid</td></tr>
-              <tr><td>Ana</td><td>ana@mail.com</td><td>DB103</td><td class="cell-warn">Torres</td><td>7.0</td><td>paid</td></tr>
-              <tr><td>Sofia</td><td>sofia@mail.com</td><td>DB101</td><td class="cell-warn">Torres</td><td>5.9</td><td>paid</td></tr>
+              <tr>
+                <td>Juan</td>
+                <td>juan@mail.com</td>
+                <td>DB101</td>
+                <td class="cell-good">Prof. Torres</td>
+                <td>5.5</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Juan</td>
+                <td>juan@mail.com</td>
+                <td>DB102</td>
+                <td class="cell-warn">Torres</td>
+                <td>6.0</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Maria</td>
+                <td>maria@mail.com</td>
+                <td>DB101</td>
+                <td class="cell-warn">Torres</td>
+                <td>6.5</td>
+                <td>pending</td>
+              </tr>
+              <tr>
+                <td>Carlos</td>
+                <td>carlos@mail.com</td>
+                <td>DB102</td>
+                <td class="cell-warn">Torres</td>
+                <td>4.8</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Ana</td>
+                <td>ana@mail.com</td>
+                <td>DB103</td>
+                <td class="cell-warn">Torres</td>
+                <td>7.0</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Sofia</td>
+                <td>sofia@mail.com</td>
+                <td>DB101</td>
+                <td class="cell-warn">Torres</td>
+                <td>5.9</td>
+                <td>paid</td>
+              </tr>
             </tbody>
           </table>
-          <div class="callout warn"><span class="icon">⚠️</span><span data-i18n-html="s10_callout1">You updated <strong>one row</strong>. Five still say "Torres". <strong>Which one is the truth?</strong></span></div>
-          <div class="callout bad" style="margin-top:0.5rem"><span class="icon">💀</span><span data-i18n="s10_callout2">We didn't update data — we corrupted history.</span></div>
+          <div class="callout warn">
+            <span class="icon">⚠️</span
+            ><span data-i18n-html="s10_callout1"
+              >You updated <strong>one row</strong>. Five still say "Torres".
+              <strong>Which one is the truth?</strong></span
+            >
+          </div>
+          <div class="callout bad" style="margin-top: 0.5rem">
+            <span class="icon">💀</span
+            ><span data-i18n="s10_callout2"
+              >We didn't update data — we corrupted history.</span
+            >
+          </div>
         </section>
 
         <!-- ⑪ Insert anomaly -->
-        <section data-title-en="Insert Problem" data-title-es="Problema Inserción">
+        <section
+          data-title-en="Insert Problem"
+          data-title-es="Problema Inserción"
+        >
           <div class="label" data-i18n="s11_label">Problem 2 — Insert</div>
           <h2 data-i18n="s11_title">A new course, no students yet</h2>
-          <table class="db-table" style="margin:0.5rem 0">
-            <thead><tr>
-              <th>user_name</th><th>email</th><th>course</th>
-              <th>instructor</th><th>grade</th><th>payment</th>
-            </tr></thead>
+          <table class="db-table" style="margin: 0.5rem 0">
+            <thead>
+              <tr>
+                <th>user_name</th>
+                <th>email</th>
+                <th>course</th>
+                <th>instructor</th>
+                <th>grade</th>
+                <th>payment</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr><td>Juan</td><td>juan@mail.com</td><td>DB101</td><td>Torres</td><td>5.5</td><td>paid</td></tr>
-              <tr><td>Juan</td><td>juan@mail.com</td><td>DB102</td><td>Torres</td><td>6.0</td><td>paid</td></tr>
-              <tr><td>Maria</td><td>maria@mail.com</td><td>DB101</td><td>Torres</td><td>6.5</td><td>pending</td></tr>
-              <tr><td>Carlos</td><td>carlos@mail.com</td><td>DB102</td><td>Torres</td><td>4.8</td><td>paid</td></tr>
-              <tr><td>Ana</td><td>ana@mail.com</td><td>DB103</td><td>Torres</td><td>7.0</td><td>paid</td></tr>
-              <tr><td>Sofia</td><td>sofia@mail.com</td><td>DB101</td><td>Torres</td><td>5.9</td><td>paid</td></tr>
-              <tr class="row-ghost"><td>???</td><td>???</td><td class="cell-bad">DB104</td><td>Torres</td><td>—</td><td>—</td></tr>
+              <tr>
+                <td>Juan</td>
+                <td>juan@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>5.5</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Juan</td>
+                <td>juan@mail.com</td>
+                <td>DB102</td>
+                <td>Torres</td>
+                <td>6.0</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Maria</td>
+                <td>maria@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>6.5</td>
+                <td>pending</td>
+              </tr>
+              <tr>
+                <td>Carlos</td>
+                <td>carlos@mail.com</td>
+                <td>DB102</td>
+                <td>Torres</td>
+                <td>4.8</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Ana</td>
+                <td>ana@mail.com</td>
+                <td>DB103</td>
+                <td>Torres</td>
+                <td>7.0</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Sofia</td>
+                <td>sofia@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>5.9</td>
+                <td>paid</td>
+              </tr>
+              <tr class="row-ghost">
+                <td>???</td>
+                <td>???</td>
+                <td class="cell-bad">DB104</td>
+                <td>Torres</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
             </tbody>
           </table>
-          <div class="callout bad"><span class="icon">🚫</span><span data-i18n-html="s11_callout">The table <strong>requires a student</strong> to exist. You cannot insert a course without one. <strong>DB104 cannot exist yet.</strong></span></div>
+          <div class="callout bad">
+            <span class="icon">🚫</span
+            ><span data-i18n-html="s11_callout"
+              >The table <strong>requires a student</strong> to exist. You
+              cannot insert a course without one.
+              <strong>DB104 cannot exist yet.</strong></span
+            >
+          </div>
         </section>
 
         <!-- ⑫ Delete anomaly -->
-        <section data-title-en="Delete Problem" data-title-es="Problema Borrado">
+        <section
+          data-title-en="Delete Problem"
+          data-title-es="Problema Borrado"
+        >
           <div class="label" data-i18n="s12_label">Problem 3 — Delete</div>
           <h2 data-i18n="s12_title">The last student drops DB103</h2>
-          <table class="db-table" style="margin:0.5rem 0">
-            <thead><tr>
-              <th>user_name</th><th>email</th><th>course</th>
-              <th>instructor</th><th>grade</th><th>payment</th>
-            </tr></thead>
+          <table class="db-table" style="margin: 0.5rem 0">
+            <thead>
+              <tr>
+                <th>user_name</th>
+                <th>email</th>
+                <th>course</th>
+                <th>instructor</th>
+                <th>grade</th>
+                <th>payment</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr><td>Juan</td><td>juan@mail.com</td><td>DB101</td><td>Torres</td><td>5.5</td><td>paid</td></tr>
-              <tr><td>Juan</td><td>juan@mail.com</td><td>DB102</td><td>Torres</td><td>6.0</td><td>paid</td></tr>
-              <tr><td>Maria</td><td>maria@mail.com</td><td>DB101</td><td>Torres</td><td>6.5</td><td>pending</td></tr>
-              <tr><td>Carlos</td><td>carlos@mail.com</td><td>DB102</td><td>Torres</td><td>4.8</td><td>paid</td></tr>
-              <tr class="row-dead"><td>Ana</td><td>ana@mail.com</td><td>DB103</td><td>Torres</td><td>7.0</td><td>paid</td></tr>
-              <tr><td>Sofia</td><td>sofia@mail.com</td><td>DB101</td><td>Torres</td><td>5.9</td><td>paid</td></tr>
+              <tr>
+                <td>Juan</td>
+                <td>juan@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>5.5</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Juan</td>
+                <td>juan@mail.com</td>
+                <td>DB102</td>
+                <td>Torres</td>
+                <td>6.0</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Maria</td>
+                <td>maria@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>6.5</td>
+                <td>pending</td>
+              </tr>
+              <tr>
+                <td>Carlos</td>
+                <td>carlos@mail.com</td>
+                <td>DB102</td>
+                <td>Torres</td>
+                <td>4.8</td>
+                <td>paid</td>
+              </tr>
+              <tr class="row-dead">
+                <td>Ana</td>
+                <td>ana@mail.com</td>
+                <td>DB103</td>
+                <td>Torres</td>
+                <td>7.0</td>
+                <td>paid</td>
+              </tr>
+              <tr>
+                <td>Sofia</td>
+                <td>sofia@mail.com</td>
+                <td>DB101</td>
+                <td>Torres</td>
+                <td>5.9</td>
+                <td>paid</td>
+              </tr>
             </tbody>
           </table>
-          <div class="callout bad"><span class="icon">💥</span><span data-i18n-html="s12_callout">Ana's row is deleted. <strong>DB103 no longer exists in the system.</strong> The course, the instructor, the grade — all gone.</span></div>
+          <div class="callout bad">
+            <span class="icon">💥</span
+            ><span data-i18n-html="s12_callout"
+              >Ana's row is deleted.
+              <strong>DB103 no longer exists in the system.</strong> The course,
+              the instructor, the grade — all gone.</span
+            >
+          </div>
         </section>
 
         <!-- ⑬ Verdict -->
         <section data-title-en="Verdict" data-title-es="Veredicto">
           <div class="label" data-i18n="s13_label">The verdict</div>
-          <div class="reveal-text" style="font-size:2.6rem;margin-bottom:0.8rem" data-i18n-html="s13_title">
-            Technically <span class="accent">working</span>.<br/>Logically <span class="red">broken</span>.
+          <div
+            class="reveal-text"
+            style="font-size: 2.6rem; margin-bottom: 0.8rem"
+            data-i18n-html="s13_title"
+          >
+            Technically <span class="accent">working</span>.<br />Logically
+            <span class="red">broken</span>.
           </div>
           <div class="divider"></div>
-          <div class="grid-3" style="margin-top:0.8rem">
-            <div class="callout warn" style="flex-direction:column;gap:0.3rem">
-              <span style="font-weight:700;color:#fbbf24" data-i18n="s13_u">Update anomaly</span>
-              <span style="font-size:0.95rem" data-i18n="s13_u_sub">One change requires many updates. Miss one → corrupt data.</span>
+          <div class="grid-3" style="margin-top: 0.8rem">
+            <div
+              class="callout warn"
+              style="flex-direction: column; gap: 0.3rem"
+            >
+              <span style="font-weight: 700; color: #fbbf24" data-i18n="s13_u"
+                >Update anomaly</span
+              >
+              <span style="font-size: 0.95rem" data-i18n="s13_u_sub"
+                >One change requires many updates. Miss one → corrupt
+                data.</span
+              >
             </div>
-            <div class="callout bad" style="flex-direction:column;gap:0.3rem">
-              <span style="font-weight:700;color:var(--red)" data-i18n="s13_i">Insert anomaly</span>
-              <span style="font-size:0.95rem" data-i18n="s13_i_sub">Can't store a fact without an unrelated fact existing first.</span>
+            <div
+              class="callout bad"
+              style="flex-direction: column; gap: 0.3rem"
+            >
+              <span
+                style="font-weight: 700; color: var(--red)"
+                data-i18n="s13_i"
+                >Insert anomaly</span
+              >
+              <span style="font-size: 0.95rem" data-i18n="s13_i_sub"
+                >Can't store a fact without an unrelated fact existing
+                first.</span
+              >
             </div>
-            <div class="callout bad" style="flex-direction:column;gap:0.3rem">
-              <span style="font-weight:700;color:var(--red)" data-i18n="s13_d">Delete anomaly</span>
-              <span style="font-size:0.95rem" data-i18n="s13_d_sub">Removing one thing accidentally destroys another.</span>
+            <div
+              class="callout bad"
+              style="flex-direction: column; gap: 0.3rem"
+            >
+              <span
+                style="font-weight: 700; color: var(--red)"
+                data-i18n="s13_d"
+                >Delete anomaly</span
+              >
+              <span style="font-size: 0.95rem" data-i18n="s13_d_sub"
+                >Removing one thing accidentally destroys another.</span
+              >
             </div>
           </div>
-          <div class="callout info" style="margin-top:0.8rem"><span class="icon">→</span><span data-i18n="s13_bridge">So how do we design this so reality doesn't break our system?</span></div>
+          <div class="callout info" style="margin-top: 0.8rem">
+            <span class="icon">→</span
+            ><span data-i18n="s13_bridge"
+              >So how do we design this so reality doesn't break our
+              system?</span
+            >
+          </div>
         </section>
 
         <!-- ⑭ One mistake -->
         <section data-title-en="One Mistake" data-title-es="Un Error">
           <div class="label" data-i18n="s14_label">One mistake</div>
-          <div class="reveal-text" style="font-size:2.8rem;margin-bottom:0.8rem" data-i18n-html="s14_reveal">
-            We didn't <span class="red">design</span> the data —<br/>we just <span class="red">stored</span> it.
+          <div
+            class="reveal-text"
+            style="font-size: 2.8rem; margin-bottom: 0.8rem"
+            data-i18n-html="s14_reveal"
+          >
+            We didn't <span class="red">design</span> the data —<br />we just
+            <span class="red">stored</span> it.
           </div>
           <div class="divider"></div>
-          <p style="margin:0.8rem 0 1rem" data-i18n="s14_body">All three anomalies. Same root cause.</p>
-          <div class="story" style="max-width:560px;margin:0 auto" data-i18n-html="s14_story">
-            So instead of fixing tables…<br/><em>we need to change how we think.</em>
+          <p style="margin: 0.8rem 0 1rem" data-i18n="s14_body">
+            All three anomalies. Same root cause.
+          </p>
+          <div
+            class="story"
+            style="max-width: 560px; margin: 0 auto"
+            data-i18n-html="s14_story"
+          >
+            So instead of fixing tables…<br /><em
+              >we need to change how we think.</em
+            >
           </div>
         </section>
 
@@ -624,17 +1572,21 @@
         <section data-title-en="Mindset Shift" data-title-es="Cambio Mental">
           <div class="label" data-i18n="s15_label">The shift</div>
           <h2 data-i18n="s15_title">Think in entities, not tables</h2>
-          <div class="grid-2" style="margin-top:1rem">
-            <div class="card" style="text-align:left">
-              <h3 style="margin-bottom:0.8rem" data-i18n="s15_q_title">Start by asking</h3>
+          <div class="grid-2" style="margin-top: 1rem">
+            <div class="card" style="text-align: left">
+              <h3 style="margin-bottom: 0.8rem" data-i18n="s15_q_title">
+                Start by asking
+              </h3>
               <ul class="card-list">
                 <li data-i18n="s15_q1">Who exists? → entities</li>
                 <li data-i18n="s15_q2">What do they have? → attributes</li>
                 <li data-i18n="s15_q3">How do they relate? → relationships</li>
               </ul>
             </div>
-            <div class="card" style="text-align:left">
-              <h3 style="margin-bottom:0.8rem" data-i18n="s15_e_title">In EduTrack</h3>
+            <div class="card" style="text-align: left">
+              <h3 style="margin-bottom: 0.8rem" data-i18n="s15_e_title">
+                In EduTrack
+              </h3>
               <ul class="card-list">
                 <li data-i18n="s15_e1">User — exists independently</li>
                 <li data-i18n="s15_e2">Course — exists independently</li>
@@ -643,45 +1595,790 @@
               </ul>
             </div>
           </div>
-          <div class="callout info" style="margin-top:1rem">
+          <div class="callout info" style="margin-top: 1rem">
             <span class="icon">💡</span>
-            <span data-i18n="s15_key">Tables are an implementation detail. The real design happens before that.</span>
+            <span data-i18n="s15_key"
+              >Tables are an implementation detail. The real design happens
+              before that.</span
+            >
           </div>
         </section>
 
         <!-- ⑯ Bridge to ER -->
         <section data-title-en="Bridge to ER" data-title-es="Hacia el ER">
           <div class="label" data-i18n="s16_label">The solution</div>
-          <h2 style="margin-bottom:1rem" data-i18n="s16_title">This is exactly what ER design helps us do.</h2>
+          <h2 style="margin-bottom: 1rem" data-i18n="s16_title">
+            This is exactly what ER design helps us do.
+          </h2>
           <div class="grid-2">
-            <div class="card red" style="text-align:left">
-              <h3 style="color:var(--red);margin-bottom:0.5rem" data-i18n="s16_bad_title">Bad thinking</h3>
-              <p class="muted" style="font-style:italic" data-i18n="s16_bad_q">"What columns do I need?"</p>
+            <div class="card red" style="text-align: left">
+              <h3
+                style="color: var(--red); margin-bottom: 0.5rem"
+                data-i18n="s16_bad_title"
+              >
+                Bad thinking
+              </h3>
+              <p class="muted" style="font-style: italic" data-i18n="s16_bad_q">
+                "What columns do I need?"
+              </p>
             </div>
-            <div class="card green" style="text-align:left">
-              <h3 style="color:var(--green);margin-bottom:0.5rem" data-i18n="s16_good_title">Good thinking</h3>
-              <p style="font-style:italic" data-i18n="s16_good_q">"What objects exist in my system?"</p>
+            <div class="card green" style="text-align: left">
+              <h3
+                style="color: var(--green); margin-bottom: 0.5rem"
+                data-i18n="s16_good_title"
+              >
+                Good thinking
+              </h3>
+              <p style="font-style: italic" data-i18n="s16_good_q">
+                "What objects exist in my system?"
+              </p>
             </div>
           </div>
-          <div class="callout info" style="margin-top:1rem">
+          <div class="callout info" style="margin-top: 1rem">
             <span class="icon">→</span>
-            <span data-i18n="s16_bridge">ER diagrams make you think in objects and relationships — before a single table is created.</span>
+            <span data-i18n="s16_bridge"
+              >ER diagrams make you think in objects and relationships — before
+              a single table is created.</span
+            >
           </div>
         </section>
 
         <!-- ⑧ The lesson bridge -->
         <section data-title-en="The Lesson" data-title-es="La Lección">
-          <div class="reveal-text" style="font-size:3.1rem;margin-bottom:0.8rem" data-i18n-html="s8_reveal">
-            <span class="accent">90%</span> of a great database<br/>is great <span class="accent">design</span>.
+          <div
+            class="reveal-text"
+            style="font-size: 3.1rem; margin-bottom: 0.8rem"
+            data-i18n-html="s8_reveal"
+          >
+            <span class="accent">90%</span> of a great database<br />is great
+            <span class="accent">design</span>.
           </div>
           <div class="divider"></div>
-          <p style="margin-bottom:1rem;color:#c9d1d9" data-i18n-html="s8_body">
-            EduTrack's problem wasn't a missing index or a slow query.<br/>It was a model that was never designed — just grown.
+          <p
+            style="margin-bottom: 1rem; color: #c9d1d9"
+            data-i18n-html="s8_body"
+          >
+            EduTrack's problem wasn't a missing index or a slow query.<br />It
+            was a model that was never designed — just grown.
           </p>
-          <div class="story" style="max-width:520px;margin:0 auto" data-i18n-html="s8_story">
-            <em>Today</em>, we learn the tools to design before we build:<br/>
-            the <em>Entity-Relationship diagram</em>, the <em>logical model</em>,<br/>
+          <div
+            class="story"
+            style="max-width: 520px; margin: 0 auto"
+            data-i18n-html="s8_story"
+          >
+            <em>Today</em>, we learn the tools to design before we build:<br />
+            the <em>Entity-Relationship diagram</em>, the
+            <em>logical model</em>,<br />
             and how to think about data the right way.
+          </div>
+        </section>
+
+        <!-- ⑰ ER Model intro -->
+        <section data-title-en="ER Model" data-title-es="Modelo ER">
+          <div class="label" data-i18n="s17_label">The tool</div>
+          <h2 data-i18n="s17_title">The Entity–Relationship Model</h2>
+          <div class="divider"></div>
+          <p style="margin-bottom: 1.2rem" data-i18n="s17_def">
+            A way to represent the real world before turning it into tables.
+          </p>
+          <div class="grid-2" style="margin-bottom: 1rem">
+            <div
+              class="callout info"
+              style="
+                flex-direction: column;
+                gap: 0.3rem;
+                align-items: flex-start;
+              "
+            >
+              <span
+                style="font-weight: 700; color: #fff"
+                data-i18n="s17_b1_title"
+                >🗺 A blueprint</span
+              >
+              <span style="font-size: 1rem" data-i18n="s17_b1_body"
+                >Design the structure before writing a single CREATE
+                TABLE.</span
+              >
+            </div>
+            <div
+              class="callout info"
+              style="
+                flex-direction: column;
+                gap: 0.3rem;
+                align-items: flex-start;
+              "
+            >
+              <span
+                style="font-weight: 700; color: #fff"
+                data-i18n="s17_b2_title"
+                >🗣 A shared language</span
+              >
+              <span style="font-size: 1rem" data-i18n="s17_b2_body"
+                >Developers, clients, and managers can all read the same
+                diagram.</span
+              >
+            </div>
+          </div>
+          <div class="callout warn">
+            <span class="icon">→</span>
+            <span data-i18n-html="s17_components"
+              >3 core components: <strong>Entities</strong>,
+              <strong>Attributes</strong>, and
+              <strong>Relationships</strong>.</span
+            >
+          </div>
+        </section>
+
+        <!-- ⑱ Entities -->
+        <section data-title-en="Entities" data-title-es="Entidades">
+          <div class="label" data-i18n="s18_label">Component 1</div>
+          <h2 data-i18n="s18_title">Entities</h2>
+
+          <p style="font-size:0.95rem; color:#c9d1d9; margin-bottom:0.9rem;" data-i18n-html="s18_repr">
+            A real-world thing that can be uniquely identified — represented as a <strong>rectangle</strong> with the entity name inside.
+          </p>
+
+          <div class="grid-2" style="margin-bottom:0.9rem;">
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.4rem;">
+              <strong data-i18n="s18_strong_title">💪 Strong entities</strong>
+              <span style="font-size:0.9rem; color:var(--muted);" data-i18n="s18_strong_body">Exist independently. They have their own unique identifier.</span>
+              <div class="er-entity-box" style="font-size:0.8rem; padding:0.3rem 1rem; margin-top:0.3rem;" data-i18n="s18_strong_ex">User</div>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.4rem;">
+              <strong data-i18n="s18_weak_title">🔗 Weak entities</strong>
+              <span style="font-size:0.9rem; color:var(--muted);" data-i18n="s18_weak_body">Cannot exist without another entity. Depend on it and require its identity to be identified.</span>
+              <div class="er-entity-weak" style="font-size:0.8rem; padding:0.3rem 1rem; margin-top:0.3rem;" data-i18n="s18_weak_ex">Enrollment</div>
+            </div>
+          </div>
+
+          <p class="muted" style="font-size:0.8rem; text-align:center; margin-bottom:0.5rem;" data-i18n="s18_stacks_note">Think of each entity as its own pile of records:</p>
+          <div class="stack-group">
+            <div class="stack">
+              <div class="stack-label" data-i18n="s18_e1">User</div>
+              <div class="paper-stack">
+                <div class="paper-card"><span class="paper-key">#001</span> · Juan · juan@mail.com</div>
+                <div class="paper-card"><span class="paper-key">#002</span> · Maria · maria@mail.com</div>
+                <div class="paper-card"><span class="paper-key">#003</span> · Carlos · ...</div>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="stack-label" data-i18n="s18_e2">Course</div>
+              <div class="paper-stack">
+                <div class="paper-card"><span class="paper-key">DB101</span> · Databases I</div>
+                <div class="paper-card"><span class="paper-key">DB102</span> · Databases II</div>
+                <div class="paper-card"><span class="paper-key">DB103</span> · Databases III</div>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="stack-label" data-i18n="s18_e3">Instructor</div>
+              <div class="paper-stack">
+                <div class="paper-card"><span class="paper-key">INS01</span> · Prof. Torres</div>
+                <div class="paper-card"><span class="paper-key">INS02</span> · Prof. Reyes</div>
+                <div class="paper-card"><span class="paper-key">INS03</span> · Prof. Mora</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout info" style="margin-top:0.8rem;">
+            <span class="icon">💡</span>
+            <span data-i18n="s18_rule">If it can exist on its own → it's probably a strong entity. No two records in the same pile share the same ID.</span>
+          </div>
+        </section>
+
+        <!-- ⑲ Attributes -->
+        <section data-title-en="Attributes" data-title-es="Atributos">
+          <div class="label" data-i18n="s19_label">Component 2</div>
+          <h2 data-i18n="s19_title">Attributes</h2>
+          <p class="muted" style="margin-bottom: 0.8rem" data-i18n="s19_def">
+            The fields on each paper — what describes an entity.
+          </p>
+          <div class="grid-2">
+            <div class="card" style="text-align: left">
+              <h3 style="margin-bottom: 0.7rem" data-i18n="s19_types_title">
+                Types of attributes
+              </h3>
+              <ul class="card-list">
+                <li data-i18n="s19_t5">
+                  <strong>Key</strong> — uniquely identifies every instance
+                </li>
+                <li data-i18n="s19_t1">
+                  <strong>Simple</strong> — atomic, indivisible (email, grade)
+                </li>
+                <li data-i18n="s19_t2">
+                  <strong>Composite</strong> — can be split (full_name → first +
+                  last)
+                </li>
+                <li data-i18n="s19_t3">
+                  <strong>Derived</strong> — computed from another (age from
+                  birthdate)
+                </li>
+                <li data-i18n="s19_t4">
+                  <strong>Multi-valued</strong> — holds several values (phone
+                  numbers)
+                </li>
+              </ul>
+            </div>
+            <div class="card" style="text-align: left">
+              <h3 style="margin-bottom: 0.8rem" data-i18n="s19_ex_title">
+                User entity
+              </h3>
+              <div class="er-entity-box" style="margin-bottom: 0.75rem">
+                User
+              </div>
+              <table style="width: 100%; border-collapse: collapse">
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border)">
+                    <td style="padding: 0.3rem 0.5rem 0.3rem 0">
+                      <span class="attr-oval key">user_id 🔑</span>
+                    </td>
+                    <td
+                      style="
+                        padding: 0.3rem 0;
+                        font-size: 0.85rem;
+                        color: var(--accent-light);
+                      "
+                      data-i18n="s19_type_key"
+                    >
+                      Key
+                    </td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border)">
+                    <td style="padding: 0.3rem 0.5rem 0.3rem 0">
+                      <span class="attr-oval simple">email</span>
+                    </td>
+                    <td
+                      style="
+                        padding: 0.3rem 0;
+                        font-size: 0.85rem;
+                        color: #c9d1d9;
+                      "
+                      data-i18n="s19_type_simple"
+                    >
+                      Simple
+                    </td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border)">
+                    <td style="padding: 0.3rem 0.5rem 0.3rem 0">
+                      <span class="attr-oval composite">full_name</span>
+                    </td>
+                    <td
+                      style="
+                        padding: 0.3rem 0;
+                        font-size: 0.85rem;
+                        color: #fbbf24;
+                      "
+                      data-i18n="s19_type_composite"
+                    >
+                      Composite
+                    </td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border)">
+                    <td style="padding: 0.3rem 0.5rem 0.3rem 0">
+                      <span class="attr-oval derived">age*</span>
+                    </td>
+                    <td
+                      style="
+                        padding: 0.3rem 0;
+                        font-size: 0.85rem;
+                        color: var(--muted);
+                      "
+                      data-i18n="s19_type_derived"
+                    >
+                      Derived
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.3rem 0.5rem 0.3rem 0">
+                      <span class="attr-oval multi">phone(s)</span>
+                    </td>
+                    <td
+                      style="
+                        padding: 0.3rem 0;
+                        font-size: 0.85rem;
+                        color: var(--muted);
+                      "
+                      data-i18n="s19_type_multi"
+                    >
+                      Multi-valued
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top: 0.8rem">
+            <span class="icon">💡</span>
+            <span data-i18n="s19_rule"
+              >Attributes live inside entities. They don't exist on their
+              own.</span
+            >
+          </div>
+        </section>
+
+        <!-- ⑳ Relationships -->
+        <section data-title-en="Relationships" data-title-es="Relaciones">
+          <div class="label" data-i18n="s20_label">Component 3</div>
+          <h2 data-i18n="s20_title">Relationships</h2>
+          <p class="muted" style="margin-bottom: 0.8rem" data-i18n="s20_def">
+            How entities connect. Reality is connected — your model should be
+            too.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:0.7rem">
+            <div class="er-wrap">
+              <div class="er-entity-box" data-i18n="s20_e1">User</div>
+              <div class="er-seg"><div class="er-seg-line"></div></div>
+              <div class="er-diamond"><span class="er-diamond-text" data-i18n="s20_r1">enrolls in</span></div>
+              <div class="er-seg"><div class="er-seg-line"></div></div>
+              <div class="er-entity-box" data-i18n="s20_e2">Course</div>
+            </div>
+            <div class="er-wrap">
+              <div class="er-entity-box" data-i18n="s20_e3">Course</div>
+              <div class="er-seg"><div class="er-seg-line"></div></div>
+              <div class="er-diamond"><span class="er-diamond-text" data-i18n="s20_r2">taught by</span></div>
+              <div class="er-seg"><div class="er-seg-line"></div></div>
+              <div class="er-entity-box" data-i18n="s20_e4">Instructor</div>
+            </div>
+            <div class="er-wrap">
+              <div class="er-entity-box" data-i18n="s20_e5">Instructor</div>
+              <div class="er-seg"><div class="er-seg-line"></div></div>
+              <div class="er-diamond"><span class="er-diamond-text" data-i18n="s20_r3">works at</span></div>
+              <div class="er-seg"><div class="er-seg-line"></div></div>
+              <div class="er-entity-box" data-i18n="s20_e6">University</div>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top: 0.8rem">
+            <span class="icon">💡</span>
+            <span data-i18n="s20_rule"
+              >Relationships are verbs. Entities are nouns.</span
+            >
+          </div>
+        </section>
+
+        <!-- ㉑ Cardinality -->
+        <section data-title-en="Cardinality" data-title-es="Cardinalidad">
+          <div class="label" data-i18n="s21_label">Component 4</div>
+          <h2 data-i18n="s21_title">Cardinality</h2>
+          <p class="muted" style="margin-bottom: 1rem" data-i18n="s21_def">
+            How many of one thing relate to another?
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 1rem">
+            <!-- 1:1 -->
+            <div class="er-wrap" style="padding: 1.4rem 2rem">
+              <div class="er-entity-box" style="width: 150px" data-i18n="s21_e1">Instructor</div>
+              <div class="er-seg">
+                <span class="er-seg-n" style="left: 0.3rem; transform: none;">(1,1)</span>
+                <div class="er-seg-line"></div>
+              </div>
+              <div class="er-diamond">
+                <span class="er-diamond-text" data-i18n="s21_r1">has</span>
+              </div>
+              <div class="er-seg">
+                <div class="er-seg-line"></div>
+                <span class="er-seg-n" style="left: auto; right: 0.3rem; transform: none;">(1,1)</span>
+              </div>
+              <div class="er-entity-box" style="width: 150px" data-i18n="s21_e2">Office</div>
+              <span class="muted" style="font-size: 0.85rem; margin-left: 1.4rem; flex-shrink: 0" data-i18n="s21_desc1">One instructor, one office.</span>
+            </div>
+            <!-- 1:N -->
+            <div class="er-wrap" style="padding: 1.4rem 2rem">
+              <div class="er-entity-box" style="width: 150px" data-i18n="s21_e3">Instructor</div>
+              <div class="er-seg">
+                <span class="er-seg-n" style="left: 0.3rem; transform: none;">(1,N)</span>
+                <div class="er-seg-line"></div>
+              </div>
+              <div class="er-diamond">
+                <span class="er-diamond-text" data-i18n="s21_r2">teaches</span>
+              </div>
+              <div class="er-seg">
+                <div class="er-seg-line"></div>
+                <span class="er-seg-n" style="left: auto; right: 0.3rem; transform: none;">(1,1)</span>
+              </div>
+              <div class="er-entity-box" style="width: 150px" data-i18n="s21_e4">Course</div>
+              <span class="muted" style="font-size: 0.85rem; margin-left: 1.4rem; flex-shrink: 0" data-i18n="s21_desc2">One instructor, many courses.</span>
+            </div>
+            <!-- M:N -->
+            <div class="er-wrap" style="padding: 1.4rem 2rem">
+              <div class="er-entity-box" style="width: 150px" data-i18n="s21_e5">User</div>
+              <div class="er-seg">
+                <span class="er-seg-n" style="left: 0.3rem; transform: none;">(1,N)</span>
+                <div class="er-seg-line"></div>
+              </div>
+              <div class="er-diamond">
+                <span class="er-diamond-text" data-i18n="s21_r3">enrolls in</span>
+              </div>
+              <div class="er-seg">
+                <div class="er-seg-line"></div>
+                <span class="er-seg-n" style="left: auto; right: 0.3rem; transform: none;">(1,M)</span>
+              </div>
+              <div class="er-entity-box" style="width: 150px" data-i18n="s21_e6">Course</div>
+              <span class="muted" style="font-size: 0.85rem; margin-left: 1.4rem; flex-shrink: 0" data-i18n="s21_desc3">Many users, many courses.</span>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top: 1rem">
+            <span class="icon">💡</span>
+            <span data-i18n="s21_rule"
+              >Ask: "How many X can relate to one Y?" — then ask it in
+              reverse.</span
+            >
+          </div>
+        </section>
+
+        <!-- ㉒ Participation -->
+        <section data-title-en="Participation" data-title-es="Participación">
+          <div class="label" data-i18n="s22_label">Component 5</div>
+          <h2 data-i18n="s22_title">Participation Constraints</h2>
+          <p class="muted" style="margin-bottom: 0.8rem" data-i18n="s22_def">
+            Can this thing exist without that relationship?
+          </p>
+          <div class="grid-2">
+            <div
+              class="card"
+              style="text-align: left; border-color: rgba(239, 68, 68, 0.3)"
+            >
+              <h3
+                style="color: var(--red); margin-bottom: 0.5rem"
+                data-i18n="s22_total_title"
+              >
+                🔒 Total (mandatory)
+              </h3>
+              <p style="margin-bottom: 0.6rem" data-i18n="s22_total_def">
+                Every instance must participate. No exceptions.
+              </p>
+              <ul class="card-list">
+                <li data-i18n="s22_total_ex1">
+                  Every Enrollment must have a Student
+                </li>
+                <li data-i18n="s22_total_ex2">
+                  Every Course must have an Instructor
+                </li>
+              </ul>
+              <p
+                class="muted"
+                style="
+                  margin-top: 0.6rem;
+                  font-size: 1.1rem;
+                  font-style: italic;
+                "
+                data-i18n="s22_total_q"
+              >
+                "Can an enrollment exist without a student?" — No.
+              </p>
+            </div>
+            <div
+              class="card"
+              style="text-align: left; border-color: rgba(34, 197, 94, 0.3)"
+            >
+              <h3
+                style="color: var(--green); margin-bottom: 0.5rem"
+                data-i18n="s22_partial_title"
+              >
+                🔓 Partial (optional)
+              </h3>
+              <p style="margin-bottom: 0.6rem" data-i18n="s22_partial_def">
+                Some instances may not participate. That's fine.
+              </p>
+              <ul class="card-list">
+                <li data-i18n="s22_partial_ex1">
+                  A Student may not be enrolled right now
+                </li>
+                <li data-i18n="s22_partial_ex2">
+                  An Instructor may not be teaching this semester
+                </li>
+              </ul>
+              <p
+                class="muted"
+                style="
+                  margin-top: 0.6rem;
+                  font-size: 1.1rem;
+                  font-style: italic;
+                "
+                data-i18n="s22_partial_q"
+              >
+                "Can a student exist without enrolling?" — Yes.
+              </p>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top: 0.8rem">
+            <span class="icon">→</span>
+            <span data-i18n="s22_rule"
+              >No = Total participation. Yes = Partial participation.</span
+            >
+          </div>
+        </section>
+
+        <!-- ㉓ Mini example -->
+        <section data-title-en="Mini Example" data-title-es="Mini Ejemplo">
+          <div class="label" data-i18n="s23_label">Putting it together</div>
+          <h2 data-i18n="s23_title">Student enrolls in Course</h2>
+          <p class="muted" style="margin-bottom: 1.2rem" data-i18n="s23_sub">
+            2 entities · 1 relationship · M:N cardinality
+          </p>
+          <div style="max-width:740px; margin:0 auto;">
+            <!-- ER row: same flex + er-seg approach as slide 21 -->
+            <div style="display:flex; align-items:center; gap:0;">
+              <div class="er-entity-box" style="width:140px; flex-shrink:0;" data-i18n="s23_student">Student</div>
+              <div class="er-seg">
+                <span class="er-seg-n" style="left:0.3rem; transform:none;">(1,N)</span>
+                <div class="er-seg-line"></div>
+              </div>
+              <div class="er-diamond" style="flex-shrink:0;">
+                <span class="er-diamond-text" data-i18n="s23_rel">enrolls in</span>
+              </div>
+              <div class="er-seg">
+                <div class="er-seg-line"></div>
+                <span class="er-seg-n" style="left:auto; right:0.3rem; transform:none;">(1,M)</span>
+              </div>
+              <div class="er-entity-box" style="width:140px; flex-shrink:0;" data-i18n="s23_course">Course</div>
+            </div>
+            <!-- Attribute groups: spacers mirror er-seg flex:1 so attrs sit under their node -->
+            <div style="display:flex; align-items:flex-start; margin-top:0.9rem; gap:0;">
+              <div style="flex:0 0 140px; display:flex; gap:0.35rem; flex-wrap:wrap; justify-content:center;">
+                <div class="attr-oval key">student_id 🔑</div>
+                <div class="attr-oval">name</div>
+                <div class="attr-oval">email</div>
+              </div>
+              <div style="flex:1;"></div>
+              <div style="flex:0 0 88px; display:flex; flex-direction:column; align-items:center; gap:0.35rem;">
+                <div style="display:flex; gap:0.35rem;">
+                  <div class="attr-oval">grade</div>
+                  <div class="attr-oval">enrolled_at</div>
+                </div>
+                <p class="muted" style="font-size:0.72rem;" data-i18n="s23_rel_note">relationship attributes</p>
+              </div>
+              <div style="flex:1;"></div>
+              <div style="flex:0 0 140px; display:flex; gap:0.35rem; flex-wrap:wrap; justify-content:center;">
+                <div class="attr-oval key">course_id 🔑</div>
+                <div class="attr-oval">name</div>
+                <div class="attr-oval">credits</div>
+              </div>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top: 1.2rem">
+            <span class="icon">💡</span>
+            <span data-i18n="s23_note"
+              >grade and enrolled_at belong to the enrollment — not to the
+              student, not to the course. Relationships can have attributes
+              too.</span
+            >
+          </div>
+        </section>
+
+        <!-- ㉔ Back to EduTrack -->
+        <section data-title-en="EduTrack ER" data-title-es="EduTrack ER">
+          <div class="label" data-i18n="s24_label">Now you see it</div>
+          <div
+            class="reveal-text"
+            style="font-size: 2.4rem; margin-bottom: 0.8rem"
+            data-i18n-html="s24_reveal"
+          >
+            Back to our <span class="red">broken</span> system.
+          </div>
+          <div class="divider"></div>
+          <p style="margin-bottom: 0.8rem" data-i18n="s24_body">
+            With ER thinking, the flat table splits cleanly into:
+          </p>
+          <div class="grid-3" style="margin-bottom: 0.8rem">
+            <div
+              class="callout info"
+              style="
+                flex-direction: column;
+                gap: 0.25rem;
+                align-items: flex-start;
+              "
+            >
+              <strong data-i18n="s24_e1">User</strong>
+              <span
+                style="font-size: 0.95rem; color: var(--muted)"
+                data-i18n="s24_e1_sub"
+                >id · name · email</span
+              >
+            </div>
+            <div
+              class="callout info"
+              style="
+                flex-direction: column;
+                gap: 0.25rem;
+                align-items: flex-start;
+              "
+            >
+              <strong data-i18n="s24_e2">Course</strong>
+              <span
+                style="font-size: 0.95rem; color: var(--muted)"
+                data-i18n="s24_e2_sub"
+                >id · name</span
+              >
+            </div>
+            <div
+              class="callout info"
+              style="
+                flex-direction: column;
+                gap: 0.25rem;
+                align-items: flex-start;
+              "
+            >
+              <strong data-i18n="s24_e3">Instructor</strong>
+              <span
+                style="font-size: 0.95rem; color: var(--muted)"
+                data-i18n="s24_e3_sub"
+                >id · name</span
+              >
+            </div>
+          </div>
+          <div class="er-wrap" style="justify-content: center">
+            <div class="er-entity-box" data-i18n="s24_n_user">User</div>
+            <div class="er-seg">
+              <span class="er-seg-n" style="left:0.3rem; transform:none;">(1,N)</span>
+              <div class="er-seg-line"></div>
+            </div>
+            <div class="er-diamond">
+              <span class="er-diamond-text" data-i18n="s24_n_enrolls">enrolls in</span>
+            </div>
+            <div class="er-seg">
+              <div class="er-seg-line"></div>
+              <span class="er-seg-n" style="left:auto; right:0.3rem; transform:none;">(1,M)</span>
+            </div>
+            <div class="er-entity-box" data-i18n="s24_n_course">Course</div>
+            <div class="er-seg">
+              <span class="er-seg-n" style="left:0.3rem; transform:none;">(1,N)</span>
+              <div class="er-seg-line"></div>
+            </div>
+            <div class="er-diamond">
+              <span class="er-diamond-text" data-i18n="s24_n_taught">taught by</span>
+            </div>
+            <div class="er-seg">
+              <div class="er-seg-line"></div>
+              <span class="er-seg-n" style="left:auto; right:0.3rem; transform:none;">(1,1)</span>
+            </div>
+            <div class="er-entity-box" data-i18n="s24_n_instructor">Instructor</div>
+          </div>
+          <div class="callout warn" style="margin-top: 0.8rem">
+            <span class="icon">→</span>
+            <span data-i18n="s24_next"
+              >Next: let's draw the full ER diagram for EduTrack and build it
+              right.</span
+            >
+          </div>
+        </section>
+
+        <!-- ㉕ No Perfect ER -->
+        <section data-title-en="Design Thinking" data-title-es="Diseño y Criterio">
+          <div class="label" data-i18n="s25_label">Before you start</div>
+          <div class="reveal-text" style="font-size:2.2rem; margin-bottom:0.5rem;" data-i18n="s25_title">
+            There's no single right answer.
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom:1rem;" data-i18n="s25_sub">
+            ER modeling is a design discipline, not a formula.
+          </p>
+          <div class="grid-3" style="margin-bottom:1rem;">
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.4rem;">
+              <strong data-i18n="s25_c1_title">Design follows functionality</strong>
+              <span style="font-size:0.95rem;" data-i18n="s25_c1_body">Every ER decision should serve a real use case — not aesthetics or habit.</span>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.4rem;">
+              <strong data-i18n="s25_c2_title">Many solutions, one problem</strong>
+              <span style="font-size:0.95rem;" data-i18n="s25_c2_body">Two valid diagrams can represent the same reality differently. Both can be correct.</span>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.4rem;">
+              <strong data-i18n="s25_c3_title">Practice builds judgment</strong>
+              <span style="font-size:0.95rem;" data-i18n="s25_c3_body">The only way to tell which design is better is experience, constraints, and critical thinking.</span>
+            </div>
+          </div>
+          <div class="callout warn">
+            <span class="icon">💡</span>
+            <span data-i18n-html="s25_note">The goal is not to find the <em>perfect</em> diagram. It's to build the <strong>right one for the right problem</strong>.</span>
+          </div>
+        </section>
+
+        <!-- ㉖ MarBrisa Intro -->
+        <section data-title-en="MarBrisa Disco" data-title-es="Disco MarBrisa">
+          <div class="label" data-i18n="s26_label">The exercise</div>
+          <div class="reveal-text" style="font-size:2.2rem; margin-bottom:0.3rem;" data-i18n="s26_title">
+            🎬 MarBrisa Disco
+          </div>
+          <p style="font-size:1.1rem; margin-bottom:1rem;" data-i18n-html="s26_brief">
+            You've been hired to design the database system for a disco called <strong>MarBrisa</strong>.
+          </p>
+          <div class="divider"></div>
+          <p class="muted" style="margin:0.8rem 0 1rem; font-size:1rem;" data-i18n="s26_context_label">The situation</p>
+          <div class="grid-3">
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+              <strong>🌊</strong>
+              <span style="font-size:0.95rem;" data-i18n="s26_story1">MarBrisa is a popular disco that hosts weekend parties with themed nights.</span>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+              <strong>🎟️</strong>
+              <span style="font-size:0.95rem;" data-i18n="s26_story2">They sell tickets online in advance and at the entrance on the night of each event.</span>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+              <strong>🍹</strong>
+              <span style="font-size:0.95rem;" data-i18n="s26_story3">Inside, there is a bar where customers can order drinks from a menu throughout the night.</span>
+            </div>
+          </div>
+          <div class="callout warn" style="margin-top:1rem;">
+            <span class="icon">→</span>
+            <span data-i18n="s26_task">Your job: model this system as an ER diagram. Think carefully before drawing.</span>
+          </div>
+        </section>
+
+        <!-- ㉗ System Requirements -->
+        <section data-title-en="Requirements" data-title-es="Requisitos">
+          <div class="label" data-i18n="s27_label">What it needs to handle</div>
+          <h2 data-i18n="s27_title">Four things the system tracks</h2>
+          <div class="grid-2" style="margin-top:1rem;">
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.5rem;">
+              <strong style="font-size:1.05rem;">🎟️ <span data-i18n="s27_r1_title">Ticket Sales</span></strong>
+              <ul style="margin:0; padding-left:1.2rem; font-size:0.92rem; color:var(--muted); line-height:1.8;">
+                <li data-i18n="s27_r1_a">Sold online (advance) or at the door</li>
+                <li data-i18n="s27_r1_b">Each ticket has a price and belongs to an event</li>
+                <li data-i18n="s27_r1_c">A customer can buy multiple tickets</li>
+              </ul>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.5rem;">
+              <strong style="font-size:1.05rem;">🍹 <span data-i18n="s27_r2_title">Bar & Drinks</span></strong>
+              <ul style="margin:0; padding-left:1.2rem; font-size:0.92rem; color:var(--muted); line-height:1.8;">
+                <li data-i18n="s27_r2_a">The disco has a menu of drinks</li>
+                <li data-i18n="s27_r2_b">Each drink has a name and a price</li>
+                <li data-i18n="s27_r2_c">Customers can order multiple drinks per night</li>
+              </ul>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.5rem;">
+              <strong style="font-size:1.05rem;">🧾 <span data-i18n="s27_r3_title">Purchases</span></strong>
+              <ul style="margin:0; padding-left:1.2rem; font-size:0.92rem; color:var(--muted); line-height:1.8;">
+                <li data-i18n="s27_r3_a">Each purchase belongs to a customer</li>
+                <li data-i18n="s27_r3_b">Can include multiple drinks</li>
+                <li data-i18n="s27_r3_c">Recorded with a timestamp</li>
+              </ul>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.5rem;">
+              <strong style="font-size:1.05rem;">🎉 <span data-i18n="s27_r4_title">Events</span></strong>
+              <ul style="margin:0; padding-left:1.2rem; font-size:0.92rem; color:var(--muted); line-height:1.8;">
+                <li data-i18n="s27_r4_a">MarBrisa hosts themed parties (e.g. Reggaeton Night)</li>
+                <li data-i18n="s27_r4_b">Each event has a date</li>
+                <li data-i18n="s27_r4_c">Ticket sales are tied to a specific event</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ㉘ Your Task -->
+        <section data-title-en="Your Task" data-title-es="Tu Tarea">
+          <div class="label" data-i18n="s28_label">Design challenge</div>
+          <h2 data-i18n="s28_title">Design an ER model for MarBrisa.</h2>
+          <p class="muted" style="margin-bottom:1rem;" data-i18n="s28_sub">Guide yourself with these questions:</p>
+          <div class="grid-2" style="margin-bottom:1rem;">
+            <div class="callout info"><span class="icon">❓</span><span data-i18n-html="s28_q1">Who are the <strong>entities</strong>?</span></div>
+            <div class="callout info"><span class="icon">❓</span><span data-i18n-html="s28_q2">What <strong>attributes</strong> does each one have?</span></div>
+            <div class="callout info"><span class="icon">❓</span><span data-i18n-html="s28_q3">How do the entities <strong>relate</strong> to each other?</span></div>
+            <div class="callout info"><span class="icon">❓</span><span data-i18n-html="s28_q4">Can something <strong>exist independently</strong>, or does it always need another entity?</span></div>
+          </div>
+          <div class="callout warn" style="margin-bottom:0.7rem;">
+            <span class="icon">🔥</span>
+            <span data-i18n="s28_challenge">Optional challenge: What if a customer buys drinks for friends? Do tickets belong to a person or just to a purchase?</span>
+          </div>
+          <div style="text-align:center; margin-top:1.2rem;">
+            <p style="font-size:1.3rem; font-weight:700; color:#fff;" data-i18n="s28_closing1">Don't think in tables. Think in reality.</p>
+            <p style="font-size:1.1rem; color:var(--accent-light);" data-i18n="s28_closing2">What exists in MarBrisa?</p>
           </div>
         </section>
 
@@ -690,8 +2387,8 @@
 
     <div id="filmstrip"></div>
     <div id="strip-toggle">
-      <span id="toggle-chevron">▲</span>
-      <span id="toggle-label">Slides</span>
+      <div id="toggle-grip"><span></span><span></span></div>
+      <svg id="toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
@@ -699,274 +2396,698 @@
       // ── Translations ──
       const i18n = {
         en: {
-          s1_label:    'TICS320 · Practicum 1',
-          s1_title:    'Data Modeling<br/>and Design',
-          s2_label:    'A story',
-          s2_title:    'Meet EduTrack',
-          s2_sub:      'An online learning startup. Ambitious team, modern stack, Y Combinator dreams.',
-          s2_t1_strong:'Month 1 — Launch',
-          s2_t1_sub:   '200 users. Everything works perfectly. The team celebrates.',
-          s2_t2_strong:'Month 4 — Growth',
-          s2_t2_sub:   '1,000 users. A bit slow, but manageable. They add more servers.',
-          s2_t3_strong:'Month 8 — Viral moment',
-          s2_t3_sub:   'Featured in a newsletter. 5,000 users sign up in a week.',
-          s2_t4_strong:'Month 8 + 3 days — Chaos',
-          s2_t4_sub:   'Support tickets flood in. Something is very, very wrong.',
-          s3_label:    'What happened',
-          s3_title:    'The support tickets',
-          s3_c1_title: 'Duplicate charges',
-          s3_c1_body:  '"I was billed twice for the same course. My bank is calling."',
-          s3_c2_title: 'Wrong grades',
-          s3_c2_body:  '"My transcript shows a course I never took — and I\'m missing one I did."',
-          s3_c3_title: 'Ghost enrollments',
-          s3_c3_body:  '"I enrolled three weeks ago but the system says I don\'t exist."',
-          s3_footer:   '1,265 tickets in 72 hours. The CEO is on the phone. The lead dev hasn\'t slept.',
-          s4_label:    'Stop and think',
-          s4_intro:    'The team panics. They start looking for the bug.',
-          s4_story:    '"It must be the payment service — let\'s roll back."<br/>"No, it\'s the enrollment API — I see an error in the logs."<br/>"Maybe it\'s the load balancer dropping requests?"<br/><em>Three engineers. Three different answers. All wrong.</em>',
-          s4_question: 'What actually failed?',
-          s4_options:  'The backend? &nbsp;·&nbsp; The frontend? &nbsp;·&nbsp; The infrastructure?',
-          s5_none:     'None of the above.',
-          s5_reveal:   'The <span class="accent">data</span>.',
-          s5_story:    'EduTrack stored users, enrollments, and payments <em>all in one table</em>. When two users shared an email, the system merged their records. When a course was updated, old enrollment rows silently pointed to nothing. There was no foreign key, no constraint, no single source of truth.<br/><br/>The code was fine. <em>The data was broken from day one.</em>',
-          s6_label:    'Key message',
-          s6_title:    'Data is the source of truth',
-          s6_li1:      '<strong>Code</strong> can be <s>rewritten</s> &nbsp;<span class="ok">fixable</span>',
-          s6_li2:      '<strong>UI</strong> can be <s>redesigned</s> &nbsp;<span class="ok">fixable</span>',
-          s6_li3:      '<strong>Infrastructure</strong> can be <s>replaced</s> &nbsp;<span class="ok">fixable</span>',
-          s6_li4:      '<strong>Corrupted data</strong> &nbsp;<span class="broken">stays broken</span>',
-          s6_footer:   'EduTrack spent 3 weeks manually reconciling 5,000 user records.<br/>Two engineers quit. Three customers filed chargebacks.',
-          s7_label:    'Your responsibility',
-          s7_sub:      'Even if you "don\'t like databases".',
-          s7_title:    'As engineers,<br/>you own the data.',
-          s7_c1_title: 'Your users trust you with',
-          s7_c1_body:  'Your users hand you their identity, their money, and their academic records. When your data model breaks, it doesn\'t just crash an app — it <strong>destroys trust</strong> that took years to earn.',
-          s7_c2_title: 'The real cost',
-          s7_c2_body:  '<ul class="card-list"><li>Live data migrations are slow and risky</li><li>Cleaning corrupted records takes weeks</li><li>Lost customers rarely come back</li></ul><p style="margin-top:0.6rem"><strong>Great design is cheap. Bad design is permanent.</strong></p>',
-          s8_reveal:   '<span class="accent">90%</span> of a great database<br/>is great <span class="accent">design</span>.',
-          s8_body:     'EduTrack\'s problem wasn\'t a missing index or a slow query.<br/>It was a model that was never designed — just grown.',
-          s8_story:    '<em>Today</em>, we learn the tools to design before we build:<br/>the <em>Entity-Relationship diagram</em>, the <em>logical model</em>,<br/>and how to think about data the right way.',
-          s9_label:    'Looks fine',
-          s9_title:    'This is EduTrack\'s database',
-          s9_sub:      'The system runs. Everyone is happy.',
-          s10_label:   'Problem 1 — Update',
-          s10_title:   'The instructor changes their name',
-          s10_callout1:'You updated <strong>one row</strong>. Five still say "Torres". <strong>Which one is the truth?</strong>',
-          s10_callout2:'We didn\'t update data — we corrupted history.',
-          s11_label:   'Problem 2 — Insert',
-          s11_title:   'A new course, no students yet',
-          s11_callout: 'The table <strong>requires a student</strong> to exist. You cannot insert a course without one. <strong>DB104 cannot exist yet.</strong>',
-          s12_label:   'Problem 3 — Delete',
-          s12_title:   'The last student drops DB103',
-          s12_callout: 'Ana\'s row is deleted. <strong>DB103 no longer exists in the system.</strong> The course, the instructor, the grade — all gone.',
-          s13_label:   'The verdict',
-          s13_title:   'Technically <span class="accent">working</span>.<br/>Logically <span class="red">broken</span>.',
-          s13_u:       'Update anomaly',
-          s13_u_sub:   'One change requires many updates. Miss one → corrupt data.',
-          s13_i:       'Insert anomaly',
-          s13_i_sub:   'Can\'t store a fact without an unrelated fact existing first.',
-          s13_d:       'Delete anomaly',
-          s13_d_sub:   'Removing one thing accidentally destroys another.',
-          s13_bridge:  'So how do we design this so reality doesn\'t break our system?',
-          s14_label:   'One mistake',
-          s14_reveal:  'We didn\'t <span class="red">design</span> the data —<br/>we just <span class="red">stored</span> it.',
-          s14_body:    'All three anomalies. Same root cause.',
-          s14_story:   'So instead of fixing tables…<br/><em>we need to change how we think.</em>',
-          s15_label:   'The shift',
-          s15_title:   'Think in entities, not tables',
-          s15_q_title: 'Start by asking',
-          s15_q1:      'Who exists? → entities',
-          s15_q2:      'What do they have? → attributes',
-          s15_q3:      'How do they relate? → relationships',
-          s15_e_title: 'In EduTrack',
-          s15_e1:      'User — exists independently',
-          s15_e2:      'Course — exists independently',
-          s15_e3:      'Instructor — exists independently',
-          s15_e4:      'Enrollment — connects them',
-          s15_key:     'Tables are an implementation detail. The real design happens before that.',
-          s16_label:   'The solution',
-          s16_title:   'This is exactly what ER design helps us do.',
-          s16_bad_title:'Bad thinking',
-          s16_bad_q:   '"What columns do I need?"',
-          s16_good_title:'Good thinking',
-          s16_good_q:  '"What objects exist in my system?"',
-          s16_bridge:  'ER diagrams make you think in objects and relationships — before a single table is created.',
+          s1_label: "TICS320 · Practicum 1",
+          s1_title: "Data Modeling<br/>and Design",
+          s2_label: "A story",
+          s2_title: "Meet EduTrack",
+          s2_sub:
+            "An online learning startup. Ambitious team, modern stack, Y Combinator dreams.",
+          s2_t1_strong: "Month 1 — Launch",
+          s2_t1_sub:
+            "200 users. Everything works perfectly. The team celebrates.",
+          s2_t2_strong: "Month 4 — Growth",
+          s2_t2_sub:
+            "1,000 users. A bit slow, but manageable. They add more servers.",
+          s2_t3_strong: "Month 8 — Viral moment",
+          s2_t3_sub: "Featured in a newsletter. 5,000 users sign up in a week.",
+          s2_t4_strong: "Month 8 + 3 days — Chaos",
+          s2_t4_sub: "Support tickets flood in. Something is very, very wrong.",
+          s3_label: "What happened",
+          s3_title: "The support tickets",
+          s3_c1_title: "Duplicate charges",
+          s3_c1_body:
+            '"I was billed twice for the same course. My bank is calling."',
+          s3_c2_title: "Wrong grades",
+          s3_c2_body:
+            '"My transcript shows a course I never took — and I\'m missing one I did."',
+          s3_c3_title: "Ghost enrollments",
+          s3_c3_body:
+            '"I enrolled three weeks ago but the system says I don\'t exist."',
+          s3_footer:
+            "1,265 tickets in 72 hours. The CEO is on the phone. The lead dev hasn't slept.",
+          s4_label: "Stop and think",
+          s4_intro: "The team panics. They start looking for the bug.",
+          s4_story:
+            '"It must be the payment service — let\'s roll back."<br/>"No, it\'s the enrollment API — I see an error in the logs."<br/>"Maybe it\'s the load balancer dropping requests?"<br/><em>Three engineers. Three different answers. All wrong.</em>',
+          s4_question: "What actually failed?",
+          s4_options:
+            "The backend? &nbsp;·&nbsp; The frontend? &nbsp;·&nbsp; The infrastructure?",
+          s5_none: "None of the above.",
+          s5_reveal: 'The <span class="accent">data</span>.',
+          s5_story:
+            "EduTrack stored users, enrollments, and payments <em>all in one table</em>. When two users shared an email, the system merged their records. When a course was updated, old enrollment rows silently pointed to nothing. There was no foreign key, no constraint, no single source of truth.<br/><br/>The code was fine. <em>The data was broken from day one.</em>",
+          s6_label: "Key message",
+          s6_title: "Data is the source of truth",
+          s6_li1:
+            '<strong>Code</strong> can be <s>rewritten</s> &nbsp;<span class="ok">fixable</span>',
+          s6_li2:
+            '<strong>UI</strong> can be <s>redesigned</s> &nbsp;<span class="ok">fixable</span>',
+          s6_li3:
+            '<strong>Infrastructure</strong> can be <s>replaced</s> &nbsp;<span class="ok">fixable</span>',
+          s6_li4:
+            '<strong>Corrupted data</strong> &nbsp;<span class="broken">stays broken</span>',
+          s6_footer:
+            "EduTrack spent 3 weeks manually reconciling 5,000 user records.<br/>Two engineers quit. Three customers filed chargebacks.",
+          s7_label: "Your responsibility",
+          s7_sub: 'Even if you "don\'t like databases".',
+          s7_title: "As engineers,<br/>you own the data.",
+          s7_c1_title: "Your users trust you with",
+          s7_c1_body:
+            "Your users hand you their identity, their money, and their academic records. When your data model breaks, it doesn't just crash an app — it <strong>destroys trust</strong> that took years to earn.",
+          s7_c2_title: "The real cost",
+          s7_c2_body:
+            '<ul class="card-list"><li>Live data migrations are slow and risky</li><li>Cleaning corrupted records takes weeks</li><li>Lost customers rarely come back</li></ul><p style="margin-top:0.6rem"><strong>Great design is cheap. Bad design is permanent.</strong></p>',
+          s8_reveal:
+            '<span class="accent">90%</span> of a great database<br/>is great <span class="accent">design</span>.',
+          s8_body:
+            "EduTrack's problem wasn't a missing index or a slow query.<br/>It was a model that was never designed — just grown.",
+          s8_story:
+            "<em>Today</em>, we learn the tools to design before we build:<br/>the <em>Entity-Relationship diagram</em>, the <em>logical model</em>,<br/>and how to think about data the right way.",
+          s9_label: "Looks fine",
+          s9_title: "This is EduTrack's database",
+          s9_sub: "The system runs. Everyone is happy.",
+          s10_label: "Problem 1 — Update",
+          s10_title: "The instructor changes their name",
+          s10_callout1:
+            'You updated <strong>one row</strong>. Five still say "Torres". <strong>Which one is the truth?</strong>',
+          s10_callout2: "We didn't update data — we corrupted history.",
+          s11_label: "Problem 2 — Insert",
+          s11_title: "A new course, no students yet",
+          s11_callout:
+            "The table <strong>requires a student</strong> to exist. You cannot insert a course without one. <strong>DB104 cannot exist yet.</strong>",
+          s12_label: "Problem 3 — Delete",
+          s12_title: "The last student drops DB103",
+          s12_callout:
+            "Ana's row is deleted. <strong>DB103 no longer exists in the system.</strong> The course, the instructor, the grade — all gone.",
+          s13_label: "The verdict",
+          s13_title:
+            'Technically <span class="accent">working</span>.<br/>Logically <span class="red">broken</span>.',
+          s13_u: "Update anomaly",
+          s13_u_sub:
+            "One change requires many updates. Miss one → corrupt data.",
+          s13_i: "Insert anomaly",
+          s13_i_sub:
+            "Can't store a fact without an unrelated fact existing first.",
+          s13_d: "Delete anomaly",
+          s13_d_sub: "Removing one thing accidentally destroys another.",
+          s13_bridge:
+            "So how do we design this so reality doesn't break our system?",
+          s14_label: "One mistake",
+          s14_reveal:
+            'We didn\'t <span class="red">design</span> the data —<br/>we just <span class="red">stored</span> it.',
+          s14_body: "All three anomalies. Same root cause.",
+          s14_story:
+            "So instead of fixing tables…<br/><em>we need to change how we think.</em>",
+          s15_label: "The shift",
+          s15_title: "Think in entities, not tables",
+          s15_q_title: "Start by asking",
+          s15_q1: "Who exists? → entities",
+          s15_q2: "What do they have? → attributes",
+          s15_q3: "How do they relate? → relationships",
+          s15_e_title: "In EduTrack",
+          s15_e1: "User — exists independently",
+          s15_e2: "Course — exists independently",
+          s15_e3: "Instructor — exists independently",
+          s15_e4: "Enrollment — connects them",
+          s15_key:
+            "Tables are an implementation detail. The real design happens before that.",
+          s16_label: "The solution",
+          s16_title: "This is exactly what ER design helps us do.",
+          s16_bad_title: "Bad thinking",
+          s16_bad_q: '"What columns do I need?"',
+          s16_good_title: "Good thinking",
+          s16_good_q: '"What objects exist in my system?"',
+          s16_bridge:
+            "ER diagrams make you think in objects and relationships — before a single table is created.",
+          s17_label: "The tool",
+          s17_title: "The Entity–Relationship Model",
+          s17_def:
+            "A way to represent the real world before turning it into tables.",
+          s17_b1_title: "🗺 A blueprint",
+          s17_b1_body:
+            "Design the structure before writing a single CREATE TABLE.",
+          s17_b2_title: "🗣 A shared language",
+          s17_b2_body:
+            "Developers, clients, and managers can all read the same diagram.",
+          s17_components:
+            "3 core components: <strong>Entities</strong>, <strong>Attributes</strong>, and <strong>Relationships</strong>.",
+          s18_label: "Component 1",
+          s18_title: "Entities",
+          s18_repr: "A real-world thing that can be uniquely identified — represented as a <strong>rectangle</strong> with the entity name inside.",
+          s18_strong_title: "💪 Strong entities",
+          s18_strong_body: "Exist independently. They have their own unique identifier.",
+          s18_strong_ex: "User",
+          s18_weak_title: "🔗 Weak entities",
+          s18_weak_body: "Cannot exist without another entity. Depend on it and require its identity to be identified.",
+          s18_weak_ex: "Enrollment",
+          s18_stacks_note: "Think of each entity as its own pile of records:",
+          s18_e1: "User",
+          s18_e2: "Course",
+          s18_e3: "Instructor",
+          s18_rule:
+            "If it can exist on its own → it's probably a strong entity. No two records in the same pile share the same ID.",
+          s19_label: "Component 2",
+          s19_title: "Attributes",
+          s19_def: "The fields on each paper — what describes an entity.",
+          s19_types_title: "Types of attributes",
+          s19_t1: "Simple — atomic, indivisible (email, grade)",
+          s19_t2: "Composite — can be split (full_name → first + last)",
+          s19_t3: "Derived — computed from another (age from birthdate)",
+          s19_t4: "Multi-valued — holds several values (phone numbers)",
+          s19_t5: "Key — uniquely identifies every instance",
+          s19_ex_title: "User entity",
+          s19_type_key: "Key",
+          s19_type_simple: "Simple",
+          s19_type_composite: "Composite",
+          s19_type_derived: "Derived",
+          s19_type_multi: "Multi-valued",
+          s19_rule:
+            "Attributes live inside entities. They don't exist on their own.",
+          s20_label: "Component 3",
+          s20_title: "Relationships",
+          s20_def:
+            "How entities connect. Reality is connected — your model should be too.",
+          s20_e1: "User",
+          s20_r1: "enrolls in",
+          s20_e2: "Course",
+          s20_e3: "Course",
+          s20_r2: "taught by",
+          s20_e4: "Instructor",
+          s20_e5: "Instructor",
+          s20_r3: "works at",
+          s20_e6: "University",
+          s20_rule: "Relationships are verbs. Entities are nouns.",
+          s21_label: "Component 4",
+          s21_title: "Cardinality",
+          s21_def: "How many of one thing relate to another?",
+          s21_e1: "Instructor",
+          s21_r1: "has",
+          s21_e2: "Office",
+          s21_e3: "Instructor",
+          s21_r2: "teaches",
+          s21_e4: "Course",
+          s21_e5: "User",
+          s21_r3: "enrolls in",
+          s21_e6: "Course",
+          s21_desc1: "One instructor, one office.",
+          s21_desc2: "One instructor, many courses.",
+          s21_desc3: "Many users, many courses.",
+          s21_rule:
+            'Ask: "How many X can relate to one Y?" — then ask it in reverse.',
+          s22_label: "Component 5",
+          s22_title: "Participation Constraints",
+          s22_def: "Can this thing exist without that relationship?",
+          s22_total_title: "🔒 Total (mandatory)",
+          s22_total_def: "Every instance must participate. No exceptions.",
+          s22_total_ex1: "Every Enrollment must have a Student",
+          s22_total_ex2: "Every Course must have an Instructor",
+          s22_total_q: '"Can an enrollment exist without a student?" — No.',
+          s22_partial_title: "🔓 Partial (optional)",
+          s22_partial_def: "Some instances may not participate. That's fine.",
+          s22_partial_ex1: "A Student may not be enrolled right now",
+          s22_partial_ex2: "An Instructor may not be teaching this semester",
+          s22_partial_q: '"Can a student exist without enrolling?" — Yes.',
+          s22_rule: "No = Total participation. Yes = Partial participation.",
+          s23_label: "Putting it together",
+          s23_title: "Student enrolls in Course",
+          s23_sub: "2 entities · 1 relationship · M:N cardinality",
+          s23_student: "Student",
+          s23_rel: "enrolls in",
+          s23_course: "Course",
+          s23_rel_note: "relationship attributes",
+          s23_note:
+            "grade and enrolled_at belong to the enrollment — not to the student, not to the course. Relationships can have attributes too.",
+          s24_label: "Now you see it",
+          s24_reveal: 'Back to our <span class="red">broken</span> system.',
+          s24_body: "With ER thinking, the flat table splits cleanly into:",
+          s24_e1: "User",
+          s24_e1_sub: "id · name · email",
+          s24_e2: "Course",
+          s24_e2_sub: "id · name",
+          s24_e3: "Instructor",
+          s24_e3_sub: "id · name",
+          s24_n_user: "User",
+          s24_n_enrolls: "enrolls in",
+          s24_n_course: "Course",
+          s24_n_taught: "taught by",
+          s24_n_instructor: "Instructor",
+          s24_next:
+            "Next: let's draw the full ER diagram for EduTrack and build it right.",
+
+          // ── Slide 25: No Perfect ER ──
+          s25_label: "Before you start",
+          s25_title: "There's no single right answer.",
+          s25_sub: "ER modeling is a design discipline, not a formula.",
+          s25_c1_title: "Design follows functionality",
+          s25_c1_body: "Every ER decision should serve a real use case — not aesthetics or habit.",
+          s25_c2_title: "Many solutions, one problem",
+          s25_c2_body: "Two valid diagrams can represent the same reality differently. Both can be correct.",
+          s25_c3_title: "Practice builds judgment",
+          s25_c3_body: "The only way to tell which design is better is experience, constraints, and critical thinking.",
+          s25_note: "The goal is not to find the <em>perfect</em> diagram. It's to build the <strong>right one for the right problem</strong>.",
+
+          // ── Slide 26: MarBrisa Intro ──
+          s26_label: "The exercise",
+          s26_title: "🎬 MarBrisa Disco",
+          s26_brief: "You've been hired to design the database system for a disco called <strong>MarBrisa</strong>.",
+          s26_context_label: "The situation",
+          s26_story1: "MarBrisa is a popular disco that hosts weekend parties with themed nights.",
+          s26_story2: "They sell tickets online in advance and at the entrance on the night of each event.",
+          s26_story3: "Inside, there is a bar where customers can order drinks from a menu throughout the night.",
+          s26_task: "Your job: model this system as an ER diagram. Think carefully before drawing.",
+
+          // ── Slide 27: Requirements ──
+          s27_label: "What it needs to handle",
+          s27_title: "Four things the system tracks",
+          s27_r1_title: "Ticket Sales",
+          s27_r1_a: "Sold online (advance) or at the door",
+          s27_r1_b: "Each ticket has a price and belongs to an event",
+          s27_r1_c: "A customer can buy multiple tickets",
+          s27_r2_title: "Bar & Drinks",
+          s27_r2_a: "The disco has a menu of drinks",
+          s27_r2_b: "Each drink has a name and a price",
+          s27_r2_c: "Customers can order multiple drinks per night",
+          s27_r3_title: "Purchases",
+          s27_r3_a: "Each purchase belongs to a customer",
+          s27_r3_b: "Can include multiple drinks",
+          s27_r3_c: "Recorded with a timestamp",
+          s27_r4_title: "Events",
+          s27_r4_a: "MarBrisa hosts themed parties (e.g. Reggaeton Night)",
+          s27_r4_b: "Each event has a date",
+          s27_r4_c: "Ticket sales are tied to a specific event",
+
+          // ── Slide 28: Your Task ──
+          s28_label: "Design challenge",
+          s28_title: "Design an ER model for MarBrisa.",
+          s28_sub: "Guide yourself with these questions:",
+          s28_q1: "Who are the <strong>entities</strong>?",
+          s28_q2: "What <strong>attributes</strong> does each one have?",
+          s28_q3: "How do the entities <strong>relate</strong> to each other?",
+          s28_q4: "Can something <strong>exist independently</strong>, or does it always need another entity?",
+          s28_challenge: "Optional challenge: What if a customer buys drinks for friends? Do tickets belong to a person or just to a purchase?",
+          s28_closing1: "Don't think in tables. Think in reality.",
+          s28_closing2: "What exists in MarBrisa?",
         },
         es: {
-          s1_label:    'TICS320 · Practicum 1',
-          s1_title:    'Modelado y Diseño<br/>de Datos',
-          s2_label:    'Una historia',
-          s2_title:    'Conoce a EduTrack',
-          s2_sub:      'Una startup de aprendizaje en línea. Equipo ambicioso, stack moderno, sueños de Y Combinator.',
-          s2_t1_strong:'Mes 1 — Lanzamiento',
-          s2_t1_sub:   '200 usuarios. Todo funciona perfectamente. El equipo celebra.',
-          s2_t2_strong:'Mes 4 — Crecimiento',
-          s2_t2_sub:   '1.000 usuarios. Un poco lento, pero manejable. Añaden más servidores.',
-          s2_t3_strong:'Mes 8 — Momento viral',
-          s2_t3_sub:   'Aparecen en un newsletter. 5.000 usuarios se registran en una semana.',
-          s2_t4_strong:'Mes 8 + 3 días — Caos',
-          s2_t4_sub:   'Los tickets de soporte se acumulan. Algo va muy, muy mal.',
-          s3_label:    'Qué pasó',
-          s3_title:    'Los tickets de soporte',
-          s3_c1_title: 'Cobros duplicados',
-          s3_c1_body:  '"Me cobraron dos veces el mismo curso. Mi banco está llamando."',
-          s3_c2_title: 'Notas incorrectas',
-          s3_c2_body:  '"Mi historial muestra un curso que nunca tomé — y falta uno que sí tomé."',
-          s3_c3_title: 'Inscripciones fantasma',
-          s3_c3_body:  '"Me inscribí hace tres semanas pero el sistema dice que no existo."',
-          s3_footer:   '1.265 tickets en 72 horas. El CEO está al teléfono. El dev principal no ha dormido.',
-          s4_label:    'Pausa y piensa',
-          s4_intro:    'El equipo entra en pánico. Empiezan a buscar el bug.',
-          s4_story:    '"Debe ser el servicio de pagos — hagamos rollback."<br/>"No, es la API de inscripciones — veo un error en los logs."<br/>"¿Quizás el balanceador de carga está descartando requests?"<br/><em>Tres ingenieros. Tres respuestas diferentes. Todas incorrectas.</em>',
-          s4_question: '¿Qué falló realmente?',
-          s4_options:  '¿El backend? &nbsp;·&nbsp; ¿El frontend? &nbsp;·&nbsp; ¿La infraestructura?',
-          s5_none:     'Ninguna de las anteriores.',
-          s5_reveal:   'Los <span class="accent">datos</span>.',
-          s5_story:    'EduTrack guardaba usuarios, inscripciones y pagos <em>en una sola tabla</em>. Cuando dos usuarios compartían un email, el sistema fusionaba sus registros. Cuando se actualizaba un curso, las filas antiguas apuntaban a nada en silencio. No había foreign key, ni constraint, ni fuente única de verdad.<br/><br/>El código estaba bien. <em>Los datos estaban rotos desde el día uno.</em>',
-          s6_label:    'Mensaje clave',
-          s6_title:    'Los datos son la fuente de verdad',
-          s6_li1:      '<strong>El código</strong> puede ser <s>reescrito</s> &nbsp;<span class="ok">reparable</span>',
-          s6_li2:      '<strong>La UI</strong> puede ser <s>rediseñada</s> &nbsp;<span class="ok">reparable</span>',
-          s6_li3:      '<strong>La infraestructura</strong> puede ser <s>reemplazada</s> &nbsp;<span class="ok">reparable</span>',
-          s6_li4:      '<strong>Datos corruptos</strong> &nbsp;<span class="broken">quedan rotos</span>',
-          s6_footer:   'EduTrack pasó 3 semanas reconciliando manualmente 5.000 registros.<br/>Dos ingenieros renunciaron. Tres clientes hicieron contracargos.',
-          s7_label:    'Tu responsabilidad',
-          s7_sub:      'Aunque no te "gusten las bases de datos".',
-          s7_title:    'Como ingenieros,<br/>los datos son su responsabilidad.',
-          s7_c1_title: 'Tus usuarios te confían',
-          s7_c1_body:  'Tus usuarios te entregan su identidad, su dinero y sus registros académicos. Cuando tu modelo de datos falla, no solo rompe una app — <strong>destruye la confianza</strong> que tardó años en construirse.',
-          s7_c2_title: 'El costo real',
-          s7_c2_body:  '<ul class="card-list"><li>Las migraciones en datos vivos son lentas y riesgosas</li><li>Limpiar registros corruptos toma semanas</li><li>Los clientes perdidos raramente vuelven</li></ul><p style="margin-top:0.6rem"><strong>Un buen diseño es barato. Un mal diseño es permanente.</strong></p>',
-          s8_reveal:   'El <span class="accent">90%</span> de una gran base de datos<br/>es un gran <span class="accent">diseño</span>.',
-          s8_body:     'El problema de EduTrack no era un índice faltante ni una consulta lenta.<br/>Era un modelo que nunca fue diseñado — solo creció.',
-          s8_story:    '<em>Hoy</em> aprendemos las herramientas para diseñar antes de construir:<br/>el <em>diagrama Entidad-Relación</em>, el <em>modelo lógico</em>,<br/>y cómo pensar correctamente sobre los datos.',
-          s9_label:    'Se ve bien',
-          s9_title:    'Esta es la base de datos de EduTrack',
-          s9_sub:      'El sistema funciona. Todo el mundo está contento.',
-          s10_label:   'Problema 1 — Actualización',
-          s10_title:   'El instructor cambia su nombre',
-          s10_callout1:'Actualizaste <strong>una fila</strong>. Cinco siguen diciendo "Torres". <strong>¿Cuál es la verdad?</strong>',
-          s10_callout2:'No actualizamos datos — corrompimos el historial.',
-          s11_label:   'Problema 2 — Inserción',
-          s11_title:   'Un nuevo curso, sin estudiantes aún',
-          s11_callout: 'La tabla <strong>requiere un estudiante</strong> para existir. No puedes insertar un curso sin uno. <strong>DB104 no puede existir todavía.</strong>',
-          s12_label:   'Problema 3 — Borrado',
-          s12_title:   'El último estudiante abandona DB103',
-          s12_callout: 'Se elimina la fila de Ana. <strong>DB103 ya no existe en el sistema.</strong> El curso, el instructor, la nota — todo desaparece.',
-          s13_label:   'El veredicto',
-          s13_title:   'Técnicamente <span class="accent">funciona</span>.<br/>Lógicamente <span class="red">está roto</span>.',
-          s13_u:       'Anomalía de actualización',
-          s13_u_sub:   'Un cambio requiere muchas actualizaciones. Olvidas una → datos corruptos.',
-          s13_i:       'Anomalía de inserción',
-          s13_i_sub:   'No puedes guardar un hecho sin que otro hecho no relacionado exista primero.',
-          s13_d:       'Anomalía de borrado',
-          s13_d_sub:   'Eliminar una cosa destruye accidentalmente otra.',
-          s13_bridge:  '¿Cómo diseñamos esto para que la realidad no rompa nuestro sistema?',
-          s14_label:   'Un error',
-          s14_reveal:  'No <span class="red">diseñamos</span> los datos —<br/>simplemente los <span class="red">almacenamos</span>.',
-          s14_body:    'Las tres anomalías. La misma causa raíz.',
-          s14_story:   'Entonces en lugar de arreglar tablas…<br/><em>necesitamos cambiar cómo pensamos.</em>',
-          s15_label:   'El cambio',
-          s15_title:   'Piensa en entidades, no en tablas',
-          s15_q_title: 'Empieza preguntando',
-          s15_q1:      '¿Quién existe? → entidades',
-          s15_q2:      '¿Qué tienen? → atributos',
-          s15_q3:      '¿Cómo se relacionan? → relaciones',
-          s15_e_title: 'En EduTrack',
-          s15_e1:      'Usuario — existe de forma independiente',
-          s15_e2:      'Curso — existe de forma independiente',
-          s15_e3:      'Instructor — existe de forma independiente',
-          s15_e4:      'Inscripción — los conecta',
-          s15_key:     'Las tablas son un detalle de implementación. El diseño real ocurre antes.',
-          s16_label:   'La solución',
-          s16_title:   'Esto es exactamente lo que el diseño ER nos ayuda a hacer.',
-          s16_bad_title:'Mal pensamiento',
-          s16_bad_q:   '"¿Qué columnas necesito?"',
-          s16_good_title:'Buen pensamiento',
-          s16_good_q:  '"¿Qué objetos existen en mi sistema?"',
-          s16_bridge:  'Los diagramas ER te hacen pensar en objetos y relaciones — antes de crear una sola tabla.',
+          s1_label: "TICS320 · Practicum 1",
+          s1_title: "Modelado y Diseño<br/>de Datos",
+          s2_label: "Una historia",
+          s2_title: "Conoce a EduTrack",
+          s2_sub:
+            "Una startup de aprendizaje en línea. Equipo ambicioso, stack moderno, sueños de Y Combinator.",
+          s2_t1_strong: "Mes 1 — Lanzamiento",
+          s2_t1_sub:
+            "200 usuarios. Todo funciona perfectamente. El equipo celebra.",
+          s2_t2_strong: "Mes 4 — Crecimiento",
+          s2_t2_sub:
+            "1.000 usuarios. Un poco lento, pero manejable. Añaden más servidores.",
+          s2_t3_strong: "Mes 8 — Momento viral",
+          s2_t3_sub:
+            "Aparecen en un newsletter. 5.000 usuarios se registran en una semana.",
+          s2_t4_strong: "Mes 8 + 3 días — Caos",
+          s2_t4_sub:
+            "Los tickets de soporte se acumulan. Algo va muy, muy mal.",
+          s3_label: "Qué pasó",
+          s3_title: "Los tickets de soporte",
+          s3_c1_title: "Cobros duplicados",
+          s3_c1_body:
+            '"Me cobraron dos veces el mismo curso. Mi banco está llamando."',
+          s3_c2_title: "Notas incorrectas",
+          s3_c2_body:
+            '"Mi historial muestra un curso que nunca tomé — y falta uno que sí tomé."',
+          s3_c3_title: "Inscripciones fantasma",
+          s3_c3_body:
+            '"Me inscribí hace tres semanas pero el sistema dice que no existo."',
+          s3_footer:
+            "1.265 tickets en 72 horas. El CEO está al teléfono. El dev principal no ha dormido.",
+          s4_label: "Pausa y piensa",
+          s4_intro: "El equipo entra en pánico. Empiezan a buscar el bug.",
+          s4_story:
+            '"Debe ser el servicio de pagos — hagamos rollback."<br/>"No, es la API de inscripciones — veo un error en los logs."<br/>"¿Quizás el balanceador de carga está descartando requests?"<br/><em>Tres ingenieros. Tres respuestas diferentes. Todas incorrectas.</em>',
+          s4_question: "¿Qué falló realmente?",
+          s4_options:
+            "¿El backend? &nbsp;·&nbsp; ¿El frontend? &nbsp;·&nbsp; ¿La infraestructura?",
+          s5_none: "Ninguna de las anteriores.",
+          s5_reveal: 'Los <span class="accent">datos</span>.',
+          s5_story:
+            "EduTrack guardaba usuarios, inscripciones y pagos <em>en una sola tabla</em>. Cuando dos usuarios compartían un email, el sistema fusionaba sus registros. Cuando se actualizaba un curso, las filas antiguas apuntaban a nada en silencio. No había foreign key, ni constraint, ni fuente única de verdad.<br/><br/>El código estaba bien. <em>Los datos estaban rotos desde el día uno.</em>",
+          s6_label: "Mensaje clave",
+          s6_title: "Los datos son la fuente de verdad",
+          s6_li1:
+            '<strong>El código</strong> puede ser <s>reescrito</s> &nbsp;<span class="ok">reparable</span>',
+          s6_li2:
+            '<strong>La UI</strong> puede ser <s>rediseñada</s> &nbsp;<span class="ok">reparable</span>',
+          s6_li3:
+            '<strong>La infraestructura</strong> puede ser <s>reemplazada</s> &nbsp;<span class="ok">reparable</span>',
+          s6_li4:
+            '<strong>Datos corruptos</strong> &nbsp;<span class="broken">quedan rotos</span>',
+          s6_footer:
+            "EduTrack pasó 3 semanas reconciliando manualmente 5.000 registros.<br/>Dos ingenieros renunciaron. Tres clientes hicieron contracargos.",
+          s7_label: "Tu responsabilidad",
+          s7_sub: 'Aunque no te "gusten las bases de datos".',
+          s7_title: "Como ingenieros,<br/>los datos son su responsabilidad.",
+          s7_c1_title: "Tus usuarios te confían",
+          s7_c1_body:
+            "Tus usuarios te entregan su identidad, su dinero y sus registros académicos. Cuando tu modelo de datos falla, no solo rompe una app — <strong>destruye la confianza</strong> que tardó años en construirse.",
+          s7_c2_title: "El costo real",
+          s7_c2_body:
+            '<ul class="card-list"><li>Las migraciones en datos vivos son lentas y riesgosas</li><li>Limpiar registros corruptos toma semanas</li><li>Los clientes perdidos raramente vuelven</li></ul><p style="margin-top:0.6rem"><strong>Un buen diseño es barato. Un mal diseño es permanente.</strong></p>',
+          s8_reveal:
+            'El <span class="accent">90%</span> de una gran base de datos<br/>es un gran <span class="accent">diseño</span>.',
+          s8_body:
+            "El problema de EduTrack no era un índice faltante ni una consulta lenta.<br/>Era un modelo que nunca fue diseñado — solo creció.",
+          s8_story:
+            "<em>Hoy</em> aprendemos las herramientas para diseñar antes de construir:<br/>el <em>diagrama Entidad-Relación</em>, el <em>modelo lógico</em>,<br/>y cómo pensar correctamente sobre los datos.",
+          s9_label: "Se ve bien",
+          s9_title: "Esta es la base de datos de EduTrack",
+          s9_sub: "El sistema funciona. Todo el mundo está contento.",
+          s10_label: "Problema 1 — Actualización",
+          s10_title: "El instructor cambia su nombre",
+          s10_callout1:
+            'Actualizaste <strong>una fila</strong>. Cinco siguen diciendo "Torres". <strong>¿Cuál es la verdad?</strong>',
+          s10_callout2: "No actualizamos datos — corrompimos el historial.",
+          s11_label: "Problema 2 — Inserción",
+          s11_title: "Un nuevo curso, sin estudiantes aún",
+          s11_callout:
+            "La tabla <strong>requiere un estudiante</strong> para existir. No puedes insertar un curso sin uno. <strong>DB104 no puede existir todavía.</strong>",
+          s12_label: "Problema 3 — Borrado",
+          s12_title: "El último estudiante abandona DB103",
+          s12_callout:
+            "Se elimina la fila de Ana. <strong>DB103 ya no existe en el sistema.</strong> El curso, el instructor, la nota — todo desaparece.",
+          s13_label: "El veredicto",
+          s13_title:
+            'Técnicamente <span class="accent">funciona</span>.<br/>Lógicamente <span class="red">está roto</span>.',
+          s13_u: "Anomalía de actualización",
+          s13_u_sub:
+            "Un cambio requiere muchas actualizaciones. Olvidas una → datos corruptos.",
+          s13_i: "Anomalía de inserción",
+          s13_i_sub:
+            "No puedes guardar un hecho sin que otro hecho no relacionado exista primero.",
+          s13_d: "Anomalía de borrado",
+          s13_d_sub: "Eliminar una cosa destruye accidentalmente otra.",
+          s13_bridge:
+            "¿Cómo diseñamos esto para que la realidad no rompa nuestro sistema?",
+          s14_label: "Un error",
+          s14_reveal:
+            'No <span class="red">diseñamos</span> los datos —<br/>simplemente los <span class="red">almacenamos</span>.',
+          s14_body: "Las tres anomalías. La misma causa raíz.",
+          s14_story:
+            "Entonces en lugar de arreglar tablas…<br/><em>necesitamos cambiar cómo pensamos.</em>",
+          s15_label: "El cambio",
+          s15_title: "Piensa en entidades, no en tablas",
+          s15_q_title: "Empieza preguntando",
+          s15_q1: "¿Quién existe? → entidades",
+          s15_q2: "¿Qué tienen? → atributos",
+          s15_q3: "¿Cómo se relacionan? → relaciones",
+          s15_e_title: "En EduTrack",
+          s15_e1: "Usuario — existe de forma independiente",
+          s15_e2: "Curso — existe de forma independiente",
+          s15_e3: "Instructor — existe de forma independiente",
+          s15_e4: "Inscripción — los conecta",
+          s15_key:
+            "Las tablas son un detalle de implementación. El diseño real ocurre antes.",
+          s16_label: "La solución",
+          s16_title:
+            "Esto es exactamente lo que el diseño ER nos ayuda a hacer.",
+          s16_bad_title: "Mal pensamiento",
+          s16_bad_q: '"¿Qué columnas necesito?"',
+          s16_good_title: "Buen pensamiento",
+          s16_good_q: '"¿Qué objetos existen en mi sistema?"',
+          s16_bridge:
+            "Los diagramas ER te hacen pensar en objetos y relaciones — antes de crear una sola tabla.",
+          s17_label: "La herramienta",
+          s17_title: "El Modelo Entidad–Relación",
+          s17_def:
+            "Una forma de representar el mundo real antes de convertirlo en tablas.",
+          s17_b1_title: "🗺 Un plano",
+          s17_b1_body:
+            "Diseña la estructura antes de escribir un solo CREATE TABLE.",
+          s17_b2_title: "🗣 Un lenguaje común",
+          s17_b2_body:
+            "Desarrolladores, clientes y managers pueden leer el mismo diagrama.",
+          s17_components:
+            "3 componentes principales: <strong>Entidades</strong>, <strong>Atributos</strong> y <strong>Relaciones</strong>.",
+          s18_label: "Componente 1",
+          s18_title: "Entidades",
+          s18_repr: "Una cosa del mundo real que puede identificarse de forma única — representada como un <strong>rectángulo</strong> con el nombre de la entidad dentro.",
+          s18_strong_title: "💪 Entidades fuertes",
+          s18_strong_body: "Existen de forma independiente. Tienen su propio identificador único.",
+          s18_strong_ex: "Usuario",
+          s18_weak_title: "🔗 Entidades débiles",
+          s18_weak_body: "No pueden existir sin otra entidad. Dependen de ella y necesitan su identidad para identificarse.",
+          s18_weak_ex: "Inscripción",
+          s18_stacks_note: "Piensa en cada entidad como su propia pila de registros:",
+          s18_e1: "Usuario",
+          s18_e2: "Curso",
+          s18_e3: "Instructor",
+          s18_rule:
+            "Si puede existir por sí solo → probablemente es una entidad fuerte. Dos registros de la misma pila no comparten el mismo ID.",
+          s19_label: "Componente 2",
+          s19_title: "Atributos",
+          s19_def: "Los campos de cada papel — lo que describe a una entidad.",
+          s19_types_title: "Tipos de atributos",
+          s19_t1: "Simple — atómico, indivisible (email, nota)",
+          s19_t2:
+            "Compuesto — puede dividirse (nombre_completo → nombre + apellido)",
+          s19_t3: "Derivado — calculado de otro (edad desde fecha_nacimiento)",
+          s19_t4: "Multivaluado — varios valores (teléfonos)",
+          s19_t5: "Clave — identifica de forma única cada instancia",
+          s19_ex_title: "Entidad Usuario",
+          s19_type_key: "Clave",
+          s19_type_simple: "Simple",
+          s19_type_composite: "Compuesto",
+          s19_type_derived: "Derivado",
+          s19_type_multi: "Multivaluado",
+          s19_rule:
+            "Los atributos viven dentro de las entidades. No existen por sí solos.",
+          s20_label: "Componente 3",
+          s20_title: "Relaciones",
+          s20_def:
+            "Cómo se conectan las entidades. La realidad está conectada — tu modelo también debe estarlo.",
+          s20_e1: "Usuario",
+          s20_r1: "se inscribe en",
+          s20_e2: "Curso",
+          s20_e3: "Curso",
+          s20_r2: "dictado por",
+          s20_e4: "Instructor",
+          s20_e5: "Instructor",
+          s20_r3: "trabaja en",
+          s20_e6: "Universidad",
+          s20_rule: "Las relaciones son verbos. Las entidades son sustantivos.",
+          s21_label: "Componente 4",
+          s21_title: "Cardinalidad",
+          s21_def: "¿Cuántos de una cosa se relacionan con otra?",
+          s21_e1: "Instructor",
+          s21_r1: "tiene",
+          s21_e2: "Oficina",
+          s21_e3: "Instructor",
+          s21_r2: "dicta",
+          s21_e4: "Curso",
+          s21_e5: "Usuario",
+          s21_r3: "se inscribe en",
+          s21_e6: "Curso",
+          s21_desc1: "Un instructor, una oficina.",
+          s21_desc2: "Un instructor, muchos cursos.",
+          s21_desc3: "Muchos usuarios, muchos cursos.",
+          s21_rule:
+            'Pregunta: "¿Cuántos X se relacionan con un Y?" — luego pregúntalo al revés.',
+          s22_label: "Componente 5",
+          s22_title: "Restricciones de Participación",
+          s22_def: "¿Puede esta cosa existir sin esa relación?",
+          s22_total_title: "🔒 Total (obligatoria)",
+          s22_total_def: "Toda instancia debe participar. Sin excepciones.",
+          s22_total_ex1: "Toda Inscripción debe tener un Estudiante",
+          s22_total_ex2: "Todo Curso debe tener un Instructor",
+          s22_total_q: '"¿Puede existir una inscripción sin estudiante?" — No.',
+          s22_partial_title: "🔓 Parcial (opcional)",
+          s22_partial_def:
+            "Algunas instancias pueden no participar. Está bien.",
+          s22_partial_ex1: "Un Estudiante puede no estar inscrito ahora",
+          s22_partial_ex2:
+            "Un Instructor puede no estar enseñando este semestre",
+          s22_partial_q:
+            '"¿Puede existir un estudiante sin inscribirse?" — Sí.',
+          s22_rule: "No = Participación total. Sí = Participación parcial.",
+          s23_label: "Juntando todo",
+          s23_title: "Estudiante se inscribe en Curso",
+          s23_sub: "2 entidades · 1 relación · cardinalidad M:N",
+          s23_student: "Estudiante",
+          s23_rel: "se inscribe en",
+          s23_course: "Curso",
+          s23_rel_note: "atributos de la relación",
+          s23_note:
+            "nota y fecha_inscripción pertenecen a la inscripción — no al estudiante ni al curso. Las relaciones también pueden tener atributos.",
+          s24_label: "Ahora lo ves",
+          s24_reveal:
+            'Volvamos a nuestro sistema <span class="red">roto</span>.',
+          s24_body:
+            "Con el pensamiento ER, la tabla plana se divide limpiamente en:",
+          s24_e1: "Usuario",
+          s24_e1_sub: "id · nombre · email",
+          s24_e2: "Curso",
+          s24_e2_sub: "id · nombre",
+          s24_e3: "Instructor",
+          s24_e3_sub: "id · nombre",
+          s24_n_user: "Usuario",
+          s24_n_enrolls: "se inscribe en",
+          s24_n_course: "Curso",
+          s24_n_taught: "dictado por",
+          s24_n_instructor: "Instructor",
+          s24_next:
+            "Siguiente: dibujemos el diagrama ER completo de EduTrack y construyámoslo bien.",
+
+          // ── Slide 25 ──
+          s25_label: "Antes de empezar",
+          s25_title: "No hay una única respuesta correcta.",
+          s25_sub: "El modelado ER es una disciplina de diseño, no una fórmula.",
+          s25_c1_title: "El diseño sigue a la funcionalidad",
+          s25_c1_body: "Cada decisión ER debe responder a un caso de uso real — no a la estética ni al hábito.",
+          s25_c2_title: "Muchas soluciones, un problema",
+          s25_c2_body: "Dos diagramas válidos pueden representar la misma realidad de forma diferente. Ambos pueden ser correctos.",
+          s25_c3_title: "La práctica forma el juicio",
+          s25_c3_body: "La única forma de saber cuál diseño es mejor es a través de la experiencia, las restricciones y el pensamiento crítico.",
+          s25_note: "El objetivo no es encontrar el diagrama <em>perfecto</em>. Es construir el <strong>correcto para el problema correcto</strong>.",
+
+          // ── Slide 26 ──
+          s26_label: "El ejercicio",
+          s26_title: "🎬 Disco MarBrisa",
+          s26_brief: "Has sido contratado para diseñar el sistema de base de datos de una discoteca llamada <strong>MarBrisa</strong>.",
+          s26_context_label: "El contexto",
+          s26_story1: "MarBrisa es una discoteca popular que organiza fiestas temáticas los fines de semana.",
+          s26_story2: "Venden entradas en línea con anticipación y en la puerta la noche del evento.",
+          s26_story3: "Adentro hay un bar donde los clientes pueden pedir bebidas del menú durante la noche.",
+          s26_task: "Tu tarea: modela este sistema como un diagrama ER. Piensa antes de dibujar.",
+
+          // ── Slide 27 ──
+          s27_label: "Qué debe manejar",
+          s27_title: "Cuatro cosas que el sistema registra",
+          s27_r1_title: "Venta de Entradas",
+          s27_r1_a: "Vendidas en línea (anticipadas) o en la puerta",
+          s27_r1_b: "Cada entrada tiene un precio y pertenece a un evento",
+          s27_r1_c: "Un cliente puede comprar múltiples entradas",
+          s27_r2_title: "Bar y Bebidas",
+          s27_r2_a: "La discoteca tiene un menú de bebidas",
+          s27_r2_b: "Cada bebida tiene un nombre y un precio",
+          s27_r2_c: "Los clientes pueden pedir múltiples bebidas por noche",
+          s27_r3_title: "Compras",
+          s27_r3_a: "Cada compra pertenece a un cliente",
+          s27_r3_b: "Puede incluir múltiples bebidas",
+          s27_r3_c: "Se registra con una marca de tiempo",
+          s27_r4_title: "Eventos",
+          s27_r4_a: "MarBrisa organiza fiestas temáticas (ej. Noche de Reggaetón)",
+          s27_r4_b: "Cada evento tiene una fecha",
+          s27_r4_c: "La venta de entradas está ligada a un evento específico",
+
+          // ── Slide 28 ──
+          s28_label: "Desafío de diseño",
+          s28_title: "Diseña un modelo ER para MarBrisa.",
+          s28_sub: "Guíate con estas preguntas:",
+          s28_q1: "¿Cuáles son las <strong>entidades</strong>?",
+          s28_q2: "¿Qué <strong>atributos</strong> tiene cada una?",
+          s28_q3: "¿Cómo se <strong>relacionan</strong> las entidades entre sí?",
+          s28_q4: "¿Puede algo <strong>existir de forma independiente</strong>, o siempre necesita otra entidad?",
+          s28_challenge: "Desafío opcional: ¿Qué pasa si un cliente compra bebidas para sus amigos? ¿Las entradas pertenecen a una persona o solo a una compra?",
+          s28_closing1: "No pienses en tablas. Piensa en la realidad.",
+          s28_closing2: "¿Qué existe en MarBrisa?",
         },
       };
 
       // ── Apply language ──
-      let currentLang = 'en';
+      let currentLang = "en";
 
       function applyLang(lang) {
         const dict = i18n[lang];
-        document.querySelectorAll('[data-i18n]').forEach(el => {
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
           const key = el.dataset.i18n;
           if (dict[key] !== undefined) el.textContent = dict[key];
         });
-        document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        document.querySelectorAll("[data-i18n-html]").forEach((el) => {
           const key = el.dataset.i18nHtml;
           if (dict[key] !== undefined) el.innerHTML = dict[key];
         });
         // Update filmstrip titles
-        const sections = document.querySelectorAll('.reveal .slides section');
-        const thumbTitles = document.querySelectorAll('.thumb-title');
+        const sections = document.querySelectorAll(".reveal .slides section");
+        const thumbTitles = document.querySelectorAll(".thumb-title");
         sections.forEach((s, i) => {
-          const title = lang === 'en' ? s.dataset.titleEn : s.dataset.titleEs;
+          const title = lang === "en" ? s.dataset.titleEn : s.dataset.titleEs;
           if (title && thumbTitles[i]) thumbTitles[i].textContent = title;
         });
         // Update toggle buttons
-        document.querySelectorAll('.lang-btn').forEach(b => {
-          b.classList.toggle('active', b.dataset.lang === lang);
+        document.querySelectorAll(".lang-btn").forEach((b) => {
+          b.classList.toggle("active", b.dataset.lang === lang);
         });
         currentLang = lang;
       }
 
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+      document.querySelectorAll(".lang-btn").forEach((btn) => {
+        btn.addEventListener("click", () => applyLang(btn.dataset.lang));
       });
 
       // ── Reveal init ──
       Reveal.initialize({
-        controls: false, progress: false, hash: true,
-        transition: 'fade', transitionSpeed: 'fast',
-        width: '100%', height: '100%', margin: 0, minScale: 1, maxScale: 1,
+        controls: false,
+        progress: false,
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        minScale: 1,
+        maxScale: 1,
       });
 
       // ── Filmstrip ──
-      const strip    = document.getElementById('filmstrip');
-      const sections = document.querySelectorAll('.reveal .slides section');
+      const strip = document.getElementById("filmstrip");
+      const sections = document.querySelectorAll(".reveal .slides section");
 
       sections.forEach((section, i) => {
-        const n = String(i + 1).padStart(2, '0');
-        const thumb = document.createElement('div');
-        thumb.className = 'thumb';
-        thumb.innerHTML = `<span class="thumb-num">${n}</span><span class="thumb-title">${section.dataset.titleEn ?? 'Slide ' + (i+1)}</span>`;
-        thumb.addEventListener('click', () => Reveal.slide(i));
+        const n = String(i + 1).padStart(2, "0");
+        const thumb = document.createElement("div");
+        thumb.className = "thumb";
+        thumb.innerHTML = `<span class="thumb-num">${n}</span><span class="thumb-title">${section.dataset.titleEn ?? "Slide " + (i + 1)}</span>`;
+        thumb.addEventListener("click", () => Reveal.slide(i));
         strip.appendChild(thumb);
       });
 
       function syncNav(e) {
         const idx = e.indexh;
-        const thumbs = strip.querySelectorAll('.thumb');
-        thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
+        const thumbs = strip.querySelectorAll(".thumb");
+        thumbs.forEach((t, i) => t.classList.toggle("active", i === idx));
         const active = thumbs[idx];
-        if (active) strip.scrollLeft = active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
-        document.getElementById('arrow-prev').classList.toggle('hidden', idx === 0);
-        document.getElementById('arrow-next').classList.toggle('hidden', idx === sections.length - 1);
+        if (active)
+          strip.scrollLeft =
+            active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
+        document
+          .getElementById("arrow-prev")
+          .classList.toggle("hidden", idx === 0);
+        document
+          .getElementById("arrow-next")
+          .classList.toggle("hidden", idx === sections.length - 1);
       }
 
-      Reveal.on('slidechanged', syncNav);
-      Reveal.on('ready', (e) => syncNav({ indexh: e.indexh }));
-      document.getElementById('arrow-prev').addEventListener('click', () => Reveal.prev());
-      document.getElementById('arrow-next').addEventListener('click', () => Reveal.next());
+      Reveal.on("slidechanged", syncNav);
+      Reveal.on("ready", (e) => syncNav({ indexh: e.indexh }));
+      document
+        .getElementById("arrow-prev")
+        .addEventListener("click", () => Reveal.prev());
+      document
+        .getElementById("arrow-next")
+        .addEventListener("click", () => Reveal.next());
 
       // ── Filmstrip collapse ──
       let collapsed = false;
-      const filmstrip = document.getElementById('filmstrip');
-      const viewport  = document.querySelector('.reveal-viewport');
-      const chevron   = document.getElementById('toggle-chevron');
-      const arrows    = document.querySelectorAll('.nav-arrow');
+      const filmstrip = document.getElementById("filmstrip");
+      const viewport = document.querySelector(".reveal-viewport");
+      const chevron = document.getElementById("toggle-chevron");
+      const arrows = document.querySelectorAll(".nav-arrow");
 
-      document.getElementById('strip-toggle').addEventListener('click', () => {
+      document.getElementById("strip-toggle").addEventListener("click", () => {
         collapsed = !collapsed;
-        filmstrip.classList.toggle('collapsed', collapsed);
-        viewport.classList.toggle('strip-collapsed', collapsed);
-        arrows.forEach(a => a.classList.toggle('strip-collapsed', collapsed));
-        chevron.textContent = collapsed ? '▲' : '▼';
+        filmstrip.classList.toggle("collapsed", collapsed);
+        viewport.classList.toggle("strip-collapsed", collapsed);
+        arrows.forEach((a) => a.classList.toggle("strip-collapsed", collapsed));
+        chevron.classList.toggle("rotated", collapsed);
         setTimeout(() => Reveal.layout(), 320);
       });
     </script>

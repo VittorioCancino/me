@@ -28,7 +28,7 @@ export default function Home() {
           <div className="rounded-2xl border border-[#21262d] bg-[#161b22] overflow-hidden">
 
             <div className="relative h-48 w-full bg-[#0d1117]">
-              <Image src="/avatar.jpg" alt="Vittorio Cancino" fill className="object-cover object-top" />
+              <Image src="/avatar.jpg" alt="Vittorio Cancino" fill priority className="object-cover object-top" />
               <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#161b22] to-transparent" />
             </div>
 
