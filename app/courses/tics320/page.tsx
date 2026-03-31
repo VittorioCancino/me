@@ -5,6 +5,8 @@ import { ChevronLeft, BookOpen, Presentation, FolderOpen, Users, ExternalLink } 
 import ExpandableList from "./ExpandableList";
 import { useLanguage } from "@lib/i18n/context";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export default function TICS320() {
   const { t } = useLanguage();
   const c = t.courses.tics320;
@@ -72,7 +74,7 @@ export default function TICS320() {
                   </span>
                   <span className="flex-1 text-sm font-medium text-white">{item.title}</span>
                   <a
-                    href={item.href}
+                    href={`${BASE}${item.href}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex shrink-0 items-center gap-1 text-xs text-[#7c3aed] transition-colors hover:text-[#a78bfa]"
