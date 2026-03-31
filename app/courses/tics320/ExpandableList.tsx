@@ -11,7 +11,7 @@ type Item = {
   label: string;
 };
 
-export default function ExpandableList({ items }: { items: Item[] }) {
+export default function ExpandableList({ items }: { items: readonly Item[] }) {
   const [open, setOpen] = useState<string | null>(null);
 
   return (
