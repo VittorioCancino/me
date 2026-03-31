@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practicum 1 — TICS320</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" />
+
+    <style>
+      :root {
+        --accent:       #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim:   rgba(124, 58, 237, 0.18);
+        --bg:           #0d1117;
+        --surface:      #161b22;
+        --border:       #21262d;
+        --muted:        #848d97;
+        --red:          #ef4444;
+        --red-dim:      rgba(239, 68, 68, 0.12);
+        --green:        #22c55e;
+        --green-dim:    rgba(34, 197, 94, 0.12);
+        --strip-h:      88px;
+        --toggle-h:     28px;
+        --arrow-w:      56px;
+        --transition:   0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 100%; height: 100%; background: var(--bg); overflow: hidden; }
+
+      .reveal-viewport {
+        background: var(--bg) !important;
+        height: calc(100vh - var(--strip-h) - var(--toggle-h)) !important;
+        transition: height var(--transition);
+      }
+      .reveal-viewport.strip-collapsed {
+        height: calc(100vh - var(--toggle-h)) !important;
+      }
+      .reveal { height: 100% !important; }
+
+      .reveal .slides {
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+      }
+
+      .reveal .slides section {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 3rem 10rem;
+        top: 0 !important;
+        left: 0 !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      /* ── Typography ── */
+      .reveal h1, .reveal h2, .reveal h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+      .reveal h1 { font-size: 3.8rem; line-height: 1.1; }
+      .reveal h2 { font-size: 2.6rem; line-height: 1.15; }
+      .reveal h3 { font-size: 1.7rem; color: var(--accent-light); }
+      .reveal p  { color: #c9d1d9; font-size: 1.37rem; line-height: 1.75; }
+
+      /* ── Utilities ── */
+      .label {
+        display: inline-block;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        border: 1px solid rgba(124,58,237,0.45);
+        background: var(--accent-dim);
+        padding: 0.22em 0.85em;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+      }
+      .divider {
+        width: 2.5rem; height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        margin: 0.8rem auto 1.1rem;
+      }
+      .muted { color: var(--muted) !important; font-size: 1.3rem; }
+
+      /* ── Data table ── */
+      .db-table {
+        width: 100%; border-collapse: collapse;
+        margin: 0.8rem 0; font-size: 1rem;
+      }
+      .db-table th {
+        background: var(--accent-dim);
+        color: var(--accent-light);
+        padding: 0.55rem 0.9rem;
+        text-align: left;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid var(--accent);
+        white-space: nowrap;
+      }
+      .db-table td {
+        padding: 0.55rem 0.9rem;
+        color: #c9d1d9;
+        font-size: 1rem;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+      .db-table tr:last-child td { border-bottom: none; }
+      .db-table tr.row-ok   td { background: rgba(34,197,94,0.06); }
+      .db-table tr.row-warn td { background: rgba(234,179,8,0.07); }
+      .db-table tr.row-dead td { background: rgba(239,68,68,0.08); text-decoration: line-through; color: var(--muted); }
+      .db-table tr.row-ghost td { opacity: 0.35; font-style: italic; }
+      .db-table td.cell-warn  { background: rgba(234,179,8,0.18);  color: #fbbf24; font-weight: 600; }
+      .db-table td.cell-bad   { background: rgba(239,68,68,0.18);  color: var(--red); font-weight: 600; }
+      .db-table td.cell-good  { background: rgba(34,197,94,0.18);  color: var(--green); font-weight: 600; }
+
+      /* ── Anomaly callout ── */
+      .callout {
+        display: flex; align-items: flex-start; gap: 0.8rem;
+        border-radius: 10px; padding: 0.7rem 1rem;
+        font-size: 1.05rem; color: #c9d1d9; text-align: left;
+        margin-top: 0.7rem;
+      }
+      .callout.warn { background: rgba(234,179,8,0.08);  border: 1px solid rgba(234,179,8,0.3); }
+      .callout.bad  { background: var(--red-dim);         border: 1px solid rgba(239,68,68,0.3); }
+      .callout.info { background: var(--accent-dim);      border: 1px solid rgba(124,58,237,0.3); }
+      .callout .icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.05rem; }
+      .callout strong { color: #fff; }
+
+      /* ── Cards ── */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.4rem 1.6rem;
+        text-align: left;
+      }
+      .card p, .card div { color: #c9d1d9; font-size: 1.37rem; line-height: 1.75; margin: 0; }
+      .card strong { color: #fff; }
+      .card-list {
+        list-style: none; padding: 0; margin: 0 0 0.8rem 0;
+        color: #c9d1d9; font-size: 1.37rem; line-height: 1.75;
+      }
+      .card-list li { padding: 0.15rem 0 0.15rem 1.2rem; position: relative; }
+      .card-list li::before {
+        content: '—'; position: absolute; left: 0;
+        color: var(--accent-light);
+      }
+      .card.red   { border-color: rgba(239,68,68,0.35); background: var(--red-dim); }
+      .card.green { border-color: rgba(34,197,94,0.35);  background: var(--green-dim); }
+
+      /* ── Grid ── */
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+      /* ── Story block ── */
+      .story {
+        background: var(--surface);
+        border-left: 4px solid var(--accent);
+        border-radius: 0 10px 10px 0;
+        padding: 1.4rem 1.8rem;
+        text-align: left;
+        font-size: 1.5rem;
+        color: #c9d1d9;
+        line-height: 1.85;
+      }
+      .story em { color: #fff; font-style: normal; font-weight: 600; }
+
+      /* ── Big reveal text ── */
+      .reveal-text {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: #fff;
+        line-height: 1;
+      }
+      .reveal-text .accent { color: var(--accent-light); }
+      .reveal-text .red    { color: var(--red); }
+
+      /* ── Truth list ── */
+      .truth-list {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+        display: inline-block;
+      }
+      .truth-list li {
+        font-size: 1.3rem;
+        color: #c9d1d9;
+        padding: 0.45rem 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+      .truth-list li:last-child { border-bottom: none; }
+      .truth-list li .icon { font-size: 1.3rem; width: 1.8rem; text-align: center; }
+      .truth-list li strong { color: #fff; }
+      .truth-list li s { color: var(--muted); text-decoration-color: var(--muted); }
+
+      /* ── Timeline ── */
+      .timeline { text-align: left; position: relative; padding-left: 1.6rem; }
+      .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0.45rem; top: 0.3rem; bottom: 0.3rem;
+        width: 2px;
+        background: var(--border);
+        border-radius: 2px;
+      }
+      .timeline-item {
+        position: relative;
+        padding: 0.9rem 0 0.9rem 1rem;
+        font-size: 1.5rem;
+        color: #c9d1d9;
+      }
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -1.18rem;
+        top: 1.3rem;
+        width: 0.85rem; height: 0.85rem;
+        border-radius: 50%;
+        background: var(--border);
+        border: 2px solid var(--surface);
+      }
+      .timeline-item.bad::before  { background: var(--red); }
+      .timeline-item.good::before { background: var(--green); }
+      .timeline-item strong { color: #fff; display: block; margin-bottom: 0.2rem; font-size: 1.56rem; }
+      .timeline-item .sub   { color: var(--muted); font-size: 1.3rem; }
+
+      /* ── Broken badge ── */
+      .broken {
+        display: inline-block;
+        background: var(--red-dim);
+        border: 1px solid rgba(239,68,68,0.4);
+        color: var(--red);
+        border-radius: 6px;
+        padding: 0.15em 0.6em;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+      .ok {
+        display: inline-block;
+        background: var(--green-dim);
+        border: 1px solid rgba(34,197,94,0.4);
+        color: var(--green);
+        border-radius: 6px;
+        padding: 0.15em 0.6em;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+
+      /* ── Language toggle ── */
+      #lang-toggle {
+        position: fixed;
+        top: 1rem; right: 1rem;
+        z-index: 300;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 999px;
+        padding: 3px;
+      }
+      .lang-btn {
+        border: none; background: transparent; cursor: pointer;
+        font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+        color: #848d97; border-radius: 999px;
+        padding: 0.25em 0.75em;
+        transition: background 0.15s, color 0.15s;
+      }
+      .lang-btn.active { background: #7c3aed; color: #fff; }
+      .lang-btn:not(.active):hover { color: #fff; }
+
+      /* ── Side arrows ── */
+      .nav-arrow {
+        position: fixed;
+        top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
+        transform: translateY(-50%);
+        z-index: 200;
+        width: var(--arrow-w); height: var(--arrow-w);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 1.2rem;
+        transition: background 0.18s, color 0.18s, border-color 0.18s, opacity 0.18s, top var(--transition);
+        user-select: none;
+      }
+      .nav-arrow:hover { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-light); }
+      .nav-arrow.hidden { opacity: 0; pointer-events: none; }
+      .nav-arrow.strip-collapsed { top: 50%; }
+      #arrow-prev { left: 1rem; }
+      #arrow-next { right: 1rem; }
+
+      /* ── Toggle tab ── */
+      #strip-toggle {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        height: var(--toggle-h);
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; z-index: 101; gap: 0.4rem;
+        transition: background 0.18s;
+      }
+      #strip-toggle:hover { background: var(--accent-dim); }
+      #strip-toggle span { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+      #strip-toggle:hover span { color: var(--accent-light); }
+      #toggle-chevron { transition: transform var(--transition); }
+
+      /* ── Filmstrip ── */
+      #filmstrip {
+        position: fixed;
+        bottom: var(--toggle-h); left: 0; right: 0;
+        height: var(--strip-h);
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex; align-items: center;
+        z-index: 100; padding: 0 1rem; gap: 0.6rem;
+        overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none;
+        transform: translateY(0); opacity: 1;
+        transition: transform var(--transition), opacity var(--transition);
+      }
+      #filmstrip::-webkit-scrollbar { display: none; }
+      #filmstrip.collapsed { transform: translateY(100%); opacity: 0; pointer-events: none; }
+
+      .thumb {
+        flex-shrink: 0; width: 120px; height: 64px;
+        border-radius: 8px; border: 1px solid var(--border);
+        background: var(--bg); cursor: pointer;
+        display: flex; flex-direction: column;
+        align-items: flex-start; justify-content: flex-end;
+        padding: 0.4rem 0.55rem; gap: 0.2rem;
+        transition: border-color 0.18s, background 0.18s, transform 0.18s;
+        position: relative; overflow: hidden;
+      }
+      .thumb:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-2px); }
+      .thumb.active { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-2px); }
+      .thumb.active::before {
+        content: ''; position: absolute;
+        top: 0; left: 0; right: 0; height: 2px;
+        background: var(--accent); border-radius: 2px 2px 0 0;
+      }
+      .thumb-num   { font-size: 0.6rem; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; }
+      .thumb-title { font-size: 0.68rem; color: #c9d1d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+      .thumb.active .thumb-num   { color: var(--accent-light); }
+      .thumb.active .thumb-title { color: #fff; font-weight: 600; }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Language toggle -->
+    <div id="lang-toggle">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+
+    <button id="arrow-prev" class="nav-arrow" aria-label="Previous">&#8592;</button>
+    <button id="arrow-next" class="nav-arrow" aria-label="Next">&#8594;</button>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- ① Title -->
+        <section data-title-en="Title" data-title-es="Título">
+          <div class="label" data-i18n="s1_label">TICS320 · Practicum 1</div>
+          <h1 data-i18n-html="s1_title">Data Modeling<br/>and Design</h1>
+          <div class="divider"></div>
+          <p class="muted">Vittorio Cancino &nbsp;·&nbsp; Universidad Adolfo Ibáñez</p>
+        </section>
+
+        <!-- ② The story setup -->
+        <section data-title-en="The Story" data-title-es="La Historia">
+          <div class="label" data-i18n="s2_label">A story</div>
+          <h2 data-i18n="s2_title">Meet EduTrack</h2>
+          <p class="muted" style="margin-bottom:1.2rem" data-i18n="s2_sub">An online learning startup. Ambitious team, modern stack, Y Combinator dreams.</p>
+          <div class="timeline">
+            <div class="timeline-item good">
+              <strong data-i18n="s2_t1_strong">Month 1 — Launch</strong>
+              <span class="sub" data-i18n="s2_t1_sub">200 users. Everything works perfectly. The team celebrates.</span>
+            </div>
+            <div class="timeline-item good">
+              <strong data-i18n="s2_t2_strong">Month 4 — Growth</strong>
+              <span class="sub" data-i18n="s2_t2_sub">1,000 users. A bit slow, but manageable. They add more servers.</span>
+            </div>
+            <div class="timeline-item good">
+              <strong data-i18n="s2_t3_strong">Month 8 — Viral moment</strong>
+              <span class="sub" data-i18n="s2_t3_sub">Featured in a newsletter. 5,000 users sign up in a week.</span>
+            </div>
+            <div class="timeline-item bad">
+              <strong data-i18n="s2_t4_strong">Month 8 + 3 days — Chaos</strong>
+              <span class="sub" data-i18n="s2_t4_sub">Support tickets flood in. Something is very, very wrong.</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ③ What broke -->
+        <section data-title-en="The Chaos" data-title-es="El Caos">
+          <div class="label" data-i18n="s3_label">What happened</div>
+          <h2 data-i18n="s3_title">The support tickets</h2>
+          <div class="grid-3" style="margin-top:1rem">
+            <div class="card red">
+              <p style="font-size:2rem;margin-bottom:0.4rem">💸</p>
+              <h3 style="color:var(--red);font-size:1.17rem;margin-bottom:0.3rem" data-i18n="s3_c1_title">Duplicate charges</h3>
+              <p style="font-size:1rem;color:#c9d1d9" data-i18n="s3_c1_body">"I was billed twice for the same course. My bank is calling."</p>
+            </div>
+            <div class="card red">
+              <p style="font-size:2rem;margin-bottom:0.4rem">📋</p>
+              <h3 style="color:var(--red);font-size:1.17rem;margin-bottom:0.3rem" data-i18n="s3_c2_title">Wrong grades</h3>
+              <p style="font-size:1rem;color:#c9d1d9" data-i18n="s3_c2_body">"My transcript shows a course I never took — and I'm missing one I did."</p>
+            </div>
+            <div class="card red">
+              <p style="font-size:2rem;margin-bottom:0.4rem">🔐</p>
+              <h3 style="color:var(--red);font-size:1.17rem;margin-bottom:0.3rem" data-i18n="s3_c3_title">Ghost enrollments</h3>
+              <p style="font-size:1rem;color:#c9d1d9" data-i18n="s3_c3_body">"I enrolled three weeks ago but the system says I don't exist."</p>
+            </div>
+          </div>
+          <p class="muted" style="margin-top:1.2rem" data-i18n="s3_footer">1,265 tickets in 72 hours. The CEO is on the phone. The lead dev hasn&apos;t slept.</p>
+        </section>
+
+        <!-- ④ The question -->
+        <section data-title-en="The Question" data-title-es="La Pregunta">
+          <div class="label" data-i18n="s4_label">Stop and think</div>
+          <p class="muted" style="margin-bottom:1.2rem" data-i18n="s4_intro">The team panics. They start looking for the bug.</p>
+          <div class="story" style="margin-bottom:1.2rem" data-i18n-html="s4_story">
+            "It must be the payment service — let's roll back."<br/>
+            "No, it's the enrollment API — I see an error in the logs."<br/>
+            "Maybe it's the load balancer dropping requests?"<br/>
+            <em>Three engineers. Three different answers. All wrong.</em>
+          </div>
+          <p style="font-size:1.95rem;font-weight:700;color:#fff" data-i18n="s4_question">What actually failed?</p>
+          <p class="muted" style="margin-top:0.5rem" data-i18n-html="s4_options">The backend? &nbsp;·&nbsp; The frontend? &nbsp;·&nbsp; The infrastructure?</p>
+        </section>
+
+        <!-- ⑤ The reveal -->
+        <section data-title-en="The Answer" data-title-es="La Respuesta">
+          <p class="muted" style="margin-bottom:0.3rem" data-i18n="s5_none">None of the above.</p>
+          <div class="reveal-text" data-i18n-html="s5_reveal">The <span class="accent">data</span>.</div>
+          <div class="divider" style="margin:0.4rem auto 0.6rem"></div>
+          <div class="story" style="max-width:620px;margin:0 auto;padding:0.9rem 1.4rem;line-height:1.65" data-i18n-html="s5_story">
+            EduTrack stored users, enrollments, and payments <em>all in one table</em>.
+            When two users shared an email, the system merged their records.
+            When a course was updated, old enrollment rows silently pointed to nothing.
+            There was no foreign key, no constraint, no single source of truth.
+            <br/><br/>
+            The code was fine. <em>The data was broken from day one.</em>
+          </div>
+        </section>
+
+        <!-- ⑥ Key message -->
+        <section data-title-en="Data = Truth" data-title-es="Datos = Verdad">
+          <div class="label" data-i18n="s6_label">Key message</div>
+          <h2 data-i18n="s6_title">Data is the source of truth</h2>
+          <ul class="truth-list" style="margin-top:1rem">
+            <li><span class="icon">🔁</span><span data-i18n-html="s6_li1"><strong>Code</strong> can be <s>rewritten</s> &nbsp;<span class="ok">fixable</span></span></li>
+            <li><span class="icon">🎨</span><span data-i18n-html="s6_li2"><strong>UI</strong> can be <s>redesigned</s> &nbsp;<span class="ok">fixable</span></span></li>
+            <li><span class="icon">☁️</span><span data-i18n-html="s6_li3"><strong>Infrastructure</strong> can be <s>replaced</s> &nbsp;<span class="ok">fixable</span></span></li>
+            <li><span class="icon">💾</span><span data-i18n-html="s6_li4"><strong>Corrupted data</strong> &nbsp;<span class="broken">stays broken</span></span></li>
+          </ul>
+          <p class="muted" style="margin-top:1rem" data-i18n-html="s6_footer">
+            EduTrack spent 3 weeks manually reconciling 5,000 user records.<br/>Two engineers quit. Three customers filed chargebacks.
+          </p>
+        </section>
+
+        <!-- ⑦ You own the data -->
+        <section data-title-en="You Own It" data-title-es="Es Tuya">
+          <div class="label" data-i18n="s7_label">Your responsibility</div>
+          <p class="muted" style="margin-bottom:0.6rem" data-i18n="s7_sub">Even if you "don't like databases".</p>
+          <h2 style="margin-bottom:0.8rem" data-i18n-html="s7_title">As engineers,<br/>you own the data.</h2>
+          <div class="grid-2" style="margin-top:0.8rem">
+            <div class="card">
+              <h3 style="margin-bottom:0.5rem" data-i18n="s7_c1_title">Your users trust you with</h3>
+              <p data-i18n-html="s7_c1_body">Your users hand you their identity, their money, and their academic records. When your data model breaks, it doesn't just crash an app — it <strong>destroys trust</strong> that took years to earn.</p>
+            </div>
+            <div class="card">
+              <h3 style="margin-bottom:0.5rem" data-i18n="s7_c2_title">The real cost</h3>
+              <div data-i18n-html="s7_c2_body"><ul class="card-list"><li>Live data migrations are slow and risky</li><li>Cleaning corrupted records takes weeks</li><li>Lost customers rarely come back</li></ul><p style="margin-top:0.6rem"><strong>Great design is cheap. Bad design is permanent.</strong></p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ⑨ The flat table -->
+        <section data-title-en="Flat Table" data-title-es="Tabla Plana">
+          <div class="label" data-i18n="s9_label">Looks fine</div>
+          <h2 data-i18n="s9_title">This is EduTrack's database</h2>
+          <table class="db-table" style="margin:0.6rem 0">
+            <thead><tr>
+              <th>user_name</th><th>email</th><th>course</th>
+              <th>instructor</th><th>grade</th><th>payment</th>
+            </tr></thead>
+            <tbody>
+              <tr class="row-ok"><td>Juan</td><td>juan@mail.com</td><td>DB101</td><td>Torres</td><td>5.5</td><td>paid</td></tr>
+              <tr class="row-ok"><td>Juan</td><td>juan@mail.com</td><td>DB102</td><td>Torres</td><td>6.0</td><td>paid</td></tr>
+              <tr class="row-ok"><td>Maria</td><td>maria@mail.com</td><td>DB101</td><td>Torres</td><td>6.5</td><td>pending</td></tr>
+              <tr class="row-ok"><td>Carlos</td><td>carlos@mail.com</td><td>DB102</td><td>Torres</td><td>4.8</td><td>paid</td></tr>
+              <tr class="row-ok"><td>Ana</td><td>ana@mail.com</td><td>DB103</td><td>Torres</td><td>7.0</td><td>paid</td></tr>
+              <tr class="row-ok"><td>Sofia</td><td>sofia@mail.com</td><td>DB101</td><td>Torres</td><td>5.9</td><td>paid</td></tr>
+            </tbody>
+          </table>
+          <p class="muted" style="margin-top:0.5rem" data-i18n="s9_sub">The system runs. Everyone is happy.</p>
+        </section>
+
+        <!-- ⑩ Update anomaly -->
+        <section data-title-en="Update Problem" data-title-es="Problema Actualización">
+          <div class="label" data-i18n="s10_label">Problem 1 — Update</div>
+          <h2 data-i18n="s10_title">The instructor changes their name</h2>
+          <table class="db-table" style="margin:0.5rem 0">
+            <thead><tr>
+              <th>user_name</th><th>email</th><th>course</th>
+              <th>instructor</th><th>grade</th><th>payment</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Juan</td><td>juan@mail.com</td><td>DB101</td><td class="cell-good">Prof. Torres</td><td>5.5</td><td>paid</td></tr>
+              <tr><td>Juan</td><td>juan@mail.com</td><td>DB102</td><td class="cell-warn">Torres</td><td>6.0</td><td>paid</td></tr>
+              <tr><td>Maria</td><td>maria@mail.com</td><td>DB101</td><td class="cell-warn">Torres</td><td>6.5</td><td>pending</td></tr>
+              <tr><td>Carlos</td><td>carlos@mail.com</td><td>DB102</td><td class="cell-warn">Torres</td><td>4.8</td><td>paid</td></tr>
+              <tr><td>Ana</td><td>ana@mail.com</td><td>DB103</td><td class="cell-warn">Torres</td><td>7.0</td><td>paid</td></tr>
+              <tr><td>Sofia</td><td>sofia@mail.com</td><td>DB101</td><td class="cell-warn">Torres</td><td>5.9</td><td>paid</td></tr>
+            </tbody>
+          </table>
+          <div class="callout warn"><span class="icon">⚠️</span><span data-i18n-html="s10_callout1">You updated <strong>one row</strong>. Five still say "Torres". <strong>Which one is the truth?</strong></span></div>
+          <div class="callout bad" style="margin-top:0.5rem"><span class="icon">💀</span><span data-i18n="s10_callout2">We didn't update data — we corrupted history.</span></div>
+        </section>
+
+        <!-- ⑪ Insert anomaly -->
+        <section data-title-en="Insert Problem" data-title-es="Problema Inserción">
+          <div class="label" data-i18n="s11_label">Problem 2 — Insert</div>
+          <h2 data-i18n="s11_title">A new course, no students yet</h2>
+          <table class="db-table" style="margin:0.5rem 0">
+            <thead><tr>
+              <th>user_name</th><th>email</th><th>course</th>
+              <th>instructor</th><th>grade</th><th>payment</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Juan</td><td>juan@mail.com</td><td>DB101</td><td>Torres</td><td>5.5</td><td>paid</td></tr>
+              <tr><td>Juan</td><td>juan@mail.com</td><td>DB102</td><td>Torres</td><td>6.0</td><td>paid</td></tr>
+              <tr><td>Maria</td><td>maria@mail.com</td><td>DB101</td><td>Torres</td><td>6.5</td><td>pending</td></tr>
+              <tr><td>Carlos</td><td>carlos@mail.com</td><td>DB102</td><td>Torres</td><td>4.8</td><td>paid</td></tr>
+              <tr><td>Ana</td><td>ana@mail.com</td><td>DB103</td><td>Torres</td><td>7.0</td><td>paid</td></tr>
+              <tr><td>Sofia</td><td>sofia@mail.com</td><td>DB101</td><td>Torres</td><td>5.9</td><td>paid</td></tr>
+              <tr class="row-ghost"><td>???</td><td>???</td><td class="cell-bad">DB104</td><td>Torres</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+          <div class="callout bad"><span class="icon">🚫</span><span data-i18n-html="s11_callout">The table <strong>requires a student</strong> to exist. You cannot insert a course without one. <strong>DB104 cannot exist yet.</strong></span></div>
+        </section>
+
+        <!-- ⑫ Delete anomaly -->
+        <section data-title-en="Delete Problem" data-title-es="Problema Borrado">
+          <div class="label" data-i18n="s12_label">Problem 3 — Delete</div>
+          <h2 data-i18n="s12_title">The last student drops DB103</h2>
+          <table class="db-table" style="margin:0.5rem 0">
+            <thead><tr>
+              <th>user_name</th><th>email</th><th>course</th>
+              <th>instructor</th><th>grade</th><th>payment</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>Juan</td><td>juan@mail.com</td><td>DB101</td><td>Torres</td><td>5.5</td><td>paid</td></tr>
+              <tr><td>Juan</td><td>juan@mail.com</td><td>DB102</td><td>Torres</td><td>6.0</td><td>paid</td></tr>
+              <tr><td>Maria</td><td>maria@mail.com</td><td>DB101</td><td>Torres</td><td>6.5</td><td>pending</td></tr>
+              <tr><td>Carlos</td><td>carlos@mail.com</td><td>DB102</td><td>Torres</td><td>4.8</td><td>paid</td></tr>
+              <tr class="row-dead"><td>Ana</td><td>ana@mail.com</td><td>DB103</td><td>Torres</td><td>7.0</td><td>paid</td></tr>
+              <tr><td>Sofia</td><td>sofia@mail.com</td><td>DB101</td><td>Torres</td><td>5.9</td><td>paid</td></tr>
+            </tbody>
+          </table>
+          <div class="callout bad"><span class="icon">💥</span><span data-i18n-html="s12_callout">Ana's row is deleted. <strong>DB103 no longer exists in the system.</strong> The course, the instructor, the grade — all gone.</span></div>
+        </section>
+
+        <!-- ⑬ Verdict -->
+        <section data-title-en="Verdict" data-title-es="Veredicto">
+          <div class="label" data-i18n="s13_label">The verdict</div>
+          <div class="reveal-text" style="font-size:2.6rem;margin-bottom:0.8rem" data-i18n-html="s13_title">
+            Technically <span class="accent">working</span>.<br/>Logically <span class="red">broken</span>.
+          </div>
+          <div class="divider"></div>
+          <div class="grid-3" style="margin-top:0.8rem">
+            <div class="callout warn" style="flex-direction:column;gap:0.3rem">
+              <span style="font-weight:700;color:#fbbf24" data-i18n="s13_u">Update anomaly</span>
+              <span style="font-size:0.95rem" data-i18n="s13_u_sub">One change requires many updates. Miss one → corrupt data.</span>
+            </div>
+            <div class="callout bad" style="flex-direction:column;gap:0.3rem">
+              <span style="font-weight:700;color:var(--red)" data-i18n="s13_i">Insert anomaly</span>
+              <span style="font-size:0.95rem" data-i18n="s13_i_sub">Can't store a fact without an unrelated fact existing first.</span>
+            </div>
+            <div class="callout bad" style="flex-direction:column;gap:0.3rem">
+              <span style="font-weight:700;color:var(--red)" data-i18n="s13_d">Delete anomaly</span>
+              <span style="font-size:0.95rem" data-i18n="s13_d_sub">Removing one thing accidentally destroys another.</span>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top:0.8rem"><span class="icon">→</span><span data-i18n="s13_bridge">So how do we design this so reality doesn't break our system?</span></div>
+        </section>
+
+        <!-- ⑭ One mistake -->
+        <section data-title-en="One Mistake" data-title-es="Un Error">
+          <div class="label" data-i18n="s14_label">One mistake</div>
+          <div class="reveal-text" style="font-size:2.8rem;margin-bottom:0.8rem" data-i18n-html="s14_reveal">
+            We didn't <span class="red">design</span> the data —<br/>we just <span class="red">stored</span> it.
+          </div>
+          <div class="divider"></div>
+          <p style="margin:0.8rem 0 1rem" data-i18n="s14_body">All three anomalies. Same root cause.</p>
+          <div class="story" style="max-width:560px;margin:0 auto" data-i18n-html="s14_story">
+            So instead of fixing tables…<br/><em>we need to change how we think.</em>
+          </div>
+        </section>
+
+        <!-- ⑮ Mindset shift -->
+        <section data-title-en="Mindset Shift" data-title-es="Cambio Mental">
+          <div class="label" data-i18n="s15_label">The shift</div>
+          <h2 data-i18n="s15_title">Think in entities, not tables</h2>
+          <div class="grid-2" style="margin-top:1rem">
+            <div class="card" style="text-align:left">
+              <h3 style="margin-bottom:0.8rem" data-i18n="s15_q_title">Start by asking</h3>
+              <ul class="card-list">
+                <li data-i18n="s15_q1">Who exists? → entities</li>
+                <li data-i18n="s15_q2">What do they have? → attributes</li>
+                <li data-i18n="s15_q3">How do they relate? → relationships</li>
+              </ul>
+            </div>
+            <div class="card" style="text-align:left">
+              <h3 style="margin-bottom:0.8rem" data-i18n="s15_e_title">In EduTrack</h3>
+              <ul class="card-list">
+                <li data-i18n="s15_e1">User — exists independently</li>
+                <li data-i18n="s15_e2">Course — exists independently</li>
+                <li data-i18n="s15_e3">Instructor — exists independently</li>
+                <li data-i18n="s15_e4">Enrollment — connects them</li>
+              </ul>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top:1rem">
+            <span class="icon">💡</span>
+            <span data-i18n="s15_key">Tables are an implementation detail. The real design happens before that.</span>
+          </div>
+        </section>
+
+        <!-- ⑯ Bridge to ER -->
+        <section data-title-en="Bridge to ER" data-title-es="Hacia el ER">
+          <div class="label" data-i18n="s16_label">The solution</div>
+          <h2 style="margin-bottom:1rem" data-i18n="s16_title">This is exactly what ER design helps us do.</h2>
+          <div class="grid-2">
+            <div class="card red" style="text-align:left">
+              <h3 style="color:var(--red);margin-bottom:0.5rem" data-i18n="s16_bad_title">Bad thinking</h3>
+              <p class="muted" style="font-style:italic" data-i18n="s16_bad_q">"What columns do I need?"</p>
+            </div>
+            <div class="card green" style="text-align:left">
+              <h3 style="color:var(--green);margin-bottom:0.5rem" data-i18n="s16_good_title">Good thinking</h3>
+              <p style="font-style:italic" data-i18n="s16_good_q">"What objects exist in my system?"</p>
+            </div>
+          </div>
+          <div class="callout info" style="margin-top:1rem">
+            <span class="icon">→</span>
+            <span data-i18n="s16_bridge">ER diagrams make you think in objects and relationships — before a single table is created.</span>
+          </div>
+        </section>
+
+        <!-- ⑧ The lesson bridge -->
+        <section data-title-en="The Lesson" data-title-es="La Lección">
+          <div class="reveal-text" style="font-size:3.1rem;margin-bottom:0.8rem" data-i18n-html="s8_reveal">
+            <span class="accent">90%</span> of a great database<br/>is great <span class="accent">design</span>.
+          </div>
+          <div class="divider"></div>
+          <p style="margin-bottom:1rem;color:#c9d1d9" data-i18n-html="s8_body">
+            EduTrack's problem wasn't a missing index or a slow query.<br/>It was a model that was never designed — just grown.
+          </p>
+          <div class="story" style="max-width:520px;margin:0 auto" data-i18n-html="s8_story">
+            <em>Today</em>, we learn the tools to design before we build:<br/>
+            the <em>Entity-Relationship diagram</em>, the <em>logical model</em>,<br/>
+            and how to think about data the right way.
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div id="filmstrip"></div>
+    <div id="strip-toggle">
+      <span id="toggle-chevron">▲</span>
+      <span id="toggle-label">Slides</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      // ── Translations ──
+      const i18n = {
+        en: {
+          s1_label:    'TICS320 · Practicum 1',
+          s1_title:    'Data Modeling<br/>and Design',
+          s2_label:    'A story',
+          s2_title:    'Meet EduTrack',
+          s2_sub:      'An online learning startup. Ambitious team, modern stack, Y Combinator dreams.',
+          s2_t1_strong:'Month 1 — Launch',
+          s2_t1_sub:   '200 users. Everything works perfectly. The team celebrates.',
+          s2_t2_strong:'Month 4 — Growth',
+          s2_t2_sub:   '1,000 users. A bit slow, but manageable. They add more servers.',
+          s2_t3_strong:'Month 8 — Viral moment',
+          s2_t3_sub:   'Featured in a newsletter. 5,000 users sign up in a week.',
+          s2_t4_strong:'Month 8 + 3 days — Chaos',
+          s2_t4_sub:   'Support tickets flood in. Something is very, very wrong.',
+          s3_label:    'What happened',
+          s3_title:    'The support tickets',
+          s3_c1_title: 'Duplicate charges',
+          s3_c1_body:  '"I was billed twice for the same course. My bank is calling."',
+          s3_c2_title: 'Wrong grades',
+          s3_c2_body:  '"My transcript shows a course I never took — and I\'m missing one I did."',
+          s3_c3_title: 'Ghost enrollments',
+          s3_c3_body:  '"I enrolled three weeks ago but the system says I don\'t exist."',
+          s3_footer:   '1,265 tickets in 72 hours. The CEO is on the phone. The lead dev hasn\'t slept.',
+          s4_label:    'Stop and think',
+          s4_intro:    'The team panics. They start looking for the bug.',
+          s4_story:    '"It must be the payment service — let\'s roll back."<br/>"No, it\'s the enrollment API — I see an error in the logs."<br/>"Maybe it\'s the load balancer dropping requests?"<br/><em>Three engineers. Three different answers. All wrong.</em>',
+          s4_question: 'What actually failed?',
+          s4_options:  'The backend? &nbsp;·&nbsp; The frontend? &nbsp;·&nbsp; The infrastructure?',
+          s5_none:     'None of the above.',
+          s5_reveal:   'The <span class="accent">data</span>.',
+          s5_story:    'EduTrack stored users, enrollments, and payments <em>all in one table</em>. When two users shared an email, the system merged their records. When a course was updated, old enrollment rows silently pointed to nothing. There was no foreign key, no constraint, no single source of truth.<br/><br/>The code was fine. <em>The data was broken from day one.</em>',
+          s6_label:    'Key message',
+          s6_title:    'Data is the source of truth',
+          s6_li1:      '<strong>Code</strong> can be <s>rewritten</s> &nbsp;<span class="ok">fixable</span>',
+          s6_li2:      '<strong>UI</strong> can be <s>redesigned</s> &nbsp;<span class="ok">fixable</span>',
+          s6_li3:      '<strong>Infrastructure</strong> can be <s>replaced</s> &nbsp;<span class="ok">fixable</span>',
+          s6_li4:      '<strong>Corrupted data</strong> &nbsp;<span class="broken">stays broken</span>',
+          s6_footer:   'EduTrack spent 3 weeks manually reconciling 5,000 user records.<br/>Two engineers quit. Three customers filed chargebacks.',
+          s7_label:    'Your responsibility',
+          s7_sub:      'Even if you "don\'t like databases".',
+          s7_title:    'As engineers,<br/>you own the data.',
+          s7_c1_title: 'Your users trust you with',
+          s7_c1_body:  'Your users hand you their identity, their money, and their academic records. When your data model breaks, it doesn\'t just crash an app — it <strong>destroys trust</strong> that took years to earn.',
+          s7_c2_title: 'The real cost',
+          s7_c2_body:  '<ul class="card-list"><li>Live data migrations are slow and risky</li><li>Cleaning corrupted records takes weeks</li><li>Lost customers rarely come back</li></ul><p style="margin-top:0.6rem"><strong>Great design is cheap. Bad design is permanent.</strong></p>',
+          s8_reveal:   '<span class="accent">90%</span> of a great database<br/>is great <span class="accent">design</span>.',
+          s8_body:     'EduTrack\'s problem wasn\'t a missing index or a slow query.<br/>It was a model that was never designed — just grown.',
+          s8_story:    '<em>Today</em>, we learn the tools to design before we build:<br/>the <em>Entity-Relationship diagram</em>, the <em>logical model</em>,<br/>and how to think about data the right way.',
+          s9_label:    'Looks fine',
+          s9_title:    'This is EduTrack\'s database',
+          s9_sub:      'The system runs. Everyone is happy.',
+          s10_label:   'Problem 1 — Update',
+          s10_title:   'The instructor changes their name',
+          s10_callout1:'You updated <strong>one row</strong>. Five still say "Torres". <strong>Which one is the truth?</strong>',
+          s10_callout2:'We didn\'t update data — we corrupted history.',
+          s11_label:   'Problem 2 — Insert',
+          s11_title:   'A new course, no students yet',
+          s11_callout: 'The table <strong>requires a student</strong> to exist. You cannot insert a course without one. <strong>DB104 cannot exist yet.</strong>',
+          s12_label:   'Problem 3 — Delete',
+          s12_title:   'The last student drops DB103',
+          s12_callout: 'Ana\'s row is deleted. <strong>DB103 no longer exists in the system.</strong> The course, the instructor, the grade — all gone.',
+          s13_label:   'The verdict',
+          s13_title:   'Technically <span class="accent">working</span>.<br/>Logically <span class="red">broken</span>.',
+          s13_u:       'Update anomaly',
+          s13_u_sub:   'One change requires many updates. Miss one → corrupt data.',
+          s13_i:       'Insert anomaly',
+          s13_i_sub:   'Can\'t store a fact without an unrelated fact existing first.',
+          s13_d:       'Delete anomaly',
+          s13_d_sub:   'Removing one thing accidentally destroys another.',
+          s13_bridge:  'So how do we design this so reality doesn\'t break our system?',
+          s14_label:   'One mistake',
+          s14_reveal:  'We didn\'t <span class="red">design</span> the data —<br/>we just <span class="red">stored</span> it.',
+          s14_body:    'All three anomalies. Same root cause.',
+          s14_story:   'So instead of fixing tables…<br/><em>we need to change how we think.</em>',
+          s15_label:   'The shift',
+          s15_title:   'Think in entities, not tables',
+          s15_q_title: 'Start by asking',
+          s15_q1:      'Who exists? → entities',
+          s15_q2:      'What do they have? → attributes',
+          s15_q3:      'How do they relate? → relationships',
+          s15_e_title: 'In EduTrack',
+          s15_e1:      'User — exists independently',
+          s15_e2:      'Course — exists independently',
+          s15_e3:      'Instructor — exists independently',
+          s15_e4:      'Enrollment — connects them',
+          s15_key:     'Tables are an implementation detail. The real design happens before that.',
+          s16_label:   'The solution',
+          s16_title:   'This is exactly what ER design helps us do.',
+          s16_bad_title:'Bad thinking',
+          s16_bad_q:   '"What columns do I need?"',
+          s16_good_title:'Good thinking',
+          s16_good_q:  '"What objects exist in my system?"',
+          s16_bridge:  'ER diagrams make you think in objects and relationships — before a single table is created.',
+        },
+        es: {
+          s1_label:    'TICS320 · Practicum 1',
+          s1_title:    'Modelado y Diseño<br/>de Datos',
+          s2_label:    'Una historia',
+          s2_title:    'Conoce a EduTrack',
+          s2_sub:      'Una startup de aprendizaje en línea. Equipo ambicioso, stack moderno, sueños de Y Combinator.',
+          s2_t1_strong:'Mes 1 — Lanzamiento',
+          s2_t1_sub:   '200 usuarios. Todo funciona perfectamente. El equipo celebra.',
+          s2_t2_strong:'Mes 4 — Crecimiento',
+          s2_t2_sub:   '1.000 usuarios. Un poco lento, pero manejable. Añaden más servidores.',
+          s2_t3_strong:'Mes 8 — Momento viral',
+          s2_t3_sub:   'Aparecen en un newsletter. 5.000 usuarios se registran en una semana.',
+          s2_t4_strong:'Mes 8 + 3 días — Caos',
+          s2_t4_sub:   'Los tickets de soporte se acumulan. Algo va muy, muy mal.',
+          s3_label:    'Qué pasó',
+          s3_title:    'Los tickets de soporte',
+          s3_c1_title: 'Cobros duplicados',
+          s3_c1_body:  '"Me cobraron dos veces el mismo curso. Mi banco está llamando."',
+          s3_c2_title: 'Notas incorrectas',
+          s3_c2_body:  '"Mi historial muestra un curso que nunca tomé — y falta uno que sí tomé."',
+          s3_c3_title: 'Inscripciones fantasma',
+          s3_c3_body:  '"Me inscribí hace tres semanas pero el sistema dice que no existo."',
+          s3_footer:   '1.265 tickets en 72 horas. El CEO está al teléfono. El dev principal no ha dormido.',
+          s4_label:    'Pausa y piensa',
+          s4_intro:    'El equipo entra en pánico. Empiezan a buscar el bug.',
+          s4_story:    '"Debe ser el servicio de pagos — hagamos rollback."<br/>"No, es la API de inscripciones — veo un error en los logs."<br/>"¿Quizás el balanceador de carga está descartando requests?"<br/><em>Tres ingenieros. Tres respuestas diferentes. Todas incorrectas.</em>',
+          s4_question: '¿Qué falló realmente?',
+          s4_options:  '¿El backend? &nbsp;·&nbsp; ¿El frontend? &nbsp;·&nbsp; ¿La infraestructura?',
+          s5_none:     'Ninguna de las anteriores.',
+          s5_reveal:   'Los <span class="accent">datos</span>.',
+          s5_story:    'EduTrack guardaba usuarios, inscripciones y pagos <em>en una sola tabla</em>. Cuando dos usuarios compartían un email, el sistema fusionaba sus registros. Cuando se actualizaba un curso, las filas antiguas apuntaban a nada en silencio. No había foreign key, ni constraint, ni fuente única de verdad.<br/><br/>El código estaba bien. <em>Los datos estaban rotos desde el día uno.</em>',
+          s6_label:    'Mensaje clave',
+          s6_title:    'Los datos son la fuente de verdad',
+          s6_li1:      '<strong>El código</strong> puede ser <s>reescrito</s> &nbsp;<span class="ok">reparable</span>',
+          s6_li2:      '<strong>La UI</strong> puede ser <s>rediseñada</s> &nbsp;<span class="ok">reparable</span>',
+          s6_li3:      '<strong>La infraestructura</strong> puede ser <s>reemplazada</s> &nbsp;<span class="ok">reparable</span>',
+          s6_li4:      '<strong>Datos corruptos</strong> &nbsp;<span class="broken">quedan rotos</span>',
+          s6_footer:   'EduTrack pasó 3 semanas reconciliando manualmente 5.000 registros.<br/>Dos ingenieros renunciaron. Tres clientes hicieron contracargos.',
+          s7_label:    'Tu responsabilidad',
+          s7_sub:      'Aunque no te "gusten las bases de datos".',
+          s7_title:    'Como ingenieros,<br/>los datos son su responsabilidad.',
+          s7_c1_title: 'Tus usuarios te confían',
+          s7_c1_body:  'Tus usuarios te entregan su identidad, su dinero y sus registros académicos. Cuando tu modelo de datos falla, no solo rompe una app — <strong>destruye la confianza</strong> que tardó años en construirse.',
+          s7_c2_title: 'El costo real',
+          s7_c2_body:  '<ul class="card-list"><li>Las migraciones en datos vivos son lentas y riesgosas</li><li>Limpiar registros corruptos toma semanas</li><li>Los clientes perdidos raramente vuelven</li></ul><p style="margin-top:0.6rem"><strong>Un buen diseño es barato. Un mal diseño es permanente.</strong></p>',
+          s8_reveal:   'El <span class="accent">90%</span> de una gran base de datos<br/>es un gran <span class="accent">diseño</span>.',
+          s8_body:     'El problema de EduTrack no era un índice faltante ni una consulta lenta.<br/>Era un modelo que nunca fue diseñado — solo creció.',
+          s8_story:    '<em>Hoy</em> aprendemos las herramientas para diseñar antes de construir:<br/>el <em>diagrama Entidad-Relación</em>, el <em>modelo lógico</em>,<br/>y cómo pensar correctamente sobre los datos.',
+          s9_label:    'Se ve bien',
+          s9_title:    'Esta es la base de datos de EduTrack',
+          s9_sub:      'El sistema funciona. Todo el mundo está contento.',
+          s10_label:   'Problema 1 — Actualización',
+          s10_title:   'El instructor cambia su nombre',
+          s10_callout1:'Actualizaste <strong>una fila</strong>. Cinco siguen diciendo "Torres". <strong>¿Cuál es la verdad?</strong>',
+          s10_callout2:'No actualizamos datos — corrompimos el historial.',
+          s11_label:   'Problema 2 — Inserción',
+          s11_title:   'Un nuevo curso, sin estudiantes aún',
+          s11_callout: 'La tabla <strong>requiere un estudiante</strong> para existir. No puedes insertar un curso sin uno. <strong>DB104 no puede existir todavía.</strong>',
+          s12_label:   'Problema 3 — Borrado',
+          s12_title:   'El último estudiante abandona DB103',
+          s12_callout: 'Se elimina la fila de Ana. <strong>DB103 ya no existe en el sistema.</strong> El curso, el instructor, la nota — todo desaparece.',
+          s13_label:   'El veredicto',
+          s13_title:   'Técnicamente <span class="accent">funciona</span>.<br/>Lógicamente <span class="red">está roto</span>.',
+          s13_u:       'Anomalía de actualización',
+          s13_u_sub:   'Un cambio requiere muchas actualizaciones. Olvidas una → datos corruptos.',
+          s13_i:       'Anomalía de inserción',
+          s13_i_sub:   'No puedes guardar un hecho sin que otro hecho no relacionado exista primero.',
+          s13_d:       'Anomalía de borrado',
+          s13_d_sub:   'Eliminar una cosa destruye accidentalmente otra.',
+          s13_bridge:  '¿Cómo diseñamos esto para que la realidad no rompa nuestro sistema?',
+          s14_label:   'Un error',
+          s14_reveal:  'No <span class="red">diseñamos</span> los datos —<br/>simplemente los <span class="red">almacenamos</span>.',
+          s14_body:    'Las tres anomalías. La misma causa raíz.',
+          s14_story:   'Entonces en lugar de arreglar tablas…<br/><em>necesitamos cambiar cómo pensamos.</em>',
+          s15_label:   'El cambio',
+          s15_title:   'Piensa en entidades, no en tablas',
+          s15_q_title: 'Empieza preguntando',
+          s15_q1:      '¿Quién existe? → entidades',
+          s15_q2:      '¿Qué tienen? → atributos',
+          s15_q3:      '¿Cómo se relacionan? → relaciones',
+          s15_e_title: 'En EduTrack',
+          s15_e1:      'Usuario — existe de forma independiente',
+          s15_e2:      'Curso — existe de forma independiente',
+          s15_e3:      'Instructor — existe de forma independiente',
+          s15_e4:      'Inscripción — los conecta',
+          s15_key:     'Las tablas son un detalle de implementación. El diseño real ocurre antes.',
+          s16_label:   'La solución',
+          s16_title:   'Esto es exactamente lo que el diseño ER nos ayuda a hacer.',
+          s16_bad_title:'Mal pensamiento',
+          s16_bad_q:   '"¿Qué columnas necesito?"',
+          s16_good_title:'Buen pensamiento',
+          s16_good_q:  '"¿Qué objetos existen en mi sistema?"',
+          s16_bridge:  'Los diagramas ER te hacen pensar en objetos y relaciones — antes de crear una sola tabla.',
+        },
+      };
+
+      // ── Apply language ──
+      let currentLang = 'en';
+
+      function applyLang(lang) {
+        const dict = i18n[lang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.dataset.i18n;
+          if (dict[key] !== undefined) el.textContent = dict[key];
+        });
+        document.querySelectorAll('[data-i18n-html]').forEach(el => {
+          const key = el.dataset.i18nHtml;
+          if (dict[key] !== undefined) el.innerHTML = dict[key];
+        });
+        // Update filmstrip titles
+        const sections = document.querySelectorAll('.reveal .slides section');
+        const thumbTitles = document.querySelectorAll('.thumb-title');
+        sections.forEach((s, i) => {
+          const title = lang === 'en' ? s.dataset.titleEn : s.dataset.titleEs;
+          if (title && thumbTitles[i]) thumbTitles[i].textContent = title;
+        });
+        // Update toggle buttons
+        document.querySelectorAll('.lang-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.lang === lang);
+        });
+        currentLang = lang;
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+      });
+
+      // ── Reveal init ──
+      Reveal.initialize({
+        controls: false, progress: false, hash: true,
+        transition: 'fade', transitionSpeed: 'fast',
+        width: '100%', height: '100%', margin: 0, minScale: 1, maxScale: 1,
+      });
+
+      // ── Filmstrip ──
+      const strip    = document.getElementById('filmstrip');
+      const sections = document.querySelectorAll('.reveal .slides section');
+
+      sections.forEach((section, i) => {
+        const n = String(i + 1).padStart(2, '0');
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb';
+        thumb.innerHTML = `<span class="thumb-num">${n}</span><span class="thumb-title">${section.dataset.titleEn ?? 'Slide ' + (i+1)}</span>`;
+        thumb.addEventListener('click', () => Reveal.slide(i));
+        strip.appendChild(thumb);
+      });
+
+      function syncNav(e) {
+        const idx = e.indexh;
+        const thumbs = strip.querySelectorAll('.thumb');
+        thumbs.forEach((t, i) => t.classList.toggle('active', i === idx));
+        const active = thumbs[idx];
+        if (active) strip.scrollLeft = active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
+        document.getElementById('arrow-prev').classList.toggle('hidden', idx === 0);
+        document.getElementById('arrow-next').classList.toggle('hidden', idx === sections.length - 1);
+      }
+
+      Reveal.on('slidechanged', syncNav);
+      Reveal.on('ready', (e) => syncNav({ indexh: e.indexh }));
+      document.getElementById('arrow-prev').addEventListener('click', () => Reveal.prev());
+      document.getElementById('arrow-next').addEventListener('click', () => Reveal.next());
+
+      // ── Filmstrip collapse ──
+      let collapsed = false;
+      const filmstrip = document.getElementById('filmstrip');
+      const viewport  = document.querySelector('.reveal-viewport');
+      const chevron   = document.getElementById('toggle-chevron');
+      const arrows    = document.querySelectorAll('.nav-arrow');
+
+      document.getElementById('strip-toggle').addEventListener('click', () => {
+        collapsed = !collapsed;
+        filmstrip.classList.toggle('collapsed', collapsed);
+        viewport.classList.toggle('strip-collapsed', collapsed);
+        arrows.forEach(a => a.classList.toggle('strip-collapsed', collapsed));
+        chevron.textContent = collapsed ? '▲' : '▼';
+        setTimeout(() => Reveal.layout(), 320);
+      });
+    </script>
+  </body>
+</html>
