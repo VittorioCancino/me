@@ -88,6 +88,48 @@ export default function TICS320() {
           </ul>
         </div>
 
+        {/* Exercises */}
+        <div className="rounded-2xl border border-[#21262d] bg-[#161b22] px-7 py-6">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7c3aed]/20 text-[#7c3aed]">
+              <BookOpen size={15} />
+            </span>
+            <h2 className="text-sm font-semibold text-white">{c.exercises.title}</h2>
+          </div>
+          <p className="mb-4 text-xs text-[#848d97]">{c.exercises.description}</p>
+          <ul className="space-y-2">
+            {t.exerciseItems.map((item) => (
+              <li key={item.number} className="rounded-xl border border-[#21262d] bg-[#0d1117] px-5 py-3">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#7c3aed]/20 text-[#7c3aed] text-xs font-bold">
+                    {item.number}
+                  </span>
+                  <span className="flex-1 text-sm font-medium text-white">{item.title}</span>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <a
+                      href={`${BASE}${item.href}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-xs text-[#7c3aed] transition-colors hover:text-[#a78bfa]"
+                    >
+                      {c.exercises.openExercise} <ExternalLink size={11} />
+                    </a>
+                    <a
+                      href={`${BASE}${item.solutionHref}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-xs text-[#848d97] transition-colors hover:text-[#a78bfa]"
+                    >
+                      {c.exercises.openSolution} <ExternalLink size={11} />
+                    </a>
+                  </div>
+                </div>
+                <p className="mt-1.5 pl-9 text-xs text-[#848d97]">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
       </div>
     </div>
   );

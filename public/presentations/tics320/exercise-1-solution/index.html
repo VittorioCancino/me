@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercise 1 — Solution — TICS320</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css" />
+
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+        --red: #ef4444;
+        --red-dim: rgba(239, 68, 68, 0.12);
+        --green: #22c55e;
+        --green-dim: rgba(34, 197, 94, 0.12);
+        --yellow: #fbbf24;
+        --yellow-dim: rgba(251, 191, 36, 0.10);
+        --strip-h: 88px;
+        --toggle-h: 28px;
+        --arrow-w: 56px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 100%; height: 100%; background: var(--bg); overflow: hidden; }
+
+      .reveal-viewport {
+        background: var(--bg) !important;
+        height: calc(100vh - var(--strip-h) - var(--toggle-h)) !important;
+        transition: height var(--transition);
+      }
+      .reveal-viewport.strip-collapsed { height: calc(100vh - var(--toggle-h)) !important; }
+      .reveal { height: 100% !important; }
+      .reveal .slides { width: 100% !important; height: 100% !important; left: 0 !important; top: 0 !important; transform: none !important; }
+      .reveal .slides section {
+        width: 100% !important; height: 100% !important;
+        padding: 3rem 10rem; top: 0 !important; left: 0 !important;
+        display: flex !important; flex-direction: column;
+        align-items: center; justify-content: center; text-align: center;
+      }
+
+      /* ── Typography ── */
+      .reveal h1, .reveal h2, .reveal h3 { text-transform: none; letter-spacing: -0.02em; color: #fff; }
+      .reveal h1 { font-size: 3.8rem; line-height: 1.1; }
+      .reveal h2 { font-size: 2.2rem; line-height: 1.15; }
+      .reveal h3 { font-size: 1.7rem; color: var(--accent-light); }
+      .reveal p { color: #c9d1d9; font-size: 1.37rem; line-height: 1.75; }
+
+      /* ── Utilities ── */
+      .label {
+        display: inline-block; font-size: 0.65rem; font-weight: 700;
+        letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--accent-light); border: 1px solid rgba(124,58,237,0.45);
+        background: var(--accent-dim); padding: 0.22em 0.85em;
+        border-radius: 999px; margin-bottom: 1rem;
+      }
+      .label.warn {
+        color: var(--yellow); border-color: rgba(251,191,36,0.45);
+        background: var(--yellow-dim);
+      }
+      .divider { width: 2.5rem; height: 3px; background: var(--accent); border-radius: 2px; margin: 0.8rem auto 1.1rem; }
+      .muted { color: var(--muted) !important; font-size: 1.15rem; }
+
+      /* ── Callout ── */
+      .callout {
+        display: flex; align-items: center; gap: 0.8rem;
+        border-radius: 10px; padding: 0.7rem 1rem;
+        font-size: 1.05rem; color: #c9d1d9; text-align: left; margin-top: 0.7rem;
+      }
+      .callout.warn  { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.3); }
+      .callout.info  { background: var(--accent-dim);     border: 1px solid rgba(124,58,237,0.3); }
+      .callout.good  { background: var(--green-dim);      border: 1px solid rgba(34,197,94,0.3); }
+      .callout.bad   { background: var(--red-dim);        border: 1px solid rgba(239,68,68,0.3); }
+      .callout .icon { font-size: 1.2rem; flex-shrink: 0; }
+      .callout strong { color: #fff; }
+
+      /* ── Grid ── */
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+      .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; }
+      .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.65rem; }
+
+      /* ── Entity card ── */
+      .entity-card {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: 10px; overflow: hidden; text-align: left !important;
+      }
+      .entity-card-header {
+        background: var(--accent-dim); border-bottom: 1px solid rgba(124,58,237,0.3);
+        padding: 0.45rem 0.8rem; text-align: left !important;
+        font-size: 0.78rem; font-weight: 700; color: #fff; letter-spacing: 0.04em;
+      }
+      .entity-card-body { display: block !important; width: 100%; margin: 0 !important; padding: 0.45rem 0.8rem !important; text-align: left !important; }
+      .entity-card-body li {
+        list-style: none; font-size: 0.72rem; color: var(--muted);
+        padding: 0.18rem 0; border-bottom: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: flex-start; gap: 0.4rem;
+        text-align: left !important;
+      }
+      .entity-card-body li:last-child { border-bottom: none; }
+      .entity-card-body li.pk { color: var(--accent-light); font-weight: 700; }
+      .entity-card-body li.pk::before { content: "🔑"; font-size: 0.65rem; }
+      .entity-card-body li.fk { color: #60a5fa; }
+      .entity-card-body li.fk::before { content: "🔗"; font-size: 0.65rem; }
+      .entity-card-body li.new { color: var(--yellow); }
+      .entity-card-body li.new::before { content: "✨"; font-size: 0.65rem; }
+      .entity-card.bridge { border-color: rgba(251,191,36,0.4); }
+      .entity-card.bridge .entity-card-header { background: rgba(251,191,36,0.12); border-bottom-color: rgba(251,191,36,0.3); color: var(--yellow); }
+
+      /* ── Reveal-text ── */
+      .reveal-text { font-size: 3rem; font-weight: 800; letter-spacing: -0.04em; color: #fff; line-height: 1; }
+
+      /* ── Relation line ── */
+      .rel-row {
+        display: flex; align-items: center; gap: 0.5rem;
+        font-size: 0.88rem; color: #c9d1d9; text-align: left;
+        padding: 0.45rem 0.8rem; border-radius: 8px;
+        background: var(--surface); border: 1px solid var(--border);
+      }
+      .rel-entity { font-weight: 700; color: #fff; white-space: nowrap; }
+      .rel-verb   { color: var(--muted); font-style: italic; white-space: nowrap; }
+      .rel-card   {
+        font-size: 0.72rem; font-weight: 800; color: var(--accent-light);
+        background: var(--accent-dim); border: 1px solid rgba(124,58,237,0.4);
+        border-radius: 4px; padding: 0.1em 0.45em; white-space: nowrap;
+      }
+      .rel-card.mn { color: var(--yellow); background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.4); }
+
+      /* ── Badge ── */
+      .badge {
+        display: inline-block; padding: 0.15em 0.6em; border-radius: 6px;
+        font-size: 0.7rem; font-weight: 600;
+      }
+      .badge.green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(34,197,94,0.35); }
+      .badge.red   { background: var(--red-dim);   color: var(--red);   border: 1px solid rgba(239,68,68,0.35); }
+      .badge.yellow{ background: var(--yellow-dim);color: var(--yellow);border: 1px solid rgba(251,191,36,0.35); }
+
+      /* ── Language toggle ── */
+      #lang-toggle {
+        position: fixed; top: 1rem; right: 1rem; z-index: 300;
+        display: flex; align-items: center; gap: 2px;
+        background: #161b22; border: 1px solid #21262d;
+        border-radius: 999px; padding: 3px;
+      }
+      .lang-btn {
+        border: none; background: transparent; cursor: pointer;
+        font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+        color: #848d97; border-radius: 999px; padding: 0.25em 0.75em;
+        transition: background 0.15s, color 0.15s;
+      }
+      .lang-btn.active { background: #7c3aed; color: #fff; }
+      .lang-btn:not(.active):hover { color: #fff; }
+
+      /* ── Side arrows ── */
+      .nav-arrow {
+        position: fixed;
+        top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
+        transform: translateY(-50%); z-index: 200;
+        width: var(--arrow-w); height: var(--arrow-w);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; border-radius: 14px;
+        border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+        transition: background 0.18s, color 0.18s, border-color 0.18s, opacity 0.18s, top var(--transition);
+        user-select: none;
+      }
+      .nav-arrow:hover { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-light); }
+      .nav-arrow.hidden { opacity: 0; pointer-events: none; }
+      .nav-arrow.strip-collapsed { top: 50%; }
+      #arrow-prev { left: 1rem; }
+      #arrow-next { right: 1rem; }
+
+      /* ── Toggle tab ── */
+      #strip-toggle {
+        position: fixed; bottom: 0; left: 0; right: 0; height: var(--toggle-h);
+        background: var(--surface); border-top: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; z-index: 101; gap: 0.5rem; transition: background 0.18s;
+      }
+      #strip-toggle:hover { background: var(--accent-dim); }
+      #toggle-grip { display: flex; flex-direction: column; gap: 3px; opacity: 0.4; transition: opacity 0.18s; }
+      #strip-toggle:hover #toggle-grip { opacity: 0.9; }
+      #toggle-grip span { display: block; width: 18px; height: 2px; border-radius: 2px; background: var(--muted); }
+      #strip-toggle:hover #toggle-grip span { background: var(--accent-light); }
+      #toggle-chevron { color: var(--muted); transition: transform var(--transition), color 0.18s; }
+      #strip-toggle:hover #toggle-chevron { color: var(--accent-light); }
+      #toggle-chevron.rotated { transform: rotate(180deg); }
+
+      /* ── Filmstrip ── */
+      #filmstrip {
+        position: fixed; bottom: var(--toggle-h); left: 0; right: 0;
+        height: var(--strip-h); background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex; align-items: center; z-index: 100;
+        padding: 0 1rem; gap: 0.6rem; overflow-x: auto;
+        scroll-behavior: smooth; scrollbar-width: none;
+        transform: translateY(0); opacity: 1;
+        transition: transform var(--transition), opacity var(--transition);
+      }
+      #filmstrip::-webkit-scrollbar { display: none; }
+      #filmstrip.collapsed { transform: translateY(100%); opacity: 0; pointer-events: none; }
+
+      .thumb {
+        flex-shrink: 0; width: 120px; height: 64px; border-radius: 8px;
+        border: 1px solid var(--border); background: var(--bg); cursor: pointer;
+        display: flex; flex-direction: column; align-items: flex-start;
+        justify-content: flex-end; padding: 0.4rem 0.55rem; gap: 0.2rem;
+        transition: border-color 0.18s, background 0.18s, transform 0.18s;
+        position: relative; overflow: hidden;
+      }
+      .thumb:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-2px); }
+      .thumb.active { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-2px); }
+      .thumb.active::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0;
+        height: 2px; background: var(--accent); border-radius: 2px 2px 0 0;
+      }
+      .thumb-num { font-size: 0.6rem; font-weight: 700; color: var(--muted); letter-spacing: 0.06em; }
+      .thumb-title { font-size: 0.68rem; color: #c9d1d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+      .thumb.active .thumb-num { color: var(--accent-light); }
+      .thumb.active .thumb-title { color: #fff; font-weight: 600; }
+    </style>
+  </head>
+
+  <body>
+    <div id="lang-toggle">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+
+    <button id="arrow-prev" class="nav-arrow" aria-label="Previous">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button id="arrow-next" class="nav-arrow" aria-label="Next">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- ① Spoiler warning -->
+        <section data-title-en="Stop Here" data-title-es="Para Aquí">
+          <div class="label warn" data-i18n="s1_label">Spoiler warning</div>
+          <div style="font-size:4rem; margin-bottom:0.5rem;">⚠️</div>
+          <h1 data-i18n="s1_title" style="font-size:2.8rem;">Proposed Solution</h1>
+          <p class="muted" style="margin:1rem 0 1.5rem; max-width:36rem;" data-i18n="s1_sub">
+            Only continue if you've already worked through the exercise on your own.
+          </p>
+          <div class="callout warn" style="max-width:38rem;">
+            <span class="icon">💡</span>
+            <span data-i18n="s1_note">There is no single correct answer — what matters is your reasoning. If your model differs from this one, compare it and ask yourself why each decision was made.</span>
+          </div>
+        </section>
+
+        <!-- ② Entities -->
+        <section data-title-en="Entities" data-title-es="Entidades">
+          <div class="label" data-i18n="s2_label">What exists in the system</div>
+          <h2 data-i18n="s2_title" style="margin-bottom:1rem;">6 Entities</h2>
+          <div class="grid-6" style="width:100%;">
+
+            <div class="entity-card">
+              <div class="entity-card-header" data-i18n="s2_e1">Customer</div>
+              <ul class="entity-card-body">
+                <li class="pk">customer_id</li>
+                <li>name</li>
+                <li>email</li>
+              </ul>
+            </div>
+
+            <div class="entity-card">
+              <div class="entity-card-header" data-i18n="s2_e2">Event</div>
+              <ul class="entity-card-body">
+                <li class="pk">event_id</li>
+                <li>name</li>
+                <li>date</li>
+              </ul>
+            </div>
+
+            <div class="entity-card">
+              <div class="entity-card-header" data-i18n="s2_e3">Ticket</div>
+              <ul class="entity-card-body">
+                <li class="pk">ticket_id</li>
+                <li>price</li>
+                <li data-i18n="s2_purchase_type">purchase_type</li>
+                <li class="fk">customer_id</li>
+                <li class="fk">event_id</li>
+              </ul>
+            </div>
+
+            <div class="entity-card">
+              <div class="entity-card-header" data-i18n="s2_e4">Drink</div>
+              <ul class="entity-card-body">
+                <li class="pk">drink_id</li>
+                <li>name</li>
+                <li>price</li>
+              </ul>
+            </div>
+
+            <div class="entity-card">
+              <div class="entity-card-header" data-i18n="s2_e5">Purchase</div>
+              <ul class="entity-card-body">
+                <li class="pk">purchase_id</li>
+                <li>timestamp</li>
+                <li class="fk">customer_id</li>
+                <li class="fk new">event_id ✨</li>
+              </ul>
+            </div>
+
+            <div class="entity-card bridge">
+              <div class="entity-card-header" data-i18n="s2_e6">PurchaseItem</div>
+              <ul class="entity-card-body">
+                <li class="pk fk">purchase_id</li>
+                <li class="pk fk">drink_id</li>
+                <li>quantity</li>
+              </ul>
+            </div>
+
+          </div>
+          <div class="callout warn" style="margin-top:0.9rem; font-size:0.9rem;">
+            <span class="icon">✨</span>
+            <span data-i18n="s2_note">Purchase links to Event — added to answer "what happened on Reggaeton Night?" without this FK that question is unanswerable.</span>
+          </div>
+        </section>
+
+        <!-- ③ Relationships -->
+        <section data-title-en="Relationships" data-title-es="Relaciones">
+          <div class="label" data-i18n="s3_label">How they connect</div>
+          <h2 data-i18n="s3_title" style="margin-bottom:1rem;">The relationships</h2>
+          <div class="grid-2" style="width:100%; gap:1.2rem;">
+
+            <div style="display:flex; flex-direction:column; gap:0.5rem; text-align:left;">
+              <p style="font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-light); margin-bottom:0.2rem;" data-i18n="s3_tickets_section">🎟️ Tickets</p>
+              <div class="rel-row">
+                <span class="rel-entity" data-i18n="s3_r1_a">Customer</span>
+                <span class="rel-verb" data-i18n="s3_r1_v">buys</span>
+                <span class="rel-entity" data-i18n="s3_r1_b">Ticket</span>
+                <span class="rel-card">1:N</span>
+              </div>
+              <div class="rel-row">
+                <span class="rel-entity" data-i18n="s3_r2_a">Ticket</span>
+                <span class="rel-verb" data-i18n="s3_r2_v">belongs to</span>
+                <span class="rel-entity" data-i18n="s3_r2_b">Event</span>
+                <span class="rel-card">N:1</span>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:0.5rem; text-align:left;">
+              <p style="font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-light); margin-bottom:0.2rem;" data-i18n="s3_bar_section">🍹 Bar purchases</p>
+              <div class="rel-row">
+                <span class="rel-entity" data-i18n="s3_r3_a">Customer</span>
+                <span class="rel-verb" data-i18n="s3_r3_v">makes</span>
+                <span class="rel-entity" data-i18n="s3_r3_b">Purchase</span>
+                <span class="rel-card">1:N</span>
+              </div>
+              <div class="rel-row">
+                <span class="rel-entity" data-i18n="s3_r4_a">Purchase</span>
+                <span class="rel-verb" data-i18n="s3_r4_v">happened at</span>
+                <span class="rel-entity" data-i18n="s3_r4_b">Event</span>
+                <span class="rel-card">N:1</span>
+                <span class="badge yellow" data-i18n="s3_added">added</span>
+              </div>
+              <div class="rel-row">
+                <span class="rel-entity" data-i18n="s3_r5_a">Purchase</span>
+                <span class="rel-verb" data-i18n="s3_r5_v">includes</span>
+                <span class="rel-entity" data-i18n="s3_r5_b">Drink</span>
+                <span class="rel-card mn">M:N</span>
+              </div>
+              <div class="callout info" style="font-size:0.85rem; margin-top:0.3rem;">
+                <span class="icon">👉</span>
+                <span data-i18n="s3_bridge_note">M:N resolved with <strong>PurchaseItem</strong> (purchase_id + drink_id + quantity)</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ④ Key teaching moments -->
+        <section data-title-en="Teaching Moments" data-title-es="Puntos Clave">
+          <div class="label" data-i18n="s4_label">What to watch for</div>
+          <h2 data-i18n="s4_title" style="margin-bottom:1rem;">Three things students usually miss</h2>
+          <div style="display:flex; flex-direction:column; gap:0.65rem; width:100%;">
+
+            <div class="callout bad">
+              <span class="icon">❌</span>
+              <div>
+                <strong data-i18n="s4_m1_title">Merging Ticket and Purchase into one entity</strong>
+                <p class="muted" style="margin-top:0.2rem; font-size:0.88rem;" data-i18n="s4_m1_body">They represent different actions — buying entry vs. buying drinks. One is tied to an event slot, the other is a bar transaction. Merging them creates an insert anomaly immediately.</p>
+              </div>
+            </div>
+
+            <div class="callout warn">
+              <span class="icon">🧩</span>
+              <div>
+                <strong data-i18n="s4_m2_title">Missing the PurchaseItem bridge</strong>
+                <p class="muted" style="margin-top:0.2rem; font-size:0.88rem;" data-i18n="s4_m2_body">A purchase can include multiple drinks, and the same drink can appear in many purchases. That's M:N — you cannot model it without a bridge table. PurchaseItem is where the quantity lives, not in Purchase or Drink.</p>
+              </div>
+            </div>
+
+            <div class="callout warn" style="background:rgba(251,191,36,0.08); border-color:rgba(251,191,36,0.3);">
+              <span class="icon">✨</span>
+              <div>
+                <strong data-i18n="s4_m3_title">Not linking Purchase to Event</strong>
+                <p class="muted" style="margin-top:0.2rem; font-size:0.88rem;" data-i18n="s4_m3_body">The exercise doesn't say it explicitly — but ask yourself: "Can I report bar revenue per event night?" Without Purchase → Event, no. This is a good example of designing for the questions you'll need to answer, not just the facts you have.</p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ⑤ Walk it + closing -->
+        <section data-title-en="How to Explain It" data-title-es="Cómo Explicarlo">
+          <div class="label" data-i18n="s5_label">Reasoning out loud</div>
+          <h2 data-i18n="s5_title" style="margin-bottom:1rem;">Walk it like this</h2>
+          <div class="grid-3" style="width:100%; margin-bottom:1rem;">
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+              <strong data-i18n="s5_step1_title">1. Start with obvious entities</strong>
+              <p class="muted" style="font-size:0.85rem;" data-i18n="s5_step1_body">"Customer, Event, Drink… these clearly exist on their own."</p>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+              <strong data-i18n="s5_step2_title">2. Identify actions</strong>
+              <p class="muted" style="font-size:0.85rem;" data-i18n="s5_step2_body">"Buying a ticket" → Ticket. "Buying drinks" → Purchase. Actions become entities too.</p>
+            </div>
+            <div class="callout info" style="flex-direction:column; align-items:flex-start; gap:0.3rem;">
+              <strong data-i18n="s5_step3_title">3. Fix complexity</strong>
+              <p class="muted" style="font-size:0.85rem;" data-i18n="s5_step3_body">"A purchase has multiple drinks" → M:N → we need a bridge. PurchaseItem is born.</p>
+            </div>
+          </div>
+          <div class="callout good" style="max-width:42rem;">
+            <span class="icon">🎯</span>
+            <span style="font-size:1rem;" data-i18n="s5_closing">Notice how every piece represents something real. If you can explain it in words, you can model it.</span>
+          </div>
+        </section>
+
+        <!-- ⑥ ER Diagram -->
+        <section data-title-en="ER Diagram" data-title-es="Diagrama ER" style="padding: 1.5rem 4rem;">
+          <div class="label" data-i18n="s6_label">Chen notation</div>
+          <h2 data-i18n="s6_title" style="margin-bottom:0.5rem;">ER Diagram — MarBrisa</h2>
+          <!--
+            Layout (two horizontal rows, two symmetric diagonals converging on Purchase):
+            Row 1 (y=170): Customer ——buys—— Ticket ——belongs_to—— Event
+                              \                                    /
+                             makes                          happened_at (✨ added)
+                                \                              /
+            Row 2 (y=310):   Purchase ——has—— PurchaseItem ——uses—— Drink
+          -->
+          <svg viewBox="0 0 880 495" style="width:100%; max-height:360px;" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, SFMono-Regular, monospace">
+
+            <!--
+              Layout:
+              Row 1 (y=105): Customer(108) —Buys(235)— Ticket(363) —BelongsTo(510)— Event(658)
+              Row 2 (y=248): Makes(108) ——————————————— Purchase(390) ——HappensAt(570) ←(Event via L-path)
+              Row 3:         Has(318,360) ——diag→ PurchaseItem(500,418) —Uses(665,418)— Drinks(808,418)
+              Customer connects straight DOWN to Makes (same x).
+              Event connects via L-path (straight down to y=248, then left) to HappensAt.
+              Purchase connects diagonally down-left to Has, Has diagonally down-right to PurchaseItem.
+            -->
+
+            <!-- ── Attribute stub lines (behind everything) ── -->
+            <line x1="108" y1="105" x2="52"  y2="47"  stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="108" y1="105" x2="108" y2="38"  stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="108" y1="105" x2="168" y2="47"  stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="363" y1="105" x2="328" y2="47"  stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="363" y1="105" x2="400" y2="47"  stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="658" y1="105" x2="625" y2="47"  stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="658" y1="105" x2="700" y2="50"  stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="390" y1="248" x2="342" y2="315" stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="390" y1="248" x2="440" y2="315" stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="500" y1="418" x2="500" y2="476" stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="808" y1="418" x2="775" y2="373" stroke="#2a2f3d" stroke-width="1"/>
+            <line x1="808" y1="418" x2="848" y2="373" stroke="#2a2f3d" stroke-width="1"/>
+
+            <!-- ── Relationship / structural lines ── -->
+            <!-- Row 1 horizontal -->
+            <line x1="108" y1="105" x2="235" y2="105" stroke="#4a5063" stroke-width="1.5"/>
+            <line x1="235" y1="105" x2="363" y2="105" stroke="#4a5063" stroke-width="1.5"/>
+            <line x1="363" y1="105" x2="510" y2="105" stroke="#4a5063" stroke-width="1.5"/>
+            <line x1="510" y1="105" x2="658" y2="105" stroke="#4a5063" stroke-width="1.5"/>
+            <!-- Customer straight down to Makes -->
+            <line x1="108" y1="105" x2="108" y2="248" stroke="#4a5063" stroke-width="1.5"/>
+            <!-- Makes → Purchase horizontal -->
+            <line x1="108" y1="248" x2="390" y2="248" stroke="#4a5063" stroke-width="1.5"/>
+            <!-- Event L-path: straight down then left to HappensAt (yellow dashed — added relationship) -->
+            <path d="M 658,105 L 658,248 L 570,248" fill="none" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <!-- Purchase → HappensAt horizontal (yellow dashed) -->
+            <line x1="390" y1="248" x2="570" y2="248" stroke="#b8860b" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <!-- Purchase → Has diagonal down-left -->
+            <line x1="390" y1="248" x2="318" y2="360" stroke="#4a5063" stroke-width="1.5"/>
+            <!-- Has → PurchaseItem diagonal down-right -->
+            <line x1="318" y1="360" x2="500" y2="418" stroke="#4a5063" stroke-width="1.5"/>
+            <!-- PurchaseItem — Uses — Drinks horizontal -->
+            <line x1="500" y1="418" x2="665" y2="418" stroke="#4a5063" stroke-width="1.5"/>
+            <line x1="665" y1="418" x2="808" y2="418" stroke="#4a5063" stroke-width="1.5"/>
+
+            <!-- ── Background masks (ensure shapes cover lines cleanly) ── -->
+            <rect x="48"  y="87"  width="120" height="36" rx="5" fill="#0d1117"/>
+            <rect x="303" y="87"  width="120" height="36" rx="5" fill="#0d1117"/>
+            <rect x="598" y="87"  width="120" height="36" rx="5" fill="#0d1117"/>
+            <rect x="330" y="230" width="120" height="36" rx="5" fill="#0d1117"/>
+            <rect x="420" y="400" width="160" height="36" rx="6" fill="#0d1117"/>
+            <rect x="748" y="400" width="120" height="36" rx="5" fill="#0d1117"/>
+
+            <!-- ── Entity rectangles ── -->
+            <rect x="48"  y="87"  width="120" height="36" rx="5" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="2"/>
+            <text x="108" y="105" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="13" font-weight="700">Customer</text>
+            <rect x="303" y="87"  width="120" height="36" rx="5" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="2"/>
+            <text x="363" y="105" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="13" font-weight="700">Ticket</text>
+            <rect x="598" y="87"  width="120" height="36" rx="5" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="2"/>
+            <text x="658" y="105" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="13" font-weight="700">Event</text>
+            <rect x="330" y="230" width="120" height="36" rx="5" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="2"/>
+            <text x="390" y="248" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="13" font-weight="700">Purchase</text>
+            <!-- PurchaseItem double border (weak/bridge entity) -->
+            <rect x="420" y="400" width="160" height="36" rx="6" fill="rgba(124,58,237,0.08)" stroke="#a78bfa" stroke-width="1"/>
+            <rect x="426" y="406" width="148" height="24" rx="4" fill="rgba(124,58,237,0.2)"  stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="500" y="418" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="11" font-weight="700">PurchaseItem</text>
+            <rect x="748" y="400" width="120" height="36" rx="5" fill="rgba(124,58,237,0.2)" stroke="#7c3aed" stroke-width="2"/>
+            <text x="808" y="418" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="13" font-weight="700">Drinks</text>
+
+            <!-- ── Relationship diamonds ── -->
+            <!-- Buys (235,105) -->
+            <polygon points="235,80 278,105 235,130 192,105" fill="#0d1117" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="235" y="105" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="10" font-weight="600">Buys</text>
+            <!-- BelongsTo (510,105) -->
+            <polygon points="510,80 553,105 510,130 467,105" fill="#0d1117" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="510" y="99"  text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="9" font-weight="600">Belongs</text>
+            <text x="510" y="111" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="9" font-weight="600">to</text>
+            <!-- Makes (108,248) -->
+            <polygon points="108,223 151,248 108,273 65,248" fill="#0d1117" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="108" y="248" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="10" font-weight="600">Makes</text>
+            <!-- HappensAt (570,248) — yellow, added relationship -->
+            <polygon points="570,223 613,248 570,273 527,248" fill="#0d1117" stroke="#fbbf24" stroke-width="1.5"/>
+            <text x="570" y="242" text-anchor="middle" dominant-baseline="middle" fill="#fbbf24" font-size="8.5" font-weight="600">Happens</text>
+            <text x="570" y="254" text-anchor="middle" dominant-baseline="middle" fill="#fbbf24" font-size="8.5" font-weight="600">at ✨</text>
+            <!-- Has (318,360) -->
+            <polygon points="318,335 361,360 318,385 275,360" fill="#0d1117" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="318" y="360" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="10" font-weight="600">Has</text>
+            <!-- Uses (665,418) -->
+            <polygon points="665,393 708,418 665,443 622,418" fill="#0d1117" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="665" y="418" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="10" font-weight="600">Uses</text>
+
+            <!-- ── Attribute ellipses ── -->
+            <!-- Customer: id_c (PK), name, email -->
+            <ellipse cx="52"  cy="46" rx="30" ry="13" fill="#0d1117" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="52"  y="46" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="8.5" font-weight="700" text-decoration="underline">id_c</text>
+            <ellipse cx="108" cy="36" rx="22" ry="12" fill="#0d1117" stroke="#3d4450" stroke-width="1"/>
+            <text x="108" y="36" text-anchor="middle" dominant-baseline="middle" fill="#848d97" font-size="9">name</text>
+            <ellipse cx="168" cy="46" rx="24" ry="13" fill="#0d1117" stroke="#3d4450" stroke-width="1"/>
+            <text x="168" y="46" text-anchor="middle" dominant-baseline="middle" fill="#848d97" font-size="9">email</text>
+            <!-- Ticket: id_t (PK), price -->
+            <ellipse cx="328" cy="46" rx="26" ry="13" fill="#0d1117" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="328" y="46" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="8.5" font-weight="700" text-decoration="underline">id_t</text>
+            <ellipse cx="400" cy="46" rx="22" ry="13" fill="#0d1117" stroke="#3d4450" stroke-width="1"/>
+            <text x="400" y="46" text-anchor="middle" dominant-baseline="middle" fill="#848d97" font-size="9">price</text>
+            <!-- Event: id_e (PK), date -->
+            <ellipse cx="625" cy="46" rx="26" ry="13" fill="#0d1117" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="625" y="46" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="8.5" font-weight="700" text-decoration="underline">id_e</text>
+            <ellipse cx="700" cy="50" rx="22" ry="13" fill="#0d1117" stroke="#3d4450" stroke-width="1"/>
+            <text x="700" y="50" text-anchor="middle" dominant-baseline="middle" fill="#848d97" font-size="9">date</text>
+            <!-- Purchase: id_p (PK), time -->
+            <ellipse cx="342" cy="317" rx="26" ry="12" fill="#0d1117" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="342" y="317" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="8.5" font-weight="700" text-decoration="underline">id_p</text>
+            <ellipse cx="440" cy="317" rx="22" ry="12" fill="#0d1117" stroke="#3d4450" stroke-width="1"/>
+            <text x="440" y="317" text-anchor="middle" dominant-baseline="middle" fill="#848d97" font-size="9">time</text>
+            <!-- PurchaseItem: quantity -->
+            <ellipse cx="500" cy="478" rx="30" ry="12" fill="#0d1117" stroke="#3d4450" stroke-width="1"/>
+            <text x="500" y="478" text-anchor="middle" dominant-baseline="middle" fill="#848d97" font-size="9">quantity</text>
+            <!-- Drinks: id_d (PK), price -->
+            <ellipse cx="775" cy="373" rx="26" ry="12" fill="#0d1117" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="775" y="373" text-anchor="middle" dominant-baseline="middle" fill="#a78bfa" font-size="8.5" font-weight="700" text-decoration="underline">id_d</text>
+            <ellipse cx="848" cy="373" rx="22" ry="12" fill="#0d1117" stroke="#3d4450" stroke-width="1"/>
+            <text x="848" y="373" text-anchor="middle" dominant-baseline="middle" fill="#848d97" font-size="9">price</text>
+
+          </svg>
+        </section>
+
+      </div>
+    </div>
+
+    <div id="filmstrip"></div>
+    <div id="strip-toggle">
+      <div id="toggle-grip"><span></span><span></span></div>
+      <svg id="toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      const i18n = {
+        en: {
+          s1_label: "TICS320 · Exercise 1 — Solution",
+          s1_title: "Proposed Solution",
+          s1_sub: "Only continue if you've already worked through the exercise on your own.",
+          s1_note: "There is no single correct answer — what matters is your reasoning. If your model differs from this one, compare it and ask yourself why each decision was made.",
+
+          s2_label: "What exists in the system",
+          s2_title: "6 Entities",
+          s2_e1: "Customer", s2_e2: "Event", s2_e3: "Ticket",
+          s2_e4: "Drink", s2_e5: "Purchase", s2_e6: "PurchaseItem",
+          s2_purchase_type: "purchase_type (online/door)",
+          s2_note: "Purchase links to Event — added to answer \"what happened on Reggaeton Night?\" Without this FK that question is unanswerable.",
+
+          s3_label: "How they connect",
+          s3_title: "The relationships",
+          s3_tickets_section: "🎟️ Tickets",
+          s3_r1_a: "Customer", s3_r1_v: "buys", s3_r1_b: "Ticket",
+          s3_r2_a: "Ticket", s3_r2_v: "belongs to", s3_r2_b: "Event",
+          s3_bar_section: "🍹 Bar purchases",
+          s3_r3_a: "Customer", s3_r3_v: "makes", s3_r3_b: "Purchase",
+          s3_r4_a: "Purchase", s3_r4_v: "happened at", s3_r4_b: "Event",
+          s3_added: "added",
+          s3_r5_a: "Purchase", s3_r5_v: "includes", s3_r5_b: "Drink",
+          s3_bridge_note: "M:N resolved with PurchaseItem (purchase_id + drink_id + quantity)",
+
+          s4_label: "What to watch for",
+          s4_title: "Three things students usually miss",
+          s4_m1_title: "Merging Ticket and Purchase into one entity",
+          s4_m1_body: "They represent different actions — buying entry vs. buying drinks. One is tied to an event slot, the other is a bar transaction. Merging them creates an insert anomaly immediately.",
+          s4_m2_title: "Missing the PurchaseItem bridge",
+          s4_m2_body: "A purchase can include multiple drinks, and the same drink can appear in many purchases. That's M:N — you cannot model it without a bridge table. PurchaseItem is where the quantity lives, not in Purchase or Drink.",
+          s4_m3_title: "Not linking Purchase to Event",
+          s4_m3_body: "The exercise doesn't say it explicitly — but ask yourself: \"Can I report bar revenue per event night?\" Without Purchase → Event, no. This is a good example of designing for the questions you'll need to answer, not just the facts you have.",
+
+          s5_label: "Reasoning out loud",
+          s5_title: "Walk it like this",
+          s5_step1_title: "1. Start with obvious entities",
+          s5_step1_body: "\"Customer, Event, Drink… these clearly exist on their own.\"",
+          s5_step2_title: "2. Identify actions",
+          s5_step2_body: "\"Buying a ticket\" → Ticket. \"Buying drinks\" → Purchase. Actions become entities too.",
+          s5_step3_title: "3. Fix complexity",
+          s5_step3_body: "\"A purchase has multiple drinks\" → M:N → we need a bridge. PurchaseItem is born.",
+          s5_closing: "Notice how every piece represents something real. If you can explain it in words, you can model it.",
+
+          s6_label: "Chen notation",
+          s6_title: "ER Diagram — MarBrisa",
+        },
+        es: {
+          s1_label: "TICS320 · Ejercicio 1 — Solución",
+          s1_title: "Solución Propuesta",
+          s1_sub: "Continúa solo si ya trabajaste el ejercicio por tu cuenta.",
+          s1_note: "No hay una única respuesta correcta — lo que importa es tu razonamiento. Si tu modelo difiere de este, compáralos y pregúntate por qué se tomó cada decisión.",
+
+          s2_label: "Qué existe en el sistema",
+          s2_title: "6 Entidades",
+          s2_e1: "Cliente", s2_e2: "Evento", s2_e3: "Entrada",
+          s2_e4: "Bebida", s2_e5: "Compra", s2_e6: "ItemCompra",
+          s2_purchase_type: "tipo_compra (online/puerta)",
+          s2_note: "Compra se enlaza con Evento — añadido para responder \"¿qué pasó en la Noche de Reggaetón?\" Sin esta FK esa pregunta es imposible de responder.",
+
+          s3_label: "Cómo se conectan",
+          s3_title: "Las relaciones",
+          s3_tickets_section: "🎟️ Entradas",
+          s3_r1_a: "Cliente", s3_r1_v: "compra", s3_r1_b: "Entrada",
+          s3_r2_a: "Entrada", s3_r2_v: "pertenece a", s3_r2_b: "Evento",
+          s3_bar_section: "🍹 Compras del bar",
+          s3_r3_a: "Cliente", s3_r3_v: "realiza", s3_r3_b: "Compra",
+          s3_r4_a: "Compra", s3_r4_v: "ocurrió en", s3_r4_b: "Evento",
+          s3_added: "añadido",
+          s3_r5_a: "Compra", s3_r5_v: "incluye", s3_r5_b: "Bebida",
+          s3_bridge_note: "M:N resuelto con ItemCompra (purchase_id + drink_id + cantidad)",
+
+          s4_label: "Qué observar",
+          s4_title: "Tres cosas que los estudiantes suelen pasar por alto",
+          s4_m1_title: "Fusionar Entrada y Compra en una sola entidad",
+          s4_m1_body: "Representan acciones distintas — comprar entrada vs. comprar bebidas. Una está ligada a un cupo de evento, la otra es una transacción del bar. Fusionarlas genera una anomalía de inserción de inmediato.",
+          s4_m2_title: "Olvidar la tabla puente ItemCompra",
+          s4_m2_body: "Una compra puede incluir múltiples bebidas, y la misma bebida puede aparecer en muchas compras. Eso es M:N — no se puede modelar sin una tabla puente. La cantidad vive en ItemCompra, no en Compra ni en Bebida.",
+          s4_m3_title: "No enlazar Compra con Evento",
+          s4_m3_body: "El ejercicio no lo dice explícitamente — pero pregúntate: \"¿Puedo reportar los ingresos del bar por noche de evento?\" Sin Compra → Evento, no. Este es un buen ejemplo de diseñar para las preguntas que necesitarás responder, no solo para los hechos que tienes.",
+
+          s5_label: "Razonando en voz alta",
+          s5_title: "Recórrelo así",
+          s5_step1_title: "1. Empieza con las entidades obvias",
+          s5_step1_body: "\"Cliente, Evento, Bebida… estas claramente existen por sí solas.\"",
+          s5_step2_title: "2. Identifica acciones",
+          s5_step2_body: "\"Comprar una entrada\" → Entrada. \"Comprar bebidas\" → Compra. Las acciones también se convierten en entidades.",
+          s5_step3_title: "3. Resuelve la complejidad",
+          s5_step3_body: "\"Una compra tiene múltiples bebidas\" → M:N → necesitamos una tabla puente. Nace ItemCompra.",
+          s5_closing: "Nota cómo cada pieza representa algo real. Si puedes explicarlo con palabras, puedes modelarlo.",
+
+          s6_label: "Notación de Chen",
+          s6_title: "Diagrama ER — MarBrisa",
+        },
+      };
+
+      let currentLang = "en";
+
+      function applyLang(lang) {
+        currentLang = lang;
+        const t = i18n[lang];
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (t[key] !== undefined) el.textContent = t[key];
+        });
+        document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+          const key = el.getAttribute("data-i18n-html");
+          if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+        document.querySelectorAll(".lang-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.lang === lang);
+        });
+        buildFilmstrip();
+      }
+
+      document.querySelectorAll(".lang-btn").forEach((btn) => {
+        btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+      });
+
+      Reveal.initialize({
+        hash: false, controls: false, progress: false, slideNumber: false,
+        transition: "fade", transitionSpeed: "fast",
+        width: "100%", height: "100%", margin: 0, minScale: 1, maxScale: 1,
+      });
+
+      function buildFilmstrip() {
+        const strip = document.getElementById("filmstrip");
+        strip.innerHTML = "";
+        const slides = document.querySelectorAll(".reveal .slides section");
+        const currentIdx = Reveal.getState().indexh;
+        slides.forEach((slide, i) => {
+          const title = slide.getAttribute(`data-title-${currentLang}`) || slide.getAttribute("data-title-en") || `Slide ${i + 1}`;
+          const thumb = document.createElement("div");
+          thumb.className = "thumb" + (i === currentIdx ? " active" : "");
+          thumb.innerHTML = `<span class="thumb-num">${String(i + 1).padStart(2, "0")}</span><span class="thumb-title">${title}</span>`;
+          thumb.addEventListener("click", () => Reveal.slide(i));
+          strip.appendChild(thumb);
+        });
+      }
+
+      Reveal.on("slidechanged", ({ indexh }) => {
+        document.querySelectorAll(".thumb").forEach((t, i) => t.classList.toggle("active", i === indexh));
+        const strip = document.getElementById("filmstrip");
+        const active = strip.querySelectorAll(".thumb")[indexh];
+        if (active) active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        updateArrows(indexh);
+      });
+
+      function updateArrows(idx) {
+        const total = document.querySelectorAll(".reveal .slides section").length;
+        document.getElementById("arrow-prev").classList.toggle("hidden", idx === 0);
+        document.getElementById("arrow-next").classList.toggle("hidden", idx === total - 1);
+      }
+
+      document.getElementById("arrow-prev").addEventListener("click", () => Reveal.prev());
+      document.getElementById("arrow-next").addEventListener("click", () => Reveal.next());
+
+      const stripToggle = document.getElementById("strip-toggle");
+      const filmstrip  = document.getElementById("filmstrip");
+      const chevron    = document.getElementById("toggle-chevron");
+      const viewport   = document.querySelector(".reveal-viewport");
+      const arrows     = document.querySelectorAll(".nav-arrow");
+
+      stripToggle.addEventListener("click", () => {
+        const collapsed = filmstrip.classList.toggle("collapsed");
+        chevron.classList.toggle("rotated", collapsed);
+        viewport.classList.toggle("strip-collapsed", collapsed);
+        arrows.forEach((a) => a.classList.toggle("strip-collapsed", collapsed));
+      });
+
+      Reveal.on("ready", () => { applyLang("en"); updateArrows(0); });
+    </script>
+  </body>
+</html>

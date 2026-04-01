@@ -52,6 +52,13 @@ export const translations = {
           empty: "Nothing here yet.",
           openSlides: "Open slides",
         },
+        exercises: {
+          title: "Exercises",
+          description: "Practice problems with solutions. Work through them on your own first.",
+          empty: "Nothing here yet.",
+          openExercise: "Open exercise",
+          openSolution: "Open solution",
+        },
       },
     },
     materialItems: [
@@ -76,6 +83,27 @@ export const translations = {
         href: "https://www.pgadmin.org/",
         label: "pgadmin.org",
       },
+      {
+        title: "Database Design for Mere Mortals (4th ed.) — Michael J. Hernandez",
+        description:
+          "My personal recommendation for this course. A practical, hands-on guide to relational database design that doesn't assume prior experience. Hernandez walks you through the full design process — from understanding requirements to building a clean, normalised schema — at a pace that builds real intuition. The level of depth matches what we cover in class, and the examples are concrete enough to apply immediately.",
+        href: "https://www.amazon.com/dp/0136788041",
+        label: "amazon.com",
+      },
+      {
+        title: "Fundamentals of Database Systems (7th ed.) — Elmasri & Navathe",
+        description:
+          "The standard academic reference for database systems. This book goes well beyond what this course covers — deep into the theory of data modelling, relational algebra, query processing, indexing, and transaction management. Treat it as the definitive source if you want to understand what is actually happening under the hood, or if you plan to go further into databases after this course.",
+        href: "https://www.amazon.com/dp/0136086209",
+        label: "amazon.com",
+      },
+      {
+        title: "Postgres Sample Databases — Neon",
+        description:
+          "A collection of ready-to-use PostgreSQL databases with SQL dumps you can load locally or into Supabase. Includes well-known datasets like Northwind, Chinook, and others — good for practising queries, joins, and aggregations against realistic schemas without having to invent data yourself. Note that some of these dumps are large enough to exceed Supabase's free tier storage limit, so not all of them will fit there. If you run into that, the simplest fix is to load them into a local PostgreSQL installation instead.",
+        href: "https://github.com/neondatabase/postgres-sample-dbs",
+        label: "github.com",
+      },
     ],
     practicumItems: [
       {
@@ -84,6 +112,16 @@ export const translations = {
         description:
           "ER diagrams, logical models, cardinality, and how to think when designing a database from scratch. Includes a hands-on exercise.",
         href: "/presentations/tics320/practicum-1/index.html",
+      },
+    ],
+    exerciseItems: [
+      {
+        number: 1,
+        title: "MarBrisa Disco — ER Design",
+        description:
+          "Design an ER diagram for a disco that sells tickets, runs themed events, and has an in-house bar where customers can order drinks.",
+        href: "/presentations/tics320/exercise-1/index.html",
+        solutionHref: "/presentations/tics320/exercise-1-solution/index.html",
       },
     ],
     courseList: [
@@ -149,6 +187,13 @@ export const translations = {
           empty: "Nada aquí todavía.",
           openSlides: "Abrir diapositivas",
         },
+        exercises: {
+          title: "Ejercicios",
+          description: "Problemas prácticos con soluciones. Intenta resolverlos por tu cuenta primero.",
+          empty: "Nada aquí todavía.",
+          openExercise: "Abrir ejercicio",
+          openSolution: "Abrir solución",
+        },
       },
     },
     materialItems: [
@@ -173,6 +218,27 @@ export const translations = {
         href: "https://www.pgadmin.org/",
         label: "pgadmin.org",
       },
+      {
+        title: "Database Design for Mere Mortals (4ª ed.) — Michael J. Hernandez",
+        description:
+          "Mi recomendación personal para este curso. Una guía práctica y directa sobre diseño de bases de datos relacionales que no asume experiencia previa. Hernandez guía al lector por todo el proceso de diseño — desde entender los requisitos hasta construir un esquema limpio y normalizado — a un ritmo que desarrolla intuición real. El nivel de profundidad se alinea con lo que vemos en clases, y los ejemplos son concretos y aplicables de inmediato.",
+        href: "https://www.amazon.com/dp/0136788041",
+        label: "amazon.com",
+      },
+      {
+        title: "Fundamentals of Database Systems (7ª ed.) — Elmasri & Navathe",
+        description:
+          "La referencia académica estándar para sistemas de bases de datos. Este libro va mucho más allá de lo que cubre este curso — profundiza en la teoría del modelado de datos, álgebra relacional, procesamiento de consultas, indexación y gestión de transacciones. Úsalo como fuente definitiva si quieres entender qué ocurre realmente bajo el capó, o si piensas profundizar en bases de datos después de este curso.",
+        href: "https://www.amazon.com/dp/0136086209",
+        label: "amazon.com",
+      },
+      {
+        title: "Postgres Sample Databases — Neon",
+        description:
+          "Una colección de bases de datos PostgreSQL listas para usar, con dumps SQL que puedes cargar localmente o en Supabase. Incluye conjuntos de datos conocidos como Northwind, Chinook y otros — ideales para practicar consultas, joins y agregaciones sobre esquemas realistas sin tener que inventar datos. Ten en cuenta que algunos de estos dumps son lo suficientemente grandes como para superar el límite de almacenamiento del plan gratuito de Supabase, por lo que no todos cabrán ahí. Si te ocurre eso, la solución más simple es cargarlos en una instalación local de PostgreSQL.",
+        href: "https://github.com/neondatabase/postgres-sample-dbs",
+        label: "github.com",
+      },
     ],
     practicumItems: [
       {
@@ -181,6 +247,16 @@ export const translations = {
         description:
           "Diagramas ER, modelos lógicos, cardinalidad y cómo pensar al diseñar una base de datos desde cero. Incluye un ejercicio práctico.",
         href: "/presentations/tics320/practicum-1/index.html",
+      },
+    ],
+    exerciseItems: [
+      {
+        number: 1,
+        title: "Disco MarBrisa — Diseño ER",
+        description:
+          "Diseña un diagrama ER para una discoteca que vende entradas, organiza eventos temáticos y tiene un bar donde los clientes pueden pedir bebidas.",
+        href: "/presentations/tics320/exercise-1/index.html",
+        solutionHref: "/presentations/tics320/exercise-1-solution/index.html",
       },
     ],
     courseList: [
