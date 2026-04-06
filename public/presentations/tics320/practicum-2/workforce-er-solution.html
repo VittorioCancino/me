@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ER Diagram — Dealership Network Management</title>
+    <title>ER Diagram — Workforce and Project Management</title>
     <style>
       :root {
         --accent: #7c3aed;
@@ -150,7 +150,7 @@
   <body>
     <div id="topbar">
       <div id="topbar-left">
-        <a href="index.html#/24" id="back-btn">
+        <a href="index.html#/30" id="back-btn">
           <svg
             width="13"
             height="13"
@@ -165,7 +165,7 @@
           </svg>
           Back to slides
         </a>
-        <h1>ER Diagram — Vehicle Dealership Network Management System</h1>
+        <h1>ER Diagram — Corporate Project and Workforce Management System</h1>
       </div>
       <div id="topbar-right">
         <span id="hint">Scroll to zoom · Drag to pan</span>
@@ -182,303 +182,244 @@
     <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
     <script>
       const nodes = [
-        { id: "USER", type: "entity", x: 280, y: 420 },
-        { id: "user_isa", type: "isa", x: 520, y: 420 },
-        { id: "BUYER", type: "entity", x: 760, y: 300 },
-        { id: "SELLER", type: "entity", x: 760, y: 540 },
+        { id: "DEPARTMENT", type: "entity", x: 1120, y: 230 },
+        { id: "EMPLOYEE", type: "entity", x: 760, y: 360 },
+        { id: "PROJECT", type: "entity", x: 1480, y: 360 },
 
-        { id: "VEHICLE", type: "entity", x: 1300, y: 500 },
-        { id: "vehicle_isa", type: "isa", x: 1500, y: 500 },
-        { id: "CAR", type: "entity", x: 1580, y: 270 },
-        { id: "TRUCK", type: "entity", x: 1580, y: 430 },
-        { id: "MOTORCYCLE", type: "entity", x: 1580, y: 590 },
-        { id: "DEALERSHIP", type: "entity", x: 950, y: 860 },
-        { id: "BRANCH", type: "weak-entity", x: 1320, y: 860 },
-        { id: "CITY", type: "entity", x: 1735, y: 860 },
-        { id: "COUNTRY", type: "entity", x: 2025, y: 730 },
+        { id: "employee_isa", type: "isa", x: 760, y: 550 },
+        { id: "MANAGER", type: "entity", x: 520, y: 780 },
+        { id: "TEAM_LEADER", type: "entity", x: 760, y: 780 },
+        { id: "SPECIALIST", type: "entity", x: 1000, y: 780 },
 
-        { id: "managed_by", type: "rel", x: 1000, y: 600 },
-        { id: "purchases", type: "rel", x: 1000, y: 230 },
-        { id: "rents", type: "rel", x: 1000, y: 390 },
-        { id: "operates", type: "rel", x: 1135, y: 860 },
-        { id: "located_in", type: "rel", x: 1535, y: 860 },
-        { id: "belongs_to", type: "rel", x: 1875, y: 805 },
-        { id: "available_at", type: "rel", x: 1285, y: 700 },
+        { id: "employs", type: "rel", x: 940, y: 270 },
+        { id: "oversees", type: "rel", x: 1300, y: 270 },
+        { id: "works_on", type: "rel", x: 1115, y: 480 },
+        { id: "supervises", type: "rel", x: 500, y: 360 },
+        { id: "depends_on", type: "rel", x: 1690, y: 360 },
 
-        { id: "user_id", type: "key-attr", x: 150, y: 360, label: "user_id" },
-        { id: "user_name", type: "attr", x: 280, y: 325, label: "name" },
-        { id: "user_email", type: "attr", x: 410, y: 360, label: "email" },
-        { id: "user_phone", type: "attr", x: 280, y: 500, label: "phone" },
-
+        // Department attrs
         {
-          id: "buyer_license",
-          type: "attr",
-          x: 760,
-          y: 230,
-          label: "license_no",
-        },
-        {
-          id: "seller_code",
-          type: "attr",
-          x: 760,
-          y: 600,
-          label: "seller_code",
-        },
-
-        {
-          id: "vehicle_id",
+          id: "department_id",
           type: "key-attr",
-          x: 1210,
-          y: 600,
-          label: "vehicle_id",
+          x: 1010,
+          y: 160,
+          label: "department_id",
         },
-        { id: "brand", type: "attr", x: 1375, y: 360, label: "brand" },
-        { id: "model", type: "attr", x: 1430, y: 410, label: "model" },
-        { id: "man_year", type: "attr", x: 1265, y: 360, label: "year" },
+        { id: "department_name", type: "attr", x: 1130, y: 130, label: "name" },
         {
-          id: "base_price",
+          id: "department_loc",
           type: "attr",
-          x: 1390,
-          y: 550,
-          label: "base_price",
+          x: 1250,
+          y: 160,
+          label: "location",
         },
 
-        { id: "car_doors", type: "attr", x: 1725, y: 235, label: "doors" },
+        // Employee attrs
         {
-          id: "car_trunk",
-          type: "attr",
-          x: 1725,
-          y: 305,
-          label: "trunk_capacity",
+          id: "employee_id",
+          type: "key-attr",
+          x: 620,
+          y: 210,
+          label: "employee_id",
         },
-        {
-          id: "truck_capacity",
-          type: "attr",
-          x: 1750,
-          y: 395,
-          label: "load_capacity",
-        },
-        { id: "truck_axles", type: "attr", x: 1750, y: 465, label: "axles" },
-        { id: "moto_cc", type: "attr", x: 1725, y: 555, label: "engine_cc" },
-        { id: "moto_style", type: "attr", x: 1725, y: 625, label: "style" },
+        { id: "employee_name", type: "attr", x: 760, y: 180, label: "name" },
+        { id: "employee_email", type: "attr", x: 900, y: 210, label: "email" },
+        { id: "employee_phone", type: "attr", x: 650, y: 480, label: "phone" },
+        { id: "hire_date", type: "attr", x: 875, y: 480, label: "hire_date" },
 
-        { id: "purchase_date", type: "attr", x: 870, y: 215, label: "date" },
+        // Project attrs
         {
-          id: "purchase_amount",
-          type: "attr",
-          x: 940,
-          y: 165,
-          label: "final_amount",
+          id: "project_id",
+          type: "key-attr",
+          x: 1340,
+          y: 210,
+          label: "project_id",
         },
+        { id: "project_name", type: "attr", x: 1480, y: 175, label: "name" },
         {
-          id: "rental_start",
+          id: "project_start",
           type: "attr",
-          x: 910,
-          y: 420,
+          x: 1615,
+          y: 210,
           label: "start_date",
         },
-        { id: "rental_end", type: "attr", x: 930, y: 470, label: "end_date" },
+        { id: "project_end", type: "attr", x: 1360, y: 480, label: "end_date" },
         {
-          id: "rental_price",
+          id: "project_budget",
           type: "attr",
-          x: 1060,
-          y: 500,
-          label: "agreed_price",
+          x: 1590,
+          y: 480,
+          label: "budget",
         },
 
+        // Subtype attrs
         {
-          id: "dealership_id",
-          type: "key-attr",
-          x: 850,
-          y: 755,
-          label: "dealership_id",
-        },
-        { id: "dealership_name", type: "attr", x: 1000, y: 730, label: "name" },
-        {
-          id: "branch_no",
-          type: "partial-key-attr",
-          x: 1440,
-          y: 970,
-          label: "branch_no",
-        },
-        {
-          id: "branch_address",
+          id: "management_level",
           type: "attr",
-          x: 1315,
-          y: 995,
-          label: "address",
+          x: 430,
+          y: 910,
+          label: "management_level",
         },
-        { id: "branch_phone", type: "attr", x: 1195, y: 940, label: "phone" },
-        { id: "city_id", type: "key-attr", x: 1710, y: 750, label: "city_id" },
-        { id: "city_name", type: "attr", x: 1840, y: 725, label: "name" },
+        { id: "lead_area", type: "attr", x: 760, y: 920, label: "lead_area" },
+        { id: "specialty", type: "attr", x: 1095, y: 910, label: "specialty" },
+
+        // Relationship attrs
         {
-          id: "country_id",
-          type: "key-attr",
-          x: 2000,
-          y: 620,
-          label: "country_id",
+          id: "assigned_hours",
+          type: "attr",
+          x: 1015,
+          y: 630,
+          label: "assigned_hours",
         },
-        { id: "country_name", type: "attr", x: 2130, y: 620, label: "name" },
+        {
+          id: "role_in_project",
+          type: "attr",
+          x: 1205,
+          y: 635,
+          label: "role_in_project",
+        },
+        {
+          id: "dependency_type",
+          type: "attr",
+          x: 1810,
+          y: 500,
+          label: "dependency_type",
+        },
       ];
 
       const links = [
-        { source: "USER", target: "user_id" },
-        { source: "USER", target: "user_name" },
-        { source: "USER", target: "user_email" },
-        { source: "USER", target: "user_phone" },
-        { source: "BUYER", target: "buyer_license" },
-        { source: "SELLER", target: "seller_code" },
-        { source: "VEHICLE", target: "vehicle_id" },
-        { source: "VEHICLE", target: "brand" },
-        { source: "VEHICLE", target: "model" },
-        { source: "VEHICLE", target: "man_year" },
-        { source: "VEHICLE", target: "base_price" },
-        { source: "DEALERSHIP", target: "dealership_id" },
-        { source: "DEALERSHIP", target: "dealership_name" },
-        { source: "BRANCH", target: "branch_no" },
-        { source: "BRANCH", target: "branch_address" },
-        { source: "BRANCH", target: "branch_phone" },
-        { source: "CITY", target: "city_id" },
-        { source: "CITY", target: "city_name" },
-        { source: "COUNTRY", target: "country_id" },
-        { source: "COUNTRY", target: "country_name" },
-        { source: "CAR", target: "car_doors" },
-        { source: "CAR", target: "car_trunk" },
-        { source: "TRUCK", target: "truck_capacity" },
-        { source: "TRUCK", target: "truck_axles" },
-        { source: "MOTORCYCLE", target: "moto_cc" },
-        { source: "MOTORCYCLE", target: "moto_style" },
-        { source: "purchases", target: "purchase_date" },
-        { source: "purchases", target: "purchase_amount" },
-        { source: "rents", target: "rental_start" },
-        { source: "rents", target: "rental_end" },
-        { source: "rents", target: "rental_price" },
-        { source: "USER", target: "user_isa" },
-        { source: "user_isa", target: "BUYER" },
-        { source: "user_isa", target: "SELLER" },
-        { source: "VEHICLE", target: "vehicle_isa" },
-        { source: "vehicle_isa", target: "CAR" },
-        { source: "vehicle_isa", target: "TRUCK" },
-        { source: "vehicle_isa", target: "MOTORCYCLE" },
+        { source: "DEPARTMENT", target: "department_id" },
+        { source: "DEPARTMENT", target: "department_name" },
+        { source: "DEPARTMENT", target: "department_loc" },
+
+        { source: "EMPLOYEE", target: "employee_id" },
+        { source: "EMPLOYEE", target: "employee_name" },
+        { source: "EMPLOYEE", target: "employee_email" },
+        { source: "EMPLOYEE", target: "employee_phone" },
+        { source: "EMPLOYEE", target: "hire_date" },
+
+        { source: "PROJECT", target: "project_id" },
+        { source: "PROJECT", target: "project_name" },
+        { source: "PROJECT", target: "project_start" },
+        { source: "PROJECT", target: "project_end" },
+        { source: "PROJECT", target: "project_budget" },
+
+        { source: "MANAGER", target: "management_level" },
+        { source: "TEAM_LEADER", target: "lead_area" },
+        { source: "SPECIALIST", target: "specialty" },
+
+        { source: "works_on", target: "assigned_hours" },
+        { source: "works_on", target: "role_in_project" },
+        { source: "depends_on", target: "dependency_type" },
+
+        { source: "EMPLOYEE", target: "employee_isa" },
+        { source: "employee_isa", target: "MANAGER" },
+        { source: "employee_isa", target: "TEAM_LEADER" },
+        { source: "employee_isa", target: "SPECIALIST" },
 
         {
-          source: "SELLER",
-          target: "managed_by",
-          label: "(0,N)",
-          labelPos: 0.28,
-          labelDx: 28,
+          source: "DEPARTMENT",
+          target: "employs",
+          label: "(1,N)",
+          labelPos: 0.3,
+          labelDx: 0,
           labelDy: 0,
         },
         {
-          source: "managed_by",
-          target: "VEHICLE",
-          label: "(0,N)",
+          source: "employs",
+          target: "EMPLOYEE",
+          label: "(1,1)",
           labelPos: 0.72,
-          labelDx: -10,
-          labelDy: -4,
+          labelDx: 0,
+          labelDy: 0,
         },
 
         {
-          source: "BUYER",
-          target: "purchases",
+          source: "DEPARTMENT",
+          target: "oversees",
           label: "(0,N)",
           labelPos: 0.3,
           labelDx: 0,
-          labelDy: -8,
+          labelDy: 0,
         },
         {
-          source: "purchases",
-          target: "VEHICLE",
-          label: "(0,N)",
-          labelPos: 0.72,
-          labelDx: 62,
-          labelDy: 44,
-        },
-
-        {
-          source: "BUYER",
-          target: "rents",
-          label: "(0,N)",
-          labelPos: 0.3,
-          labelDx: -18,
-          labelDy: 8,
-        },
-        {
-          source: "rents",
-          target: "VEHICLE",
-          label: "(0,N)",
-          labelPos: 0.72,
-          labelDx: -10,
-          labelDy: 10,
-        },
-
-        {
-          source: "DEALERSHIP",
-          target: "operates",
+          source: "oversees",
+          target: "PROJECT",
           label: "(1,1)",
-          labelPos: 0.3,
-          labelDx: 40,
-          labelDy: -4,
-        },
-        {
-          source: "operates",
-          target: "BRANCH",
-          label: "(1,N)",
           labelPos: 0.72,
-          labelDx: -50,
-          labelDy: -4,
+          labelDx: 0,
+          labelDy: 0,
         },
+
         {
-          source: "BRANCH",
-          target: "located_in",
-          label: "(1,N)",
+          source: "EMPLOYEE",
+          target: "works_on",
+          label: "(0,N)",
           labelPos: 0.34,
-          labelDx: 30,
-          labelDy: -4,
+          labelDx: 0,
+          labelDy: 0,
         },
         {
-          source: "located_in",
-          target: "CITY",
-          label: "(1,1)",
-          labelPos: 0.72,
-          labelDx: -38,
-          labelDy: -4,
-        },
-        {
-          source: "CITY",
-          target: "belongs_to",
-          label: "(N,1)",
-          labelPos: 0.3,
-          labelDx: 4,
-          labelDy: -10,
-        },
-        {
-          source: "belongs_to",
-          target: "COUNTRY",
-          label: "(1,1)",
-          labelPos: 0.72,
-          labelDx: 4,
-          labelDy: 14,
-        },
-        {
-          source: "VEHICLE",
-          target: "available_at",
-          label: "(1,1)",
-          labelPos: 0.32,
-          labelDx: 16,
-          labelDy: -28,
-        },
-        {
-          source: "available_at",
-          target: "BRANCH",
+          source: "works_on",
+          target: "PROJECT",
           label: "(1,N)",
           labelPos: 0.72,
-          labelDx: 20,
-          labelDy: 12,
+          labelDx: 0,
+          labelDy: 0,
+        },
+
+        {
+          source: "EMPLOYEE",
+          target: "supervises",
+          label: "(0,N)",
+          labelPos: 0.34,
+          labelDx: 0,
+          labelDy: 0,
+          x1: 684,
+          y1: 336,
+          x2: 500,
+          y2: 330,
+        },
+        {
+          source: "supervises",
+          target: "EMPLOYEE",
+          label: "(0,1)",
+          labelPos: 0.72,
+          labelDx: 0,
+          labelDy: 0,
+          x1: 500,
+          y1: 390,
+          x2: 684,
+          y2: 384,
+        },
+
+        {
+          source: "PROJECT",
+          target: "depends_on",
+          label: "(0,N)",
+          labelPos: 0.34,
+          labelDx: 0,
+          labelDy: 0,
+          x1: 1556,
+          y1: 336,
+          x2: 1690,
+          y2: 330,
+        },
+        {
+          source: "depends_on",
+          target: "PROJECT",
+          label: "(0,N)",
+          labelPos: 0.72,
+          labelDx: 0,
+          labelDy: 0,
+          x1: 1690,
+          y1: 390,
+          x2: 1556,
+          y2: 384,
         },
       ];
 
-      const W = 2200,
+      const W = 2700,
         H = 1320;
       const nodeMap = new Map(nodes.map((node) => [node.id, node]));
 
@@ -497,10 +438,10 @@
         .append("line")
         .attr("stroke", "#848d97")
         .attr("stroke-width", 1.2)
-        .attr("x1", (d) => nodeMap.get(d.source).x)
-        .attr("y1", (d) => nodeMap.get(d.source).y)
-        .attr("x2", (d) => nodeMap.get(d.target).x)
-        .attr("y2", (d) => nodeMap.get(d.target).y);
+        .attr("x1", (d) => d.x1 ?? nodeMap.get(d.source).x)
+        .attr("y1", (d) => d.y1 ?? nodeMap.get(d.source).y)
+        .attr("x2", (d) => d.x2 ?? nodeMap.get(d.target).x)
+        .attr("y2", (d) => d.y2 ?? nodeMap.get(d.target).y);
 
       const nodeSel = g
         .append("g")
@@ -510,9 +451,7 @@
         .append("g")
         .attr("transform", (d) => `translate(${d.x},${d.y})`);
 
-      const entities = nodeSel.filter(
-        (d) => d.type === "entity" || d.type === "weak-entity",
-      );
+      const entities = nodeSel.filter((d) => d.type === "entity");
       entities
         .append("rect")
         .attr("x", -78)
@@ -524,17 +463,6 @@
         .attr("stroke", "#7c3aed")
         .attr("stroke-width", 2);
       entities
-        .filter((d) => d.type === "weak-entity")
-        .append("rect")
-        .attr("x", -84)
-        .attr("y", -30)
-        .attr("width", 168)
-        .attr("height", 60)
-        .attr("rx", 3)
-        .attr("fill", "none")
-        .attr("stroke", "#a78bfa")
-        .attr("stroke-width", 1.2);
-      entities
         .append("text")
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
@@ -542,12 +470,12 @@
         .attr("font-size", 13)
         .attr("font-weight", 700)
         .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
-        .text((d) => d.id);
+        .text((d) => d.label ?? d.id);
 
       const rels = nodeSel.filter((d) => d.type === "rel");
       rels
         .append("polygon")
-        .attr("points", "0,-32 68,0 0,32 -68,0")
+        .attr("points", "0,-30 64,0 0,30 -64,0")
         .attr("fill", "#2d1b6b")
         .attr("stroke", "#a78bfa")
         .attr("stroke-width", 1.5);
@@ -603,36 +531,10 @@
         .attr("stroke", "#c9d1d9")
         .attr("stroke-width", 1);
 
-      const partialKeyAttrs = nodeSel.filter(
-        (d) => d.type === "partial-key-attr",
-      );
-      partialKeyAttrs
-        .append("ellipse")
-        .attr("rx", 58)
-        .attr("ry", 20)
-        .attr("fill", "#0d1117")
-        .attr("stroke", "#a78bfa")
-        .attr("stroke-width", 1.5);
-      partialKeyAttrs
-        .append("ellipse")
-        .attr("rx", 64)
-        .attr("ry", 26)
-        .attr("fill", "none")
-        .attr("stroke", "#a78bfa")
-        .attr("stroke-width", 1);
-      partialKeyAttrs
-        .append("text")
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")
-        .attr("fill", "#c9d1d9")
-        .attr("font-size", 11)
-        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
-        .text((d) => d.label);
-
       const attrs = nodeSel.filter((d) => d.type === "attr");
       attrs
         .append("ellipse")
-        .attr("rx", 54)
+        .attr("rx", 56)
         .attr("ry", 18)
         .attr("fill", "#0d1117")
         .attr("stroke", "#848d97")
