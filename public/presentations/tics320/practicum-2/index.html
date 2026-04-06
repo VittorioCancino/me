@@ -1,0 +1,1423 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practicum 2 — TICS320</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <link rel="stylesheet" href="../../shared/tokens.css" />
+
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+        --red: #ef4444;
+        --red-dim: rgba(239, 68, 68, 0.12);
+        --green: #22c55e;
+        --green-dim: rgba(34, 197, 94, 0.12);
+        --strip-h: 88px;
+        --toggle-h: 28px;
+        --arrow-w: 56px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+      }
+
+      .reveal-viewport {
+        background: var(--bg) !important;
+        height: calc(100vh - var(--strip-h) - var(--toggle-h)) !important;
+        transition: height var(--transition);
+      }
+      .reveal-viewport.strip-collapsed {
+        height: calc(100vh - var(--toggle-h)) !important;
+      }
+      .reveal {
+        height: 100% !important;
+      }
+
+      .reveal .slides {
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+      }
+
+      .reveal .slides section {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 3rem 10rem;
+        top: 0 !important;
+        left: 0 !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      /* ── Typography ── */
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+      .reveal h1 {
+        font-size: var(--text-display);
+        line-height: 1.1;
+      }
+      .reveal h2 {
+        font-size: var(--text-heading);
+        line-height: 1.15;
+      }
+      .reveal h3 {
+        font-size: var(--text-subheading);
+        color: var(--accent-light);
+      }
+      .reveal p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+      }
+
+      /* ── Utilities ── */
+      .label {
+        display: inline-block;
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        border: 1px solid rgba(124, 58, 237, 0.45);
+        background: var(--accent-dim);
+        padding: 0.22em 0.85em;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+      }
+      .divider {
+        width: 2.5rem;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        margin: 0.8rem auto 1.1rem;
+      }
+      .muted {
+        color: var(--muted) !important;
+        font-size: var(--text-muted);
+      }
+
+      /* ── Cards ── */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.4rem 1.6rem;
+        text-align: left;
+      }
+      .card p,
+      .card div {
+        color: #c9d1d9;
+        font-size: var(--text-card);
+        line-height: 1.75;
+        margin: 0;
+      }
+      .card strong {
+        color: #fff;
+      }
+      .card-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 0.8rem 0;
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+      }
+      .card-list li {
+        padding: 0.15rem 0 0.15rem 1.2rem;
+        position: relative;
+      }
+      .card-list li::before {
+        content: "—";
+        position: absolute;
+        left: 0;
+        color: var(--accent-light);
+      }
+      .card.red {
+        border-color: rgba(239, 68, 68, 0.35);
+        background: var(--red-dim);
+      }
+      .card.green {
+        border-color: rgba(34, 197, 94, 0.35);
+        background: var(--green-dim);
+      }
+
+      /* ── Grid ── */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+      }
+
+      /* ── Story block ── */
+      .story {
+        background: var(--surface);
+        border-left: 4px solid var(--accent);
+        border-radius: 0 10px 10px 0;
+        padding: 1.4rem 1.8rem;
+        text-align: left;
+        font-size: 1.5rem;
+        color: #c9d1d9;
+        line-height: 1.85;
+      }
+      .story em {
+        color: #fff;
+        font-style: normal;
+        font-weight: 600;
+      }
+
+      /* ── Callout ── */
+      .callout {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: 1.05rem;
+        color: #c9d1d9;
+        text-align: left;
+        margin-top: 0.7rem;
+      }
+      .callout.warn {
+        background: rgba(234, 179, 8, 0.08);
+        border: 1px solid rgba(234, 179, 8, 0.3);
+      }
+      .callout.bad {
+        background: var(--red-dim);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+      .callout.info {
+        background: var(--accent-dim);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+      }
+      .callout .icon {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .callout strong {
+        color: #fff;
+      }
+
+      /* ── ER Diagram ── */
+      .er-wrap {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.9rem 1.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0;
+        width: 100%;
+      }
+      .er-entity-box {
+        padding: 0.65rem 1.4rem;
+        border: 2px solid var(--accent);
+        background: var(--accent-dim);
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #fff;
+        min-width: 110px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .er-entity-weak {
+        padding: 0.65rem 1.4rem;
+        border: 2px solid var(--accent);
+        background: var(--accent-dim);
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #fff;
+        min-width: 110px;
+        text-align: center;
+        white-space: nowrap;
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+      .er-rel-pill {
+        padding: 0.4rem 1rem;
+        border: 2px solid var(--accent-light);
+        background: var(--surface);
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--accent-light);
+        white-space: nowrap;
+      }
+      .er-seg {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 3rem;
+      }
+      .er-seg-line {
+        flex: 1;
+        height: 2px;
+        background: var(--muted);
+        min-width: 2rem;
+      }
+
+      /* ── ER Diamond (Chen notation) ── */
+      .er-diamond {
+        position: relative; display: flex; align-items: center;
+        justify-content: center; flex-shrink: 0;
+        width: 88px; height: 88px;
+      }
+      .er-diamond::before {
+        content: ''; position: absolute;
+        width: 62px; height: 62px;
+        transform: rotate(45deg);
+        border: 2px solid var(--accent-light);
+        background: var(--surface);
+      }
+      .er-diamond-text {
+        position: relative; z-index: 1;
+        font-size: 0.72rem; font-weight: 600;
+        color: var(--accent-light); text-align: center;
+        max-width: 58px; line-height: 1.3;
+      }
+      .er-seg-n {
+        position: absolute;
+        top: -1.3rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--accent-light);
+      }
+      .er-card-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--muted);
+        padding: 0 0.6rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      /* ── Attribute tags ── */
+      .attr-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .attr-row {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .attr-tag {
+        padding: 0.25rem 0.7rem;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: #c9d1d9;
+      }
+      .attr-tag.key {
+        border-color: var(--accent);
+        color: var(--accent-light);
+        font-weight: 700;
+        text-decoration: underline;
+      }
+      .attr-tag.derived {
+        border-style: dashed;
+        color: var(--muted);
+        font-style: italic;
+      }
+      .attr-tag.multi {
+        border-width: 3px;
+        border-style: double;
+        border-color: var(--muted);
+      }
+      .attr-tag.composite {
+        border-color: #fbbf24;
+        color: #fbbf24;
+      }
+
+      /* ── Attribute oval (ER notation) ── */
+      .attr-oval {
+        display: inline-block; padding: 0.28rem 0.9rem;
+        border: 1.5px solid var(--accent-light); background: var(--surface);
+        border-radius: 999px; font-size: 0.8rem; color: var(--accent-light);
+        white-space: nowrap;
+      }
+      .attr-oval.key       { border-color: var(--accent); color: var(--accent-light); font-weight: 700; text-decoration: underline; }
+      .attr-oval.simple    { border-color: var(--muted);  color: #c9d1d9; }
+      .attr-oval.composite { border-color: #fbbf24;       color: #fbbf24; }
+      .attr-oval.derived   { border-style: dashed;        color: var(--muted); font-style: italic; }
+      .attr-oval.multi     { border-width: 3px; border-style: double; border-color: var(--muted); color: var(--muted); }
+
+      /* ── Language toggle ── */
+      #lang-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 300;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 999px;
+        padding: 3px;
+      }
+      .lang-btn {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: #848d97;
+        border-radius: 999px;
+        padding: 0.25em 0.75em;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .lang-btn.active {
+        background: #7c3aed;
+        color: #fff;
+      }
+      .lang-btn:not(.active):hover {
+        color: #fff;
+      }
+
+      /* ── Side arrows ── */
+      .nav-arrow {
+        position: fixed;
+        top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
+        transform: translateY(-50%);
+        z-index: 200;
+        width: var(--arrow-w);
+        height: var(--arrow-w);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        transition:
+          background 0.18s,
+          color 0.18s,
+          border-color 0.18s,
+          opacity 0.18s,
+          top var(--transition);
+        user-select: none;
+      }
+      .nav-arrow:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent-light);
+      }
+      .nav-arrow.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .nav-arrow.strip-collapsed {
+        top: 50%;
+      }
+      #arrow-prev {
+        left: 1rem;
+      }
+      #arrow-next {
+        right: 1rem;
+      }
+
+      /* ── Toggle tab ── */
+      #strip-toggle {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--toggle-h);
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 101;
+        gap: 0.5rem;
+        transition: background 0.18s;
+      }
+      #strip-toggle:hover {
+        background: var(--accent-dim);
+      }
+      #toggle-grip {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        opacity: 0.4;
+        transition: opacity 0.18s;
+      }
+      #strip-toggle:hover #toggle-grip {
+        opacity: 0.9;
+      }
+      #toggle-grip span {
+        display: block;
+        width: 18px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--muted);
+      }
+      #strip-toggle:hover #toggle-grip span {
+        background: var(--accent-light);
+      }
+      #toggle-chevron {
+        color: var(--muted);
+        transition: transform var(--transition), color 0.18s;
+      }
+      #strip-toggle:hover #toggle-chevron {
+        color: var(--accent-light);
+      }
+      #toggle-chevron.rotated {
+        transform: rotate(180deg);
+      }
+
+      /* ── Filmstrip ── */
+      #filmstrip {
+        position: fixed;
+        bottom: var(--toggle-h);
+        left: 0;
+        right: 0;
+        height: var(--strip-h);
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        z-index: 100;
+        padding: 0 1rem;
+        gap: 0.6rem;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        transform: translateY(0);
+        opacity: 1;
+        transition:
+          transform var(--transition),
+          opacity var(--transition);
+      }
+      #filmstrip::-webkit-scrollbar {
+        display: none;
+      }
+      #filmstrip.collapsed {
+        transform: translateY(100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .thumb {
+        flex-shrink: 0;
+        width: 120px;
+        height: 68px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.18s,
+          transform 0.18s;
+      }
+      .thumb:hover {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+      }
+      .thumb.active {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+      }
+      .thumb.active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+        border-radius: 2px 2px 0 0;
+        z-index: 3;
+      }
+      .thumb-num {
+        position: absolute;
+        bottom: 4px;
+        left: 6px;
+        z-index: 2;
+        font-size: 0.58rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.75);
+        letter-spacing: 0.06em;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      }
+
+      /* ── Guided reading highlight ── */
+      .hl {
+        color: var(--accent-light);
+        font-weight: 700;
+        background: var(--accent-dim);
+        padding: 0.05em 0.3em;
+        border-radius: 3px;
+      }
+
+      /* ── Slide preview (scaled DOM clone) ── */
+      .slide-preview-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+      .slide-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
+        pointer-events: none;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 3rem 10rem;
+      }
+      .slide-preview h1,
+      .slide-preview h2,
+      .slide-preview h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+      .slide-preview h1 { font-size: var(--text-display); line-height: 1.1; }
+      .slide-preview h2 { font-size: var(--text-heading); line-height: 1.15; }
+      .slide-preview h3 { font-size: var(--text-subheading); color: var(--accent-light); }
+      .slide-preview p  { color: #c9d1d9; font-size: var(--text-body); line-height: 1.75; }
+    </style>
+  </head>
+
+  <body>
+    <!-- Language toggle -->
+    <div id="lang-toggle">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+
+    <button id="arrow-prev" class="nav-arrow" aria-label="Previous">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button id="arrow-next" class="nav-arrow" aria-label="Next">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- ① Title -->
+        <section data-title-en="Title" data-title-es="Título">
+          <div class="label" data-i18n="s1_label">TICS320 · Practicum 2</div>
+          <h1 data-i18n="s1_title">ER Diagram<br />Practice</h1>
+          <div class="divider"></div>
+          <p class="muted">
+            Vittorio Cancino &nbsp;·&nbsp; Universidad Adolfo Ibáñez
+          </p>
+        </section>
+
+        <!-- ② Case Study — The Problem -->
+        <section data-title-en="The Case" data-title-es="El Caso">
+          <div class="label" data-i18n="s2_label">Case Study</div>
+          <h2 data-i18n="s2_title">University Enrollment Management</h2>
+          <div class="divider"></div>
+          <div class="story" style="margin-bottom: 1.2rem" data-i18n="s2_story">
+            A university manages its course enrollment process using <em>spreadsheets and paper forms</em>. The administration has decided to develop a structured system to replace it.
+          </div>
+          <div class="grid-3" style="width: 100%">
+            <div class="callout bad">
+              <span class="icon">⚠️</span>
+              <span data-i18n="s2_p1">Frequent errors in records</span>
+            </div>
+            <div class="callout bad">
+              <span class="icon">📋</span>
+              <span data-i18n="s2_p2">Duplicated student data</span>
+            </div>
+            <div class="callout bad">
+              <span class="icon">🔍</span>
+              <span data-i18n="s2_p3">Hard to track enrollments</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ③ Case Study — Full Text -->
+        <section data-title-en="Case Study" data-title-es="Caso de Estudio">
+          <div class="label" data-i18n="s3_label">Case Study · 1 of 2</div>
+          <h2 data-i18n="s3_heading">University Enrollment Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); font-weight: 700; color: #fff; margin-bottom: 1.1rem" data-i18n="s3_title">Case Study: University Enrollment Management System</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s3_p1">A university is currently managing its course enrollment process manually using spreadsheets and paper forms. This has led to frequent errors, duplicated records, and difficulty tracking which students are enrolled in which courses.</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s3_p2">The administration has decided to develop a system that allows them to organize and manage this information in a structured way.</p>
+            <p style="font-size: var(--text-case-study)" data-i18n="s3_p3">Each semester, students register for one or more courses offered by the university. Every course is assigned to a professor who is responsible for teaching it. Professors may teach multiple courses during the same semester.</p>
+          </div>
+        </section>
+
+        <!-- ④ Requirements & Task -->
+        <section data-title-en="Your Task" data-title-es="Tu Tarea">
+          <div class="label" data-i18n="s4_label">Case Study · 2 of 2</div>
+          <h2 data-i18n="s4_title">University Enrollment Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s3_p4">The university needs to keep track of which students are enrolled in each course. Additionally, for each enrollment, the university wants to store relevant information about the student's performance in that course.</p>
+            <p style="font-size: var(--text-body); margin-bottom: 0.85rem" data-i18n="s4_intro">The system should also allow administrators to easily identify:</p>
+            <ul class="card-list" style="margin-bottom: 1.4rem">
+              <li data-i18n="s4_q1">Which courses a student is currently enrolled in</li>
+              <li data-i18n="s4_q2">Which students are enrolled in a given course</li>
+              <li data-i18n="s4_q3">Which professor is responsible for each course</li>
+            </ul>
+            <p style="font-size: var(--text-body); color: var(--accent-light); font-style: italic" data-i18n="s4_task">Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.</p>
+          </div>
+        </section>
+
+        <!-- ⑤ Guided Reading Cover -->
+        <section data-title-en="Guided Reading" data-title-es="Lectura Guiada">
+          <div class="label" data-i18n="s5_label">Up next</div>
+          <h1 data-i18n="s5_title">Guided Reading</h1>
+          <div class="divider"></div>
+          <p class="muted" data-i18n="s5_sub">The following slides highlight key information from the case study to help you identify entities, attributes, and relationships.</p>
+          <div class="callout warn" style="margin-top: 1.8rem; max-width: 36rem">
+            <span class="icon">⚠️</span>
+            <span data-i18n="s5_warning">Try the exercise on your own before continuing.</span>
+          </div>
+        </section>
+
+        <!-- ⑥ Guided Reading — Part 1 -->
+        <section data-title-en="Guided · 1/2" data-title-es="Guiada · 1/2">
+          <div class="label" data-i18n="s6_label">Guided Reading · 1 of 2</div>
+          <h2 data-i18n="s6_heading">University Enrollment Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); font-weight: 700; color: #fff; margin-bottom: 1.1rem" data-i18n="s6_title">Case Study: University Enrollment Management System (Guided Reading)</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s6_p1">A university is currently managing its <span class="hl">course enrollment process</span> manually using spreadsheets and paper forms. This has led to frequent errors, duplicated records, and difficulty tracking which <span class="hl">students are enrolled in which courses</span>.</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s6_p2">The administration has decided to develop a system that allows them to organize and manage this information in a structured way.</p>
+            <p style="font-size: var(--text-case-study)" data-i18n="s6_p3">Each semester, <span class="hl">students</span> register for one or more <span class="hl">courses</span> offered by the university. Every <span class="hl">course</span> is assigned to a <span class="hl">professor</span> who is responsible for teaching it. <span class="hl">Professors may teach multiple courses</span> during the same semester.</p>
+          </div>
+        </section>
+
+        <!-- ⑦ Guided Reading — Part 2 -->
+        <section data-title-en="Guided · 2/2" data-title-es="Guiada · 2/2">
+          <div class="label" data-i18n="s7_label">Guided Reading · 2 of 2</div>
+          <h2 data-i18n="s7_heading">University Enrollment Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s6_p4">The university needs to keep track of which <span class="hl">students are enrolled in each course</span>. Additionally, for each <span class="hl">enrollment</span>, the university wants to store <span class="hl">relevant information about the student's performance</span> in that course.</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s7_intro">The system should also allow administrators to easily identify:</p>
+            <ul class="card-list" style="font-size: var(--text-case-study); margin-bottom: 1.2rem">
+              <li data-i18n="s7_q1">Which <span class="hl">courses a student</span> is currently enrolled in</li>
+              <li data-i18n="s7_q2">Which <span class="hl">students are enrolled in a given course</span></li>
+              <li data-i18n="s7_q3">Which <span class="hl">professor is responsible for each course</span></li>
+            </ul>
+            <p style="font-size: var(--text-case-study); color: var(--accent-light); font-style: italic" data-i18n="s7_task">Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.</p>
+          </div>
+        </section>
+
+        <!-- ⑧ Proposed Solution Cover -->
+        <section data-title-en="Solution" data-title-es="Solución">
+          <div class="label" data-i18n="s8_label">Up next</div>
+          <h1 data-i18n="s8_title">Proposed Solution</h1>
+          <div class="divider"></div>
+          <p class="muted" data-i18n="s8_sub">The following slide presents one valid ER model for this case study. Keep in mind there is no single correct answer.</p>
+          <div class="callout warn" style="margin-top: 1.8rem; max-width: 36rem">
+            <span class="icon">⚠️</span>
+            <span data-i18n="s8_warning">Make sure you've attempted the exercise before continuing.</span>
+          </div>
+        </section>
+
+        <!-- ⑨ ER Diagram -->
+        <section data-title-en="ER Diagram" data-title-es="Diagrama ER">
+          <div class="label" data-i18n="s9_label">Proposed Solution</div>
+          <h2 data-i18n="s9_title">Entity-Relationship Diagram</h2>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 2rem" data-i18n="s9_sub">Open the interactive diagram to inspect the proposed solution with zoom and pan controls.</p>
+          <a href="er-solution.html" style="
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.18s;
+          " onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='var(--accent)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span data-i18n="s9_open">Open ER Diagram</span>
+          </a>
+        </section>
+
+        <!-- ⑩ Case Study — Clinic Management -->
+        <section data-title-en="Clinic Case · 1/3" data-title-es="Caso Clínica · 1/3">
+          <div class="label" data-i18n="s10_label">Case Study · Level 2 · 1 of 3</div>
+          <h2 data-i18n="s10_heading">Clinic Appointment Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); font-weight: 700; color: #fff; margin-bottom: 1.1rem" data-i18n="s10_title">Case Study: Clinic Appointment Management System</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s10_p1">A private clinic is currently managing its daily operations using paper forms and spreadsheets. This has caused frequent problems when organizing appointments, assigning doctors, and keeping track of the patients who attend the clinic.</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s10_p2">In many cases, the staff must manually search through records to verify which doctor will see a patient, what specialty that doctor belongs to, and in which consultation room the appointment will take place.</p>
+            <p style="font-size: var(--text-case-study)" data-i18n="s10_p3">To improve its organization, the clinic wants to develop a system that stores information about its patients, doctors, medical specialties, consultation rooms, and appointments.</p>
+          </div>
+        </section>
+
+        <!-- ⑪ Case Study — Clinic Details -->
+        <section data-title-en="Clinic Case · 2/3" data-title-es="Caso Clínica · 2/3">
+          <div class="label" data-i18n="s11_label">Case Study · Level 2 · 2 of 3</div>
+          <h2 data-i18n="s11_heading">Clinic Appointment Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s11_p1">Patients may visit the clinic many times over time, and doctors may attend many different patients during their work schedule. Each appointment is scheduled for a specific date and time, is associated with one patient, and is attended by one doctor.</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s11_p2">The clinic also wants to keep track of the specialty of each doctor, since each doctor works in a particular medical area such as cardiology, pediatrics, or dermatology. In addition, every appointment must be assigned to a consultation room, because the clinic has several rooms available throughout the day and needs to know where each consultation will occur.</p>
+          </div>
+        </section>
+
+        <!-- ⑫ Case Study — Clinic Requirements -->
+        <section data-title-en="Clinic Case · 3/3" data-title-es="Caso Clínica · 3/3">
+          <div class="label" data-i18n="s12_label">Case Study · Level 2 · 3 of 3</div>
+          <h2 data-i18n="s12_heading">Clinic Appointment Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-body); margin-bottom: 0.85rem" data-i18n="s12_intro">The system should allow the clinic to:</p>
+            <ul class="card-list" style="margin-bottom: 1.2rem">
+              <li data-i18n="s12_q1">identify the appointments scheduled for each patient</li>
+              <li data-i18n="s12_q2">determine which doctor will attend each appointment</li>
+              <li data-i18n="s12_q3">know the medical specialty associated with each doctor</li>
+              <li data-i18n="s12_q4">identify the consultation room assigned to each appointment</li>
+            </ul>
+            <p style="font-size: var(--text-body); color: var(--accent-light); font-style: italic" data-i18n="s12_task">Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.</p>
+          </div>
+        </section>
+
+        <!-- ⑬ Proposed Solution Cover — Clinic -->
+        <section data-title-en="Clinic Solution" data-title-es="Solución Clínica">
+          <div class="label" data-i18n="s13_label">Up next</div>
+          <h1 data-i18n="s13_title">Proposed Solution</h1>
+          <div class="divider"></div>
+          <p class="muted" data-i18n="s13_sub">The following slide will contain one valid ER model for the clinic case study. Try solving it first before opening the diagram.</p>
+          <div class="callout warn" style="margin-top: 1.8rem; max-width: 36rem">
+            <span class="icon">⚠️</span>
+            <span data-i18n="s13_warning">Make sure you've attempted the clinic exercise before continuing.</span>
+          </div>
+        </section>
+
+        <!-- ⑭ ER Diagram — Clinic -->
+        <section data-title-en="Clinic ER Diagram" data-title-es="Diagrama ER Clínica">
+          <div class="label" data-i18n="s14_label">Proposed Solution</div>
+          <h2 data-i18n="s14_title">Clinic ER Diagram</h2>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 2rem" data-i18n="s14_sub">Open the page that will host the interactive ER diagram for the clinic case.</p>
+          <a href="clinic-er-solution.html" style="
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.18s;
+          " onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='var(--accent)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span data-i18n="s14_open">Open ER Diagram</span>
+          </a>
+        </section>
+
+        <!-- ⑮ Case Study — Event Management -->
+        <section data-title-en="Event Case · 1/3" data-title-es="Caso Evento · 1/3">
+          <div class="label" data-i18n="s15_label">Case Study · Level 3 · 1 of 3</div>
+          <h2 data-i18n="s15_heading">Event Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); font-weight: 700; color: #fff; margin-bottom: 1.1rem" data-i18n="s15_title">Case Study: Event Management System</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s15_p1">A company that organizes professional conferences and academic events is currently managing its operations using spreadsheets, email threads, and manually updated documents. As the number of events has grown, this process has become difficult to maintain, especially when tracking attendees, assigning speakers to sessions, and organizing the rooms where activities take place.</p>
+            <p style="font-size: var(--text-case-study)" data-i18n="s15_p2">To improve coordination, the company wants to develop a system that stores information about the events it organizes, the sessions that belong to each event, the speakers who participate in those sessions, the attendees who register for the events, and the rooms where the sessions are held.</p>
+          </div>
+        </section>
+
+        <!-- ⑯ Case Study — Event Details -->
+        <section data-title-en="Event Case · 2/3" data-title-es="Caso Evento · 2/3">
+          <div class="label" data-i18n="s16_label">Case Study · Level 3 · 2 of 3</div>
+          <h2 data-i18n="s16_heading">Event Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s16_p1">Each event may include several sessions scheduled throughout the day. Every session belongs to a single event, has a title, a scheduled date and time, and takes place in one room. A room may be used for many sessions over time.</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s16_p2">Speakers may participate in different sessions, and a session may include more than one speaker. The organization also wants to keep track of the role each speaker has in a session, such as main speaker, panelist, or moderator.</p>
+            <p style="font-size: var(--text-case-study)" data-i18n="s16_p3">Attendees may register for different events over time, and each event may have many registered attendees. For every registration, the company wants to store the date on which the attendee registered and the current registration status.</p>
+          </div>
+        </section>
+
+        <!-- ⑰ Case Study — Event Requirements -->
+        <section data-title-en="Event Case · 3/3" data-title-es="Caso Evento · 3/3">
+          <div class="label" data-i18n="s17_label">Case Study · Level 3 · 3 of 3</div>
+          <h2 data-i18n="s17_heading">Event Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-body); margin-bottom: 0.85rem" data-i18n="s17_intro">The system should allow the organization to:</p>
+            <ul class="card-list" style="margin-bottom: 1.2rem">
+              <li data-i18n="s17_q1">identify the sessions that belong to each event</li>
+              <li data-i18n="s17_q2">determine which room is assigned to each session</li>
+              <li data-i18n="s17_q3">know which speakers participate in each session</li>
+              <li data-i18n="s17_q4">store the role of each speaker in a given session</li>
+              <li data-i18n="s17_q5">identify which attendees are registered for each event</li>
+              <li data-i18n="s17_q6">store the registration date and status for each attendee registration</li>
+            </ul>
+            <p style="font-size: var(--text-body); color: var(--accent-light); font-style: italic" data-i18n="s17_task">Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.</p>
+          </div>
+        </section>
+
+        <!-- ⑱ Proposed Solution Cover — Event -->
+        <section data-title-en="Event Solution" data-title-es="Solución Evento">
+          <div class="label" data-i18n="s18_label">Up next</div>
+          <h1 data-i18n="s18_title">Proposed Solution</h1>
+          <div class="divider"></div>
+          <p class="muted" data-i18n="s18_sub">The following slide will contain one valid ER model for the event case study. Try solving it first before opening the diagram.</p>
+          <div class="callout warn" style="margin-top: 1.8rem; max-width: 36rem">
+            <span class="icon">⚠️</span>
+            <span data-i18n="s18_warning">Make sure you've attempted the event exercise before continuing.</span>
+          </div>
+        </section>
+
+        <!-- ⑲ ER Diagram — Event -->
+        <section data-title-en="Event ER Diagram" data-title-es="Diagrama ER Evento">
+          <div class="label" data-i18n="s19_label">Proposed Solution</div>
+          <h2 data-i18n="s19_title">Event ER Diagram</h2>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 2rem" data-i18n="s19_sub">Open the page that will host the interactive ER diagram for the event case.</p>
+          <a href="event-er-solution.html" style="
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.18s;
+          " onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='var(--accent)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span data-i18n="s19_open">Open ER Diagram</span>
+          </a>
+        </section>
+
+        <!-- ⑳ Case Study — Dealership Network -->
+        <section data-title-en="Dealership Case · 1/4" data-title-es="Caso Concesionaria · 1/4">
+          <div class="label" data-i18n="s20_label">Case Study · Level 4 · 1 of 4</div>
+          <h2 data-i18n="s20_heading">Vehicle Dealership Network Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); font-weight: 700; color: #fff; margin-bottom: 1.1rem" data-i18n="s20_title">Case Study: Vehicle Dealership Network Management System</p>
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s20_p1">A company operates a network of vehicle dealerships in different cities and countries. Until now, each dealership has managed its information independently using spreadsheets, local databases, and manual documents. As the business has expanded, this has made it difficult to maintain consistent records about vehicles, branches, sellers, buyers, and the operations carried out at each location.</p>
+            <p style="font-size: var(--text-case-study)" data-i18n="s20_p2">The company now wants to develop a centralized system that stores information about its dealerships, the branches that belong to each dealership, the cities and countries where those branches are located, the vehicles managed by the company, and the users who interact with the platform.</p>
+          </div>
+        </section>
+
+        <!-- ㉑ Case Study — Users and Vehicles -->
+        <section data-title-en="Dealership Case · 2/4" data-title-es="Caso Concesionaria · 2/4">
+          <div class="label" data-i18n="s21_label">Case Study · Level 4 · 2 of 4</div>
+          <h2 data-i18n="s21_heading">Vehicle Dealership Network Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s21_p1">The company works with different kinds of users. All users share common information such as an identifier, name, email address, and phone number. However, some users act as buyers, while others act as sellers. Buyers are the people or organizations that purchase or rent vehicles from the company. Sellers are the staff members or representatives responsible for publishing, managing, and negotiating the available vehicles in the system.</p>
+            <p style="font-size: var(--text-case-study)" data-i18n="s21_p2">The company also manages different kinds of vehicles. Every vehicle has common information such as an identifier, brand, model, manufacturing year, and base price. However, depending on the type of vehicle, the company needs to store additional specific information.</p>
+          </div>
+        </section>
+
+        <!-- ㉒ Case Study — Branches and Operations -->
+        <section data-title-en="Dealership Case · 3/4" data-title-es="Caso Concesionaria · 3/4">
+          <div class="label" data-i18n="s22_label">Case Study · Level 4 · 3 of 4</div>
+          <h2 data-i18n="s22_heading">Vehicle Dealership Network Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-case-study); margin-bottom: 0.85rem" data-i18n="s22_p1">Each dealership may operate several branches. A branch is identified within the context of its dealership and has information such as its branch number, address, and contact phone. Every branch is located in one city, and every city belongs to one country. The company needs to know in which branch each vehicle is currently available.</p>
+            <p style="font-size: var(--text-case-study)" data-i18n="s22_p2">The business supports both vehicle purchases and vehicle rentals. Buyers may purchase vehicles that are available through the company, and the system must store the date and final amount of each purchase. Buyers may also rent vehicles for a period of time, and for each rental the company needs to record the start date, end date, and agreed rental price.</p>
+          </div>
+        </section>
+
+        <!-- ㉓ Case Study — Requirements -->
+        <section data-title-en="Dealership Case · 4/4" data-title-es="Caso Concesionaria · 4/4">
+          <div class="label" data-i18n="s23_label">Case Study · Level 4 · 4 of 4</div>
+          <h2 data-i18n="s23_heading">Vehicle Dealership Network Management System</h2>
+          <div class="divider"></div>
+          <div style="width: 100%; text-align: left">
+            <p style="font-size: var(--text-body); margin-bottom: 0.85rem" data-i18n="s23_intro">The system should allow the company to:</p>
+            <ul class="card-list" style="margin-bottom: 1.2rem">
+              <li data-i18n="s23_q1">identify the branches that belong to each dealership</li>
+              <li data-i18n="s23_q2">determine in which city and country each branch is located</li>
+              <li data-i18n="s23_q3">know which vehicles are available in each branch</li>
+              <li data-i18n="s23_q4">distinguish the different kinds of vehicles and store their specific information</li>
+              <li data-i18n="s23_q5">distinguish between buyers and sellers while preserving the common information they share</li>
+              <li data-i18n="s23_q6">record which buyer purchased a vehicle and the details of that purchase</li>
+              <li data-i18n="s23_q7">record which buyer rented a vehicle and the details of that rental</li>
+            </ul>
+            <p style="font-size: var(--text-body); color: var(--accent-light); font-style: italic" data-i18n="s23_task">Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.</p>
+          </div>
+        </section>
+
+        <!-- ㉔ Proposed Solution Cover — Dealership -->
+        <section data-title-en="Dealership Solution" data-title-es="Solución Concesionaria">
+          <div class="label" data-i18n="s24_label">Up next</div>
+          <h1 data-i18n="s24_title">Proposed Solution</h1>
+          <div class="divider"></div>
+          <p class="muted" data-i18n="s24_sub">The following slide will contain one valid ER model for the dealership network case study. Try solving it first before opening the diagram.</p>
+          <div class="callout warn" style="margin-top: 1.8rem; max-width: 36rem">
+            <span class="icon">⚠️</span>
+            <span data-i18n="s24_warning">Make sure you've attempted the level 4 exercise before continuing.</span>
+          </div>
+        </section>
+
+        <!-- ㉕ ER Diagram — Dealership -->
+        <section data-title-en="Dealership ER Diagram" data-title-es="Diagrama ER Concesionaria">
+          <div class="label" data-i18n="s25_label">Proposed Solution</div>
+          <h2 data-i18n="s25_title">Dealership ER Diagram</h2>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 2rem" data-i18n="s25_sub">Open the page that will host the interactive ER diagram for the dealership case.</p>
+          <a href="dealership-er-solution.html" style="
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.18s;
+          " onmouseover="this.style.background='#6d28d9'" onmouseout="this.style.background='var(--accent)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span data-i18n="s25_open">Open ER Diagram</span>
+          </a>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Filmstrip toggle -->
+    <div id="strip-toggle">
+      <div id="toggle-grip">
+        <span></span><span></span><span></span>
+      </div>
+      <svg id="toggle-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div id="filmstrip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      // ── i18n ──
+      const i18n = {
+        en: {
+          s1_label: "TICS320 · Practicum 2",
+          s1_title: "ER Diagram<br />Practice",
+
+          s2_label: "Case Study",
+          s2_title: "University Enrollment Management",
+          s2_story: "A university manages its course enrollment process using spreadsheets and paper forms. The administration has decided to develop a structured system to replace it.",
+          s2_p1: "Frequent errors in records",
+          s2_p2: "Duplicated student data",
+          s2_p3: "Hard to track enrollments",
+
+          s3_label: "Case Study · 1 of 2",
+          s3_heading: "University Enrollment Management System",
+          s3_title: "Case Study: University Enrollment Management System",
+          s3_p1: "A university is currently managing its course enrollment process manually using spreadsheets and paper forms. This has led to frequent errors, duplicated records, and difficulty tracking which students are enrolled in which courses.",
+          s3_p2: "The administration has decided to develop a system that allows them to organize and manage this information in a structured way.",
+          s3_p3: "Each semester, students register for one or more courses offered by the university. Every course is assigned to a professor who is responsible for teaching it. Professors may teach multiple courses during the same semester.",
+          s3_p4: "The university needs to keep track of which students are enrolled in each course. Additionally, for each enrollment, the university wants to store relevant information about the student's performance in that course.",
+
+          s4_label: "Case Study · 2 of 2",
+          s4_title: "University Enrollment Management System",
+          s4_intro: "The system should also allow administrators to easily identify:",
+          s4_q1: "Which courses a student is currently enrolled in",
+          s4_q2: "Which students are enrolled in a given course",
+          s4_q3: "Which professor is responsible for each course",
+          s4_task: "Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.",
+
+          s5_label: "Up next",
+          s5_title: "Guided Reading",
+          s5_sub: "The following slides highlight key information from the case study to help you identify entities, attributes, and relationships.",
+          s5_warning: "Try the exercise on your own before continuing.",
+
+          s6_label: "Guided Reading · 1 of 2",
+          s6_heading: "University Enrollment Management System",
+          s6_title: "Case Study: University Enrollment Management System (Guided Reading)",
+          s6_p1: "A university is currently managing its <span class=\"hl\">course enrollment process</span> manually using spreadsheets and paper forms. This has led to frequent errors, duplicated records, and difficulty tracking which <span class=\"hl\">students are enrolled in which courses</span>.",
+          s6_p2: "The administration has decided to develop a system that allows them to organize and manage this information in a structured way.",
+          s6_p3: "Each semester, <span class=\"hl\">students</span> register for one or more <span class=\"hl\">courses</span> offered by the university. Every <span class=\"hl\">course</span> is assigned to a <span class=\"hl\">professor</span> who is responsible for teaching it. <span class=\"hl\">Professors may teach multiple courses</span> during the same semester.",
+          s6_p4: "The university needs to keep track of which <span class=\"hl\">students are enrolled in each course</span>. Additionally, for each <span class=\"hl\">enrollment</span>, the university wants to store <span class=\"hl\">relevant information about the student's performance</span> in that course.",
+
+          s7_label: "Guided Reading · 2 of 2",
+          s7_heading: "Requirements & Your Task",
+          s7_intro: "The system should also allow administrators to easily identify:",
+          s7_q1: "Which <span class=\"hl\">courses a student</span> is currently enrolled in",
+          s7_q2: "Which <span class=\"hl\">students are enrolled in a given course</span>",
+          s7_q3: "Which <span class=\"hl\">professor is responsible for each course</span>",
+          s7_task: "Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.",
+
+          s8_label: "Up next",
+          s8_title: "Proposed Solution",
+          s8_sub: "The following slide presents one valid ER model for this case study. Keep in mind there is no single correct answer.",
+          s8_warning: "Make sure you've attempted the exercise before continuing.",
+
+          s9_label: "Proposed Solution",
+          s9_title: "Entity-Relationship Diagram",
+          s9_sub: "Open the interactive diagram to inspect the proposed solution with zoom and pan controls.",
+          s9_open: "Open ER Diagram",
+
+          s10_label: "Case Study · Level 2 · 1 of 3",
+          s10_heading: "Clinic Appointment Management System",
+          s10_title: "Case Study: Clinic Appointment Management System",
+          s10_p1: "A private clinic is currently managing its daily operations using paper forms and spreadsheets. This has caused frequent problems when organizing appointments, assigning doctors, and keeping track of the patients who attend the clinic.",
+          s10_p2: "In many cases, the staff must manually search through records to verify which doctor will see a patient, what specialty that doctor belongs to, and in which consultation room the appointment will take place.",
+          s10_p3: "To improve its organization, the clinic wants to develop a system that stores information about its patients, doctors, medical specialties, consultation rooms, and appointments.",
+
+          s11_label: "Case Study · Level 2 · 2 of 3",
+          s11_heading: "Clinic Appointment Management System",
+          s11_p1: "Patients may visit the clinic many times over time, and doctors may attend many different patients during their work schedule. Each appointment is scheduled for a specific date and time, is associated with one patient, and is attended by one doctor.",
+          s11_p2: "The clinic also wants to keep track of the specialty of each doctor, since each doctor works in a particular medical area such as cardiology, pediatrics, or dermatology. In addition, every appointment must be assigned to a consultation room, because the clinic has several rooms available throughout the day and needs to know where each consultation will occur.",
+          s12_label: "Case Study · Level 2 · 3 of 3",
+          s12_heading: "Clinic Appointment Management System",
+          s12_intro: "The system should allow the clinic to:",
+          s12_q1: "identify the appointments scheduled for each patient",
+          s12_q2: "determine which doctor will attend each appointment",
+          s12_q3: "know the medical specialty associated with each doctor",
+          s12_q4: "identify the consultation room assigned to each appointment",
+          s12_task: "Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.",
+
+          s13_label: "Up next",
+          s13_title: "Proposed Solution",
+          s13_sub: "The following slide will contain one valid ER model for the clinic case study. Try solving it first before opening the diagram.",
+          s13_warning: "Make sure you've attempted the clinic exercise before continuing.",
+
+          s14_label: "Proposed Solution",
+          s14_title: "Clinic ER Diagram",
+          s14_sub: "Open the page that will host the interactive ER diagram for the clinic case.",
+          s14_open: "Open ER Diagram",
+
+          s15_label: "Case Study · Level 3 · 1 of 3",
+          s15_heading: "Event Management System",
+          s15_title: "Case Study: Event Management System",
+          s15_p1: "A company that organizes professional conferences and academic events is currently managing its operations using spreadsheets, email threads, and manually updated documents. As the number of events has grown, this process has become difficult to maintain, especially when tracking attendees, assigning speakers to sessions, and organizing the rooms where activities take place.",
+          s15_p2: "To improve coordination, the company wants to develop a system that stores information about the events it organizes, the sessions that belong to each event, the speakers who participate in those sessions, the attendees who register for the events, and the rooms where the sessions are held.",
+
+          s16_label: "Case Study · Level 3 · 2 of 3",
+          s16_heading: "Event Management System",
+          s16_p1: "Each event may include several sessions scheduled throughout the day. Every session belongs to a single event, has a title, a scheduled date and time, and takes place in one room. A room may be used for many sessions over time.",
+          s16_p2: "Speakers may participate in different sessions, and a session may include more than one speaker. The organization also wants to keep track of the role each speaker has in a session, such as main speaker, panelist, or moderator.",
+          s16_p3: "Attendees may register for different events over time, and each event may have many registered attendees. For every registration, the company wants to store the date on which the attendee registered and the current registration status.",
+
+          s17_label: "Case Study · Level 3 · 3 of 3",
+          s17_heading: "Event Management System",
+          s17_intro: "The system should allow the organization to:",
+          s17_q1: "identify the sessions that belong to each event",
+          s17_q2: "determine which room is assigned to each session",
+          s17_q3: "know which speakers participate in each session",
+          s17_q4: "store the role of each speaker in a given session",
+          s17_q5: "identify which attendees are registered for each event",
+          s17_q6: "store the registration date and status for each attendee registration",
+          s17_task: "Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.",
+
+          s18_label: "Up next",
+          s18_title: "Proposed Solution",
+          s18_sub: "The following slide will contain one valid ER model for the event case study. Try solving it first before opening the diagram.",
+          s18_warning: "Make sure you've attempted the event exercise before continuing.",
+
+          s19_label: "Proposed Solution",
+          s19_title: "Event ER Diagram",
+          s19_sub: "Open the page that will host the interactive ER diagram for the event case.",
+          s19_open: "Open ER Diagram",
+
+          s20_label: "Case Study · Level 4 · 1 of 4",
+          s20_heading: "Vehicle Dealership Network Management System",
+          s20_title: "Case Study: Vehicle Dealership Network Management System",
+          s20_p1: "A company operates a network of vehicle dealerships in different cities and countries. Until now, each dealership has managed its information independently using spreadsheets, local databases, and manual documents. As the business has expanded, this has made it difficult to maintain consistent records about vehicles, branches, sellers, buyers, and the operations carried out at each location.",
+          s20_p2: "The company now wants to develop a centralized system that stores information about its dealerships, the branches that belong to each dealership, the cities and countries where those branches are located, the vehicles managed by the company, and the users who interact with the platform.",
+
+          s21_label: "Case Study · Level 4 · 2 of 4",
+          s21_heading: "Vehicle Dealership Network Management System",
+          s21_p1: "The company works with different kinds of users. All users share common information such as an identifier, name, email address, and phone number. However, some users act as buyers, while others act as sellers. Buyers are the people or organizations that purchase or rent vehicles from the company. Sellers are the staff members or representatives responsible for publishing, managing, and negotiating the available vehicles in the system.",
+          s21_p2: "The company also manages different kinds of vehicles. Every vehicle has common information such as an identifier, brand, model, manufacturing year, and base price. However, depending on the type of vehicle, the company needs to store additional specific information.",
+
+          s22_label: "Case Study · Level 4 · 3 of 4",
+          s22_heading: "Vehicle Dealership Network Management System",
+          s22_p1: "Each dealership may operate several branches. A branch is identified within the context of its dealership and has information such as its branch number, address, and contact phone. Every branch is located in one city, and every city belongs to one country. The company needs to know in which branch each vehicle is currently available.",
+          s22_p2: "The business supports both vehicle purchases and vehicle rentals. Buyers may purchase vehicles that are available through the company, and the system must store the date and final amount of each purchase. Buyers may also rent vehicles for a period of time, and for each rental the company needs to record the start date, end date, and agreed rental price.",
+
+          s23_label: "Case Study · Level 4 · 4 of 4",
+          s23_heading: "Vehicle Dealership Network Management System",
+          s23_intro: "The system should allow the company to:",
+          s23_q1: "identify the branches that belong to each dealership",
+          s23_q2: "determine in which city and country each branch is located",
+          s23_q3: "know which vehicles are available in each branch",
+          s23_q4: "distinguish the different kinds of vehicles and store their specific information",
+          s23_q5: "distinguish between buyers and sellers while preserving the common information they share",
+          s23_q6: "record which buyer purchased a vehicle and the details of that purchase",
+          s23_q7: "record which buyer rented a vehicle and the details of that rental",
+          s23_task: "Your task is to analyze this situation and design a conceptual model that accurately represents the information and relationships involved.",
+
+          s24_label: "Up next",
+          s24_title: "Proposed Solution",
+          s24_sub: "The following slide will contain one valid ER model for the dealership network case study. Try solving it first before opening the diagram.",
+          s24_warning: "Make sure you've attempted the level 4 exercise before continuing.",
+
+          s25_label: "Proposed Solution",
+          s25_title: "Dealership ER Diagram",
+          s25_sub: "Open the page that will host the interactive ER diagram for the dealership case.",
+          s25_open: "Open ER Diagram",
+        },
+        es: {
+          s1_label: "TICS320 · Practicum 2",
+          s1_title: "Práctica de<br />Diagramas ER",
+
+          s2_label: "Caso de Estudio",
+          s2_title: "Sistema de Gestión de Inscripciones",
+          s2_story: "Una universidad gestiona el proceso de inscripción de cursos usando planillas y formularios en papel. La administración ha decidido desarrollar un sistema estructurado para reemplazarlo.",
+          s2_p1: "Errores frecuentes en los registros",
+          s2_p2: "Datos de estudiantes duplicados",
+          s2_p3: "Difícil de rastrear inscripciones",
+
+          s3_label: "Caso de Estudio · 1 de 2",
+          s3_heading: "Sistema de Gestión de Inscripciones Universitarias",
+          s3_title: "Caso de Estudio: Sistema de Gestión de Inscripciones Universitarias",
+          s3_p1: "Una universidad gestiona actualmente su proceso de inscripción de cursos de forma manual, usando planillas y formularios en papel. Esto ha generado errores frecuentes, registros duplicados y dificultades para rastrear qué estudiantes están inscritos en qué cursos.",
+          s3_p2: "La administración ha decidido desarrollar un sistema que les permita organizar y gestionar esta información de forma estructurada.",
+          s3_p3: "Cada semestre, los estudiantes se inscriben en uno o más cursos ofrecidos por la universidad. Cada curso es asignado a un profesor responsable de impartirlo. Los profesores pueden enseñar múltiples cursos durante el mismo semestre.",
+          s3_p4: "La universidad necesita registrar qué estudiantes están inscritos en cada curso. Además, por cada inscripción, la universidad quiere almacenar información relevante sobre el rendimiento del estudiante en ese curso.",
+
+          s4_label: "Caso de Estudio · 2 de 2",
+          s4_title: "Sistema de Gestión de Inscripciones Universitarias",
+          s4_intro: "El sistema también debe permitir a los administradores identificar fácilmente:",
+          s4_q1: "En qué cursos está inscrito actualmente un estudiante",
+          s4_q2: "Qué estudiantes están inscritos en un curso determinado",
+          s4_q3: "Qué profesor es responsable de cada curso",
+          s4_task: "Tu tarea es analizar esta situación y diseñar un modelo conceptual que represente con precisión la información y las relaciones involucradas.",
+
+          s5_label: "A continuación",
+          s5_title: "Lectura Guiada",
+          s5_sub: "Las siguientes diapositivas resaltan información clave del caso de estudio para ayudarte a identificar entidades, atributos y relaciones.",
+          s5_warning: "Intenta el ejercicio por tu cuenta antes de continuar.",
+
+          s6_label: "Lectura Guiada · 1 de 2",
+          s6_heading: "Sistema de Gestión de Inscripciones Universitarias",
+          s6_title: "Caso de Estudio: Sistema de Gestión de Inscripciones Universitarias (Lectura Guiada)",
+          s6_p1: "Una universidad gestiona actualmente su <span class=\"hl\">proceso de inscripción de cursos</span> de forma manual usando planillas y formularios en papel. Esto ha generado errores frecuentes, registros duplicados y dificultades para rastrear qué <span class=\"hl\">estudiantes están inscritos en qué cursos</span>.",
+          s6_p2: "La administración ha decidido desarrollar un sistema que les permita organizar y gestionar esta información de forma estructurada.",
+          s6_p3: "Cada semestre, los <span class=\"hl\">estudiantes</span> se inscriben en uno o más <span class=\"hl\">cursos</span> ofrecidos por la universidad. Cada <span class=\"hl\">curso</span> es asignado a un <span class=\"hl\">profesor</span> responsable de impartirlo. <span class=\"hl\">Los profesores pueden enseñar múltiples cursos</span> durante el mismo semestre.",
+          s6_p4: "La universidad necesita registrar qué <span class=\"hl\">estudiantes están inscritos en cada curso</span>. Además, por cada <span class=\"hl\">inscripción</span>, la universidad quiere almacenar <span class=\"hl\">información relevante sobre el rendimiento del estudiante</span> en ese curso.",
+
+          s7_label: "Lectura Guiada · 2 de 2",
+          s7_heading: "Sistema de Gestión de Inscripciones Universitarias",
+          s7_intro: "El sistema también debe permitir a los administradores identificar fácilmente:",
+          s7_q1: "En qué <span class=\"hl\">cursos está inscrito un estudiante</span> actualmente",
+          s7_q2: "Qué <span class=\"hl\">estudiantes están inscritos en un curso determinado</span>",
+          s7_q3: "Qué <span class=\"hl\">profesor es responsable de cada curso</span>",
+          s7_task: "Tu tarea es analizar esta situación y diseñar un modelo conceptual que represente con precisión la información y las relaciones involucradas.",
+
+          s9_label: "Solución Propuesta",
+          s9_title: "Diagrama Entidad-Relación",
+          s9_sub: "Abre el diagrama interactivo para revisar la solución propuesta con controles de zoom y desplazamiento.",
+          s9_open: "Abrir Diagrama ER",
+
+          s10_label: "Caso de Estudio · Nivel 2 · 1 de 2",
+          s10_heading: "Sistema de Gestión de Citas Clínicas",
+          s10_title: "Caso de Estudio: Sistema de Gestión de Citas Clínicas",
+          s10_p1: "Una clínica privada está gestionando actualmente sus operaciones diarias mediante formularios en papel y planillas. Esto ha provocado problemas frecuentes al organizar citas, asignar médicos y llevar el control de los pacientes que asisten a la clínica.",
+          s10_p2: "En muchos casos, el personal debe revisar manualmente los registros para verificar qué médico atenderá a un paciente, a qué especialidad pertenece ese médico y en qué sala de consulta se realizará la cita.",
+          s10_p3: "Para mejorar su organización, la clínica quiere desarrollar un sistema que almacene información sobre sus pacientes, médicos, especialidades médicas, salas de consulta y citas.",
+
+          s11_label: "Caso de Estudio · Nivel 2 · 2 de 2",
+          s11_heading: "Sistema de Gestión de Citas Clínicas",
+          s11_p1: "Los pacientes pueden visitar la clínica muchas veces a lo largo del tiempo, y los médicos pueden atender a distintos pacientes durante su jornada. Cada cita se agenda para una fecha y hora específicas, se asocia a un paciente y es atendida por un médico.",
+          s11_p2: "La clínica también quiere llevar registro de la especialidad de cada médico, ya que cada uno trabaja en un área médica específica como cardiología, pediatría o dermatología. Además, cada cita debe asignarse a una sala de consulta, porque la clínica dispone de varias salas durante el día y necesita saber dónde se realizará cada atención.",
+          s11_intro: "El sistema debe permitir a la clínica:",
+          s11_q1: "identificar las citas agendadas para cada paciente",
+          s11_q2: "determinar qué médico atenderá cada cita",
+          s11_q3: "conocer la especialidad médica asociada a cada médico",
+          s11_q4: "identificar la sala de consulta asignada a cada cita",
+          s11_task: "Tu tarea es analizar esta situación y diseñar un modelo conceptual que represente con precisión la información y las relaciones involucradas.",
+        },
+      };
+
+      // ── Apply language ──
+      let currentLang = "en";
+
+      function applyLang(lang) {
+        const dict = i18n[lang];
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.dataset.i18n;
+          if (dict[key] !== undefined) el.innerHTML = dict[key];
+        });
+        document.querySelectorAll(".lang-btn").forEach((b) => {
+          b.classList.toggle("active", b.dataset.lang === lang);
+        });
+        currentLang = lang;
+      }
+
+      document.querySelectorAll(".lang-btn").forEach((btn) => {
+        btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+      });
+
+      // ── Reveal init ──
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        minScale: 1,
+        maxScale: 1,
+      });
+
+      // ── Filmstrip ──
+      const strip = document.getElementById("filmstrip");
+      const sections = document.querySelectorAll(".reveal .slides section");
+
+      function buildThumbs() {
+        const revealEl = document.querySelector(".reveal");
+        const slideW = revealEl.offsetWidth;
+        const slideH = revealEl.offsetHeight;
+        const THUMB_W = 120;
+        const scale = THUMB_W / slideW;
+
+        sections.forEach((section, i) => {
+          const n = String(i + 1).padStart(2, "0");
+          const thumb = document.createElement("div");
+          thumb.className = "thumb";
+
+          // Scaled preview
+          const wrap = document.createElement("div");
+          wrap.className = "slide-preview-wrap";
+
+          const preview = document.createElement("div");
+          preview.className = "slide-preview";
+          preview.style.width = slideW + "px";
+          preview.style.height = slideH + "px";
+          preview.style.transform = `scale(${scale})`;
+
+          // Clone inner content only (not the <section> itself)
+          Array.from(section.childNodes).forEach((node) => {
+            preview.appendChild(node.cloneNode(true));
+          });
+
+          wrap.appendChild(preview);
+          thumb.appendChild(wrap);
+
+          // Slide number overlay
+          const numEl = document.createElement("span");
+          numEl.className = "thumb-num";
+          numEl.textContent = n;
+          thumb.appendChild(numEl);
+
+          thumb.addEventListener("click", () => Reveal.slide(i));
+          strip.appendChild(thumb);
+        });
+      }
+
+      function syncNav(e) {
+        const idx = e.indexh;
+        const thumbs = strip.querySelectorAll(".thumb");
+        thumbs.forEach((t, i) => t.classList.toggle("active", i === idx));
+        const active = thumbs[idx];
+        if (active)
+          strip.scrollLeft =
+            active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
+        document
+          .getElementById("arrow-prev")
+          .classList.toggle("hidden", idx === 0);
+        document
+          .getElementById("arrow-next")
+          .classList.toggle("hidden", idx === sections.length - 1);
+      }
+
+      Reveal.on("slidechanged", syncNav);
+      Reveal.on("ready", (e) => {
+        buildThumbs();
+        syncNav({ indexh: e.indexh });
+      });
+      document
+        .getElementById("arrow-prev")
+        .addEventListener("click", () => Reveal.prev());
+      document
+        .getElementById("arrow-next")
+        .addEventListener("click", () => Reveal.next());
+
+      // ── Filmstrip collapse ──
+      let collapsed = false;
+      const filmstrip = document.getElementById("filmstrip");
+      const viewport = document.querySelector(".reveal-viewport");
+      const chevron = document.getElementById("toggle-chevron");
+      const arrows = document.querySelectorAll(".nav-arrow");
+
+      document.getElementById("strip-toggle").addEventListener("click", () => {
+        collapsed = !collapsed;
+        filmstrip.classList.toggle("collapsed", collapsed);
+        viewport.classList.toggle("strip-collapsed", collapsed);
+        arrows.forEach((a) => a.classList.toggle("strip-collapsed", collapsed));
+        chevron.classList.toggle("rotated", collapsed);
+        setTimeout(() => Reveal.layout(), 320);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ER Diagram — Dealership Network Management</title>
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+
+      #topbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 52px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.25rem;
+        z-index: 100;
+      }
+
+      #topbar-left { display: flex; align-items: center; gap: 1rem; }
+      #topbar-right { display: flex; align-items: center; gap: 0.5rem; }
+
+      #back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        cursor: pointer;
+        transition: color 0.15s, border-color 0.15s, background 0.15s;
+      }
+
+      #back-btn:hover {
+        color: var(--accent-light);
+        border-color: var(--accent);
+        background: var(--accent-dim);
+      }
+
+      #topbar h1 {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #c9d1d9;
+        letter-spacing: -0.01em;
+      }
+
+      .ctrl-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--muted);
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        cursor: pointer;
+        transition: color 0.15s, border-color 0.15s, background 0.15s;
+      }
+
+      .ctrl-btn:hover {
+        color: var(--accent-light);
+        border-color: var(--accent);
+        background: var(--accent-dim);
+      }
+
+      #hint {
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-left: 0.5rem;
+      }
+
+      #canvas {
+        position: fixed;
+        top: 52px; left: 0; right: 0; bottom: 0;
+        overflow: hidden;
+        cursor: grab;
+      }
+
+      #canvas.grabbing { cursor: grabbing; }
+
+      #diagram {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform-origin: center center;
+        transform: translate(-50%, -50%);
+      }
+
+      #diagram svg { display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="topbar">
+      <div id="topbar-left">
+        <a href="index.html#/24" id="back-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+          Back to slides
+        </a>
+        <h1>ER Diagram — Vehicle Dealership Network Management System</h1>
+      </div>
+      <div id="topbar-right">
+        <span id="hint">Scroll to zoom · Drag to pan</span>
+        <button class="ctrl-btn" id="zoom-in-btn">+ Zoom in</button>
+        <button class="ctrl-btn" id="zoom-out-btn">− Zoom out</button>
+        <button class="ctrl-btn" id="reset-btn">Reset view</button>
+      </div>
+    </div>
+
+    <div id="canvas">
+      <div id="diagram"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <script>
+      const nodes = [
+        { id: "USER", type: "entity", x: 520, y: 200 },
+        { id: "user_isa", type: "isa", x: 520, y: 400 },
+        { id: "BUYER", type: "entity", x: 330, y: 650 },
+        { id: "SELLER", type: "entity", x: 710, y: 650 },
+
+        { id: "VEHICLE", type: "entity", x: 1440, y: 210 },
+        { id: "vehicle_isa", type: "isa", x: 1440, y: 400 },
+        { id: "CAR", type: "entity", x: 1200, y: 650 },
+        { id: "TRUCK", type: "entity", x: 1440, y: 650 },
+        { id: "MOTORCYCLE", type: "entity", x: 1680, y: 650 },
+
+        { id: "managed_by", type: "rel", x: 960, y: 500 },
+        { id: "purchased_by", type: "rel", x: 720, y: 900 },
+        { id: "purchases", type: "rel", x: 1110, y: 900 },
+        { id: "rented_by", type: "rel", x: 720, y: 1070 },
+        { id: "rents", type: "rel", x: 1110, y: 1070 },
+        { id: "PURCHASE", type: "entity", x: 915, y: 900 },
+        { id: "RENTAL", type: "entity", x: 915, y: 1070 },
+
+        { id: "user_id", type: "key-attr", x: 380, y: 70, label: "user_id" },
+        { id: "user_name", type: "attr", x: 520, y: 30, label: "name" },
+        { id: "user_email", type: "attr", x: 665, y: 70, label: "email" },
+        { id: "user_phone", type: "attr", x: 520, y: 110, label: "phone" },
+
+        { id: "buyer_license", type: "attr", x: 240, y: 800, label: "license_no" },
+        { id: "seller_code", type: "attr", x: 800, y: 800, label: "seller_code" },
+
+        { id: "vehicle_id", type: "key-attr", x: 1300, y: 70, label: "vehicle_id" },
+        { id: "brand", type: "attr", x: 1440, y: 30, label: "brand" },
+        { id: "model", type: "attr", x: 1580, y: 70, label: "model" },
+        { id: "man_year", type: "attr", x: 1325, y: 125, label: "year" },
+        { id: "base_price", type: "attr", x: 1560, y: 125, label: "base_price" },
+
+        { id: "car_doors", type: "attr", x: 1110, y: 805, label: "doors" },
+        { id: "truck_capacity", type: "attr", x: 1440, y: 820, label: "load_capacity" },
+        { id: "moto_cc", type: "attr", x: 1770, y: 805, label: "engine_cc" },
+
+        { id: "purchase_date", type: "attr", x: 820, y: 790, label: "date" },
+        { id: "purchase_amount", type: "attr", x: 1015, y: 790, label: "final_amount" },
+        { id: "rental_start", type: "attr", x: 810, y: 1185, label: "start_date" },
+        { id: "rental_end", type: "attr", x: 990, y: 1185, label: "end_date" },
+        { id: "rental_price", type: "attr", x: 1120, y: 1115, label: "agreed_price" }
+      ];
+
+      const links = [
+        { source: "USER", target: "user_id" },
+        { source: "USER", target: "user_name" },
+        { source: "USER", target: "user_email" },
+        { source: "USER", target: "user_phone" },
+        { source: "BUYER", target: "buyer_license" },
+        { source: "SELLER", target: "seller_code" },
+        { source: "VEHICLE", target: "vehicle_id" },
+        { source: "VEHICLE", target: "brand" },
+        { source: "VEHICLE", target: "model" },
+        { source: "VEHICLE", target: "man_year" },
+        { source: "VEHICLE", target: "base_price" },
+        { source: "CAR", target: "car_doors" },
+        { source: "TRUCK", target: "truck_capacity" },
+        { source: "MOTORCYCLE", target: "moto_cc" },
+        { source: "PURCHASE", target: "purchase_date" },
+        { source: "PURCHASE", target: "purchase_amount" },
+        { source: "RENTAL", target: "rental_start" },
+        { source: "RENTAL", target: "rental_end" },
+        { source: "RENTAL", target: "rental_price" },
+        { source: "USER", target: "user_isa" },
+        { source: "user_isa", target: "BUYER" },
+        { source: "user_isa", target: "SELLER" },
+        { source: "VEHICLE", target: "vehicle_isa" },
+        { source: "vehicle_isa", target: "CAR" },
+        { source: "vehicle_isa", target: "TRUCK" },
+        { source: "vehicle_isa", target: "MOTORCYCLE" },
+
+        { source: "SELLER", target: "managed_by", label: "(0,N)", labelPos: 0.28, labelDx: 0, labelDy: -14 },
+        { source: "managed_by", target: "VEHICLE", label: "(1,1)", labelPos: 0.72, labelDx: 8, labelDy: -14 },
+
+        { source: "BUYER", target: "purchased_by", label: "(0,N)", labelPos: 0.28, labelDx: -4, labelDy: -10 },
+        { source: "purchased_by", target: "PURCHASE", label: "(1,1)", labelPos: 0.72, labelDx: -6, labelDy: -12 },
+        { source: "VEHICLE", target: "purchases", label: "(0,1)", labelPos: 0.30, labelDx: 10, labelDy: -12 },
+        { source: "purchases", target: "PURCHASE", label: "(1,1)", labelPos: 0.72, labelDx: 10, labelDy: -2 },
+
+        { source: "BUYER", target: "rented_by", label: "(0,N)", labelPos: 0.28, labelDx: -4, labelDy: -10 },
+        { source: "rented_by", target: "RENTAL", label: "(1,1)", labelPos: 0.72, labelDx: -6, labelDy: -12 },
+        { source: "VEHICLE", target: "rents", label: "(0,N)", labelPos: 0.30, labelDx: 8, labelDy: -12 },
+        { source: "rents", target: "RENTAL", label: "(1,1)", labelPos: 0.72, labelDx: 12, labelDy: -2 }
+      ];
+
+      const W = 1900, H = 1320;
+      const nodeMap = new Map(nodes.map((node) => [node.id, node]));
+
+      const svg = d3.select("#diagram").append("svg")
+        .attr("width", W)
+        .attr("height", H);
+
+      const g = svg.append("g");
+
+      g.append("g")
+        .selectAll("line")
+        .data(links)
+        .enter()
+        .append("line")
+        .attr("stroke", "#848d97")
+        .attr("stroke-width", 1.2)
+        .attr("x1", (d) => nodeMap.get(d.source).x)
+        .attr("y1", (d) => nodeMap.get(d.source).y)
+        .attr("x2", (d) => nodeMap.get(d.target).x)
+        .attr("y2", (d) => nodeMap.get(d.target).y);
+
+      const nodeSel = g.append("g")
+        .selectAll("g")
+        .data(nodes)
+        .enter()
+        .append("g")
+        .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+      const entities = nodeSel.filter((d) => d.type === "entity" || d.type === "weak-entity");
+      entities.append("rect")
+        .attr("x", -78)
+        .attr("y", -24)
+        .attr("width", 156)
+        .attr("height", 48)
+        .attr("rx", 2)
+        .attr("fill", "#1f2937")
+        .attr("stroke", "#7c3aed")
+        .attr("stroke-width", 2);
+      entities.filter((d) => d.type === "weak-entity")
+        .append("rect")
+        .attr("x", -84)
+        .attr("y", -30)
+        .attr("width", 168)
+        .attr("height", 60)
+        .attr("rx", 3)
+        .attr("fill", "none")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1.2);
+      entities.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 13)
+        .attr("font-weight", 700)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.id);
+
+      const rels = nodeSel.filter((d) => d.type === "rel");
+      rels.append("polygon")
+        .attr("points", "0,-32 68,0 0,32 -68,0")
+        .attr("fill", "#2d1b6b")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1.5);
+      rels.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 12)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.id);
+
+      const isaNodes = nodeSel.filter((d) => d.type === "isa");
+      isaNodes.append("polygon")
+        .attr("points", "0,-36 44,34 -44,34")
+        .attr("fill", "#6d28d9")
+        .attr("stroke", "#c4b5fd")
+        .attr("stroke-width", 1.5);
+      isaNodes.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("y", 10)
+        .attr("fill", "#f5f3ff")
+        .attr("font-size", 12)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text("IsA");
+
+      const keyAttrs = nodeSel.filter((d) => d.type === "key-attr");
+      keyAttrs.append("ellipse")
+        .attr("rx", 58)
+        .attr("ry", 20)
+        .attr("fill", "#0d1117")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1.5);
+      keyAttrs.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 11)
+        .attr("y", -1)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.label);
+      keyAttrs.append("line")
+        .attr("x1", (d) => -Math.min(d.label.length * 3.0, 50))
+        .attr("x2", (d) => Math.min(d.label.length * 3.0, 50))
+        .attr("y1", 5)
+        .attr("y2", 5)
+        .attr("stroke", "#c9d1d9")
+        .attr("stroke-width", 1);
+
+      const partialKeyAttrs = nodeSel.filter((d) => d.type === "partial-key-attr");
+      partialKeyAttrs.append("ellipse")
+        .attr("rx", 58)
+        .attr("ry", 20)
+        .attr("fill", "#0d1117")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1.5);
+      partialKeyAttrs.append("ellipse")
+        .attr("rx", 64)
+        .attr("ry", 26)
+        .attr("fill", "none")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1);
+      partialKeyAttrs.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 11)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.label);
+
+      const attrs = nodeSel.filter((d) => d.type === "attr");
+      attrs.append("ellipse")
+        .attr("rx", 54)
+        .attr("ry", 18)
+        .attr("fill", "#0d1117")
+        .attr("stroke", "#848d97")
+        .attr("stroke-width", 1);
+      attrs.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#848d97")
+        .attr("font-size", 11)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.label);
+
+      g.append("g")
+        .selectAll("text")
+        .data(links.filter((link) => link.label))
+        .enter()
+        .append("text")
+        .attr("fill", "#a78bfa")
+        .attr("font-size", 12)
+        .attr("font-weight", 600)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .attr("text-anchor", "middle")
+        .attr("x", (d) => {
+          const source = nodeMap.get(d.source);
+          const target = nodeMap.get(d.target);
+          const pos = d.labelPos ?? (source.type === "entity" ? 0.30 : 0.70);
+          return source.x + (target.x - source.x) * pos + (d.labelDx ?? 0);
+        })
+        .attr("y", (d) => {
+          const source = nodeMap.get(d.source);
+          const target = nodeMap.get(d.target);
+          const pos = d.labelPos ?? (source.type === "entity" ? 0.30 : 0.70);
+          return source.y + (target.y - source.y) * pos + (d.labelDy ?? -10);
+        })
+        .text((d) => d.label);
+
+      let scale = 1;
+      let originX = 0;
+      let originY = 0;
+      const ZOOM_STEP = 0.15;
+      const MIN_SCALE = 0.2;
+      const MAX_SCALE = 4;
+      const canvas = document.getElementById("canvas");
+      const diagram = document.getElementById("diagram");
+
+      function applyTransform() {
+        diagram.style.transform =
+          `translate(calc(-50% + ${originX}px), calc(-50% + ${originY}px)) scale(${scale})`;
+      }
+
+      function resetView() {
+        scale = 1;
+        originX = 0;
+        originY = 0;
+        applyTransform();
+      }
+
+      function zoomAt(delta, clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const cx = clientX - rect.left - rect.width / 2;
+        const cy = clientY - rect.top - rect.height / 2;
+        const newScale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale + delta));
+        const ratio = newScale / scale;
+        originX = cx + (originX - cx) * ratio;
+        originY = cy + (originY - cy) * ratio;
+        scale = newScale;
+        applyTransform();
+      }
+
+      canvas.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        zoomAt(event.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP, event.clientX, event.clientY);
+      }, { passive: false });
+
+      let dragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let originAtDragX = 0;
+      let originAtDragY = 0;
+
+      canvas.addEventListener("mousedown", (event) => {
+        dragging = true;
+        dragStartX = event.clientX;
+        dragStartY = event.clientY;
+        originAtDragX = originX;
+        originAtDragY = originY;
+        canvas.classList.add("grabbing");
+      });
+
+      window.addEventListener("mousemove", (event) => {
+        if (!dragging) return;
+        originX = originAtDragX + (event.clientX - dragStartX);
+        originY = originAtDragY + (event.clientY - dragStartY);
+        applyTransform();
+      });
+
+      window.addEventListener("mouseup", () => {
+        dragging = false;
+        canvas.classList.remove("grabbing");
+      });
+
+      document.getElementById("zoom-in-btn").addEventListener("click", () => {
+        const rect = canvas.getBoundingClientRect();
+        zoomAt(ZOOM_STEP, rect.left + rect.width / 2, rect.top + rect.height / 2);
+      });
+
+      document.getElementById("zoom-out-btn").addEventListener("click", () => {
+        const rect = canvas.getBoundingClientRect();
+        zoomAt(-ZOOM_STEP, rect.left + rect.width / 2, rect.top + rect.height / 2);
+      });
+
+      document.getElementById("reset-btn").addEventListener("click", resetView);
+    </script>
+  </body>
+</html>

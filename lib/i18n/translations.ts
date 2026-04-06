@@ -1,18 +1,16 @@
 export const translations = {
   en: {
     sidebar: {
-      role: "Software Developer · Educator",
+      role: "Software Developer · Student",
       pronouns: "he/him",
       bio: "Turning caffeine into code and dreams into reality",
-      followers: "followers",
-      following: "following",
     },
     home: {
       whoami: {
         title: "Who am I",
         p1: "I'm a software developer and educator based in Viña del Mar, working towards a future as a developer or sysadmin. My main focus is infrastructure design — building systems that provision, deploy, and tear themselves down without anyone having to babysit them. I've been working with Linux servers for over three years, rely heavily on Ansible for system configuration, and have a strong preference for declarative approaches: if it can't be described as code, it probably shouldn't exist.",
         p2: "I'm a Kubernetes enjoyer, actively learning C and Go, and I read broadly across computer engineering — systems design, compilers, networking. I maintain open-source tooling under IT-LAB-UAI and contribute personal projects on GitHub.",
-        p3: "I'm also an AI enthusiast — not an expert, just someone genuinely excited by the possibilities of applying new models to everyday problems and making life a little better. And when I'm not at a terminal, I'm probably gaming with friends.",
+        p3: "I'm also an AI enthusiast — not an expert, just someone genuinely excited by the possibilities of applying new models to everyday problems and making life a little better.",
         highlights: {
           sysadmin: "developer or sysadmin",
           infra: "infrastructure design",
@@ -23,7 +21,6 @@ export const translations = {
           go: "Go",
           itlab: "IT-LAB-UAI",
           ai: "AI enthusiast",
-          gaming: "gaming with friends",
         },
       },
       courses: {
@@ -113,6 +110,13 @@ export const translations = {
           "ER diagrams, logical models, cardinality, and how to think when designing a database from scratch. Includes a hands-on exercise.",
         href: "/presentations/tics320/practicum-1/index.html",
       },
+      {
+        number: 2,
+        title: "ER Diagram Practice",
+        description:
+          "Hands-on session focused entirely on ER diagram creation and design. Covers worked examples and guided exercises to build fluency with entity-relationship modeling.",
+        href: "/presentations/tics320/practicum-2/index.html",
+      },
     ],
     exerciseItems: [
       {
@@ -136,18 +140,16 @@ export const translations = {
 
   es: {
     sidebar: {
-      role: "Desarrollador de Software · Educador",
+      role: "Desarrollador de Software · Estudiante",
       pronouns: "él",
       bio: "Convirtiendo cafeína en código y sueños en realidad",
-      followers: "seguidores",
-      following: "siguiendo",
     },
     home: {
       whoami: {
         title: "¿Quién soy?",
         p1: "Soy un desarrollador de software y educador basado en Viña del Mar, con proyección hacia un futuro como desarrollador o sysadmin. Mi enfoque principal es el diseño de infraestructura — construir sistemas que se aprovisionen, desplieguen y eliminen solos sin que nadie tenga que supervisarlos. Llevo más de tres años trabajando con servidores Linux, uso ampliamente Ansible para la configuración de sistemas, y tengo una fuerte preferencia por enfoques declarativos: si no se puede describir como código, probablemente no debería existir.",
         p2: "Soy un entusiasta de Kubernetes, aprendiendo activamente C y Go, y leo ampliamente sobre ingeniería de computadores — diseño de sistemas, compiladores, redes. Mantengo herramientas open-source bajo IT-LAB-UAI y contribuyo proyectos personales en GitHub.",
-        p3: "También soy un entusiasta de la IA — no un experto, solo alguien genuinamente emocionado por las posibilidades de aplicar nuevos modelos a los problemas cotidianos para hacer la vida un poco mejor. Y cuando no estoy frente a un terminal, probablemente estoy jugando con amigos.",
+        p3: "También soy un entusiasta de la IA — no un experto, solo alguien genuinamente emocionado por las posibilidades de aplicar nuevos modelos a los problemas cotidianos para hacer la vida un poco mejor.",
         highlights: {
           sysadmin: "desarrollador o sysadmin",
           infra: "diseño de infraestructura",
@@ -158,7 +160,6 @@ export const translations = {
           go: "Go",
           itlab: "IT-LAB-UAI",
           ai: "entusiasta de la IA",
-          gaming: "jugando con amigos",
         },
       },
       courses: {
@@ -247,6 +248,13 @@ export const translations = {
         description:
           "Diagramas ER, modelos lógicos, cardinalidad y cómo pensar al diseñar una base de datos desde cero. Incluye un ejercicio práctico.",
         href: "/presentations/tics320/practicum-1/index.html",
+      },
+      {
+        number: 2,
+        title: "Práctica de Diagramas ER",
+        description:
+          "Sesión práctica enfocada exclusivamente en la creación y diseño de diagramas ER. Incluye ejemplos resueltos y ejercicios guiados para desarrollar fluidez en el modelado entidad-relación.",
+        href: "/presentations/tics320/practicum-2/index.html",
       },
     ],
     exerciseItems: [

@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ER Diagram — University Enrollment</title>
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+
+      /* ── Top bar ── */
+      #topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 52px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.25rem;
+        z-index: 100;
+      }
+      #topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      #back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        cursor: pointer;
+        transition:
+          color 0.15s,
+          border-color 0.15s,
+          background 0.15s;
+      }
+      #back-btn:hover {
+        color: var(--accent-light);
+        border-color: var(--accent);
+        background: var(--accent-dim);
+      }
+      #topbar h1 {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #c9d1d9;
+        letter-spacing: -0.01em;
+      }
+      #topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .ctrl-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--muted);
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        cursor: pointer;
+        transition:
+          color 0.15s,
+          border-color 0.15s,
+          background 0.15s;
+      }
+      .ctrl-btn:hover {
+        color: var(--accent-light);
+        border-color: var(--accent);
+        background: var(--accent-dim);
+      }
+      #hint {
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-left: 0.5rem;
+      }
+
+      /* ── Canvas ── */
+      #canvas {
+        position: fixed;
+        top: 52px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        cursor: grab;
+      }
+      #canvas.grabbing {
+        cursor: grabbing;
+      }
+
+      #diagram {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: center center;
+        transform: translate(-50%, -50%);
+      }
+      #diagram svg {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="topbar">
+      <div id="topbar-left">
+        <a href="index.html#/8" id="back-btn">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          Back to slides
+        </a>
+        <h1>ER Diagram — University Enrollment Management System</h1>
+      </div>
+      <div id="topbar-right">
+        <span id="hint">Scroll to zoom · Drag to pan</span>
+        <button class="ctrl-btn" id="zoom-in-btn">+ Zoom in</button>
+        <button class="ctrl-btn" id="zoom-out-btn">− Zoom out</button>
+        <button class="ctrl-btn" id="reset-btn">Reset view</button>
+      </div>
+    </div>
+
+    <div id="canvas">
+      <div id="diagram"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <script>
+      const nodes = [
+        // Entities
+        { id: "STUDENT", type: "entity", x: 150, y: 450 },
+        { id: "COURSE_OFFERING", type: "entity", x: 700, y: 450 },
+        { id: "COURSE", type: "entity", x: 1050, y: 250 },
+        { id: "SEMESTER", type: "entity", x: 1050, y: 650 },
+        { id: "PROFESSOR", type: "entity", x: 150, y: 750 },
+        // Relationships
+        { id: "enrolls", type: "rel", x: 425, y: 450 },
+        { id: "of", type: "rel", x: 875, y: 350 },
+        { id: "occurs_in", type: "rel", x: 875, y: 550 },
+        { id: "teaches", type: "rel", x: 425, y: 650 },
+        // enrolls attributes (relationship attributes)
+        { id: "grade", type: "attr", x: 370, y: 560, label: "grade" },
+        {
+          id: "enrollment_date",
+          type: "attr",
+          x: 510,
+          y: 525,
+          label: "enrollment_date",
+        },
+        // STUDENT attributes
+        {
+          id: "student_id",
+          type: "key-attr",
+          x: 65,
+          y: 315,
+          label: "student_id",
+        },
+        { id: "s_name", type: "attr", x: 155, y: 285, label: "name" },
+        { id: "s_email", type: "attr", x: 265, y: 310, label: "email" },
+        // PROFESSOR attributes
+        {
+          id: "professor_id",
+          type: "key-attr",
+          x: 80,
+          y: 860,
+          label: "professor_id",
+        },
+        { id: "p_name", type: "attr", x: 155, y: 895, label: "name" },
+        { id: "p_email", type: "attr", x: 265, y: 870, label: "email" },
+        // COURSE_OFFERING attributes
+        {
+          id: "offering_id",
+          type: "key-attr",
+          x: 615,
+          y: 320,
+          label: "offering_id",
+        },
+        { id: "co_section", type: "attr", x: 740, y: 305, label: "section" },
+        // COURSE attributes
+        {
+          id: "course_id",
+          type: "key-attr",
+          x: 950,
+          y: 120,
+          label: "course_id",
+        },
+        { id: "c_title", type: "attr", x: 1060, y: 95, label: "title" },
+        // SEMESTER attributes
+        {
+          id: "semester_id",
+          type: "key-attr",
+          x: 950,
+          y: 760,
+          label: "semester_id",
+        },
+        { id: "sem_name", type: "attr", x: 1060, y: 785, label: "name" },
+      ];
+
+      const links = [
+        // enrolls relationship attributes
+        { source: "enrolls", target: "grade" },
+        { source: "enrolls", target: "enrollment_date" },
+        // STUDENT attributes
+        { source: "STUDENT", target: "student_id" },
+        { source: "STUDENT", target: "s_name" },
+        { source: "STUDENT", target: "s_email" },
+        // PROFESSOR attributes
+        { source: "PROFESSOR", target: "professor_id" },
+        { source: "PROFESSOR", target: "p_name" },
+        { source: "PROFESSOR", target: "p_email" },
+        // COURSE_OFFERING attributes
+        { source: "COURSE_OFFERING", target: "offering_id" },
+        { source: "COURSE_OFFERING", target: "co_section" },
+        // COURSE attributes
+        { source: "COURSE", target: "course_id" },
+        { source: "COURSE", target: "c_title" },
+        // SEMESTER attributes
+        { source: "SEMESTER", target: "semester_id" },
+        { source: "SEMESTER", target: "sem_name" },
+        // Relationships
+        {
+          source: "STUDENT",
+          target: "enrolls",
+          label: "(0,N)",
+          labelPos: 0.28,
+          labelDx: 0,
+          labelDy: -4,
+        },
+        {
+          source: "enrolls",
+          target: "COURSE_OFFERING",
+          label: "(0,N)",
+          labelPos: 0.72,
+          labelDx: 0,
+          labelDy: -4,
+        },
+        {
+          source: "COURSE_OFFERING",
+          target: "of",
+          label: "(1,N)",
+          labelPos: 0.26,
+          labelDx: -18,
+          labelDy: 0,
+        },
+        {
+          source: "of",
+          target: "COURSE",
+          label: "(1,1)",
+          labelPos: 0.72,
+          labelDx: 12,
+          labelDy: 10,
+        },
+        {
+          source: "COURSE_OFFERING",
+          target: "occurs_in",
+          label: "(1,N)",
+          labelPos: 0.26,
+          labelDx: -15,
+          labelDy: 8,
+        },
+        {
+          source: "occurs_in",
+          target: "SEMESTER",
+          label: "(1,1)",
+          labelPos: 0.72,
+          labelDx: 20,
+          labelDy: 2,
+        },
+        {
+          source: "PROFESSOR",
+          target: "teaches",
+          label: "(1,N)",
+          labelPos: 0.28,
+          labelDx: -20,
+          labelDy: 0,
+        },
+        {
+          source: "teaches",
+          target: "COURSE_OFFERING",
+          label: "(1,1)",
+          labelPos: 0.7,
+          labelDx: 20,
+          labelDy: -26,
+        },
+      ];
+
+      const W = 1400,
+        H = 950;
+      const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+
+      const svg = d3
+        .select("#diagram")
+        .append("svg")
+        .attr("width", W)
+        .attr("height", H);
+
+      const g = svg.append("g");
+
+      // Links
+      g.append("g")
+        .selectAll("line")
+        .data(links)
+        .enter()
+        .append("line")
+        .attr("stroke", "#848d97")
+        .attr("stroke-width", 1.2)
+        .attr("x1", (d) => nodeMap.get(d.source).x)
+        .attr("y1", (d) => nodeMap.get(d.source).y)
+        .attr("x2", (d) => nodeMap.get(d.target).x)
+        .attr("y2", (d) => nodeMap.get(d.target).y);
+
+      // Nodes
+      const nodeSel = g
+        .append("g")
+        .selectAll("g")
+        .data(nodes)
+        .enter()
+        .append("g")
+        .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+      const entities = nodeSel.filter((d) => d.type === "entity");
+      entities
+        .append("rect")
+        .attr("x", -62)
+        .attr("y", -22)
+        .attr("width", 124)
+        .attr("height", 44)
+        .attr("rx", 2)
+        .attr("fill", "#1f2937")
+        .attr("stroke", "#7c3aed")
+        .attr("stroke-width", 2);
+      entities
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 13)
+        .attr("font-weight", 700)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.id);
+
+      const rels = nodeSel.filter((d) => d.type === "rel");
+      rels
+        .append("polygon")
+        .attr("points", "0,-28 58,0 0,28 -58,0")
+        .attr("fill", "#2d1b6b")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1.5);
+      rels
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 12)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.id);
+
+      const keyAttrs = nodeSel.filter((d) => d.type === "key-attr");
+      keyAttrs
+        .append("ellipse")
+        .attr("rx", 52)
+        .attr("ry", 20)
+        .attr("fill", "#0d1117")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1.5);
+      keyAttrs
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 11)
+        .attr("y", -1)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.label);
+      keyAttrs
+        .append("line")
+        .attr("x1", (d) => -Math.min(d.label.length * 3.0, 44))
+        .attr("x2", (d) => Math.min(d.label.length * 3.0, 44))
+        .attr("y1", 5)
+        .attr("y2", 5)
+        .attr("stroke", "#c9d1d9")
+        .attr("stroke-width", 1);
+
+      const attrs = nodeSel.filter((d) => d.type === "attr");
+      attrs
+        .append("ellipse")
+        .attr("rx", 48)
+        .attr("ry", 18)
+        .attr("fill", "#0d1117")
+        .attr("stroke", "#848d97")
+        .attr("stroke-width", 1);
+      attrs
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#848d97")
+        .attr("font-size", 11)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.label);
+
+      // Cardinality labels — rendered last
+      g.append("g")
+        .selectAll("text")
+        .data(links.filter((l) => l.label))
+        .enter()
+        .append("text")
+        .attr("fill", "#a78bfa")
+        .attr("font-size", 12)
+        .attr("font-weight", 600)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .attr("text-anchor", "middle")
+        .attr("x", (d) => {
+          const s = nodeMap.get(d.source),
+            t = nodeMap.get(d.target);
+          const p = d.labelPos ?? (s.type === "entity" ? 0.3 : 0.7);
+          return s.x + (t.x - s.x) * p + (d.labelDx ?? 0);
+        })
+        .attr("y", (d) => {
+          const s = nodeMap.get(d.source),
+            t = nodeMap.get(d.target);
+          const p = d.labelPos ?? (s.type === "entity" ? 0.3 : 0.7);
+          return s.y + (t.y - s.y) * p + (d.labelDy ?? -10);
+        })
+        .text((d) => d.label);
+
+      // ── Pan / zoom ──
+      let scale = 1,
+        originX = 0,
+        originY = 0;
+      const ZOOM_STEP = 0.15,
+        MIN_SCALE = 0.2,
+        MAX_SCALE = 4;
+      const canvas = document.getElementById("canvas");
+      const diagram = document.getElementById("diagram");
+
+      function applyTransform() {
+        diagram.style.transform = `translate(calc(-50% + ${originX}px), calc(-50% + ${originY}px)) scale(${scale})`;
+      }
+
+      function resetView() {
+        scale = 1;
+        originX = 0;
+        originY = 0;
+        applyTransform();
+      }
+
+      function zoomAt(delta, clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const cx = clientX - rect.left - rect.width / 2;
+        const cy = clientY - rect.top - rect.height / 2;
+        const newScale = Math.min(
+          MAX_SCALE,
+          Math.max(MIN_SCALE, scale + delta),
+        );
+        const ratio = newScale / scale;
+        originX = cx + (originX - cx) * ratio;
+        originY = cy + (originY - cy) * ratio;
+        scale = newScale;
+        applyTransform();
+      }
+
+      canvas.addEventListener(
+        "wheel",
+        (e) => {
+          e.preventDefault();
+          zoomAt(e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP, e.clientX, e.clientY);
+        },
+        { passive: false },
+      );
+
+      let dragging = false,
+        dragStartX = 0,
+        dragStartY = 0,
+        originAtDragX = 0,
+        originAtDragY = 0;
+      canvas.addEventListener("mousedown", (e) => {
+        dragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        originAtDragX = originX;
+        originAtDragY = originY;
+        canvas.classList.add("grabbing");
+      });
+      window.addEventListener("mousemove", (e) => {
+        if (!dragging) return;
+        originX = originAtDragX + (e.clientX - dragStartX);
+        originY = originAtDragY + (e.clientY - dragStartY);
+        applyTransform();
+      });
+      window.addEventListener("mouseup", () => {
+        dragging = false;
+        canvas.classList.remove("grabbing");
+      });
+
+      document.getElementById("zoom-in-btn").addEventListener("click", () => {
+        const r = canvas.getBoundingClientRect();
+        zoomAt(ZOOM_STEP, r.left + r.width / 2, r.top + r.height / 2);
+      });
+      document.getElementById("zoom-out-btn").addEventListener("click", () => {
+        const r = canvas.getBoundingClientRect();
+        zoomAt(-ZOOM_STEP, r.left + r.width / 2, r.top + r.height / 2);
+      });
+      document.getElementById("reset-btn").addEventListener("click", resetView);
+    </script>
+  </body>
+</html>

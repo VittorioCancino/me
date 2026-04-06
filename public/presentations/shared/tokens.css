@@ -1,0 +1,12 @@
+:root {
+  /* ── Type scale ── */
+  --text-display:     3.8rem;   /* h1 — slide titles        */
+  --text-heading:     2.6rem;   /* h2 — section titles      */
+  --text-subheading:  1.7rem;   /* h3                       */
+  --text-body:        1.37rem;  /* default paragraph        */
+  --text-card:        1rem;     /* text inside cards        */
+  --text-case-study:  1.5rem;   /* case study body text     */
+  --text-muted:       1.3rem;   /* subtitles, muted lines   */
+  --text-label:       0.65rem;  /* pill labels              */
+  --text-small:       0.85rem;  /* table text, fine print   */
+}
