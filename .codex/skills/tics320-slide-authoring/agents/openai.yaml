@@ -1,0 +1,3 @@
+display_name: TICS320 Slide Authoring
+short_description: Maintains TICS320 Reveal decks, ER pages, and gallery wrappers in this repo.
+default_prompt: Update TICS320 practicum or exercise materials following the repo slide-authoring standard.

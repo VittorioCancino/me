@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ER Diagram — Workforce and Project Management</title>
+    <title>ER Diagram — University Enrollment</title>
     <style>
       :root {
         --accent: #7c3aed;
@@ -32,6 +32,14 @@
         font-family: ui-sans-serif, system-ui, sans-serif;
       }
 
+      body.embedded #topbar {
+        display: none;
+      }
+      body.embedded #canvas {
+        top: 0;
+      }
+
+      /* ── Top bar ── */
       #topbar {
         position: fixed;
         top: 0;
@@ -46,18 +54,11 @@
         padding: 0 1.25rem;
         z-index: 100;
       }
-
       #topbar-left {
         display: flex;
         align-items: center;
         gap: 1rem;
       }
-      #topbar-right {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
       #back-btn {
         display: flex;
         align-items: center;
@@ -76,20 +77,22 @@
           border-color 0.15s,
           background 0.15s;
       }
-
       #back-btn:hover {
         color: var(--accent-light);
         border-color: var(--accent);
         background: var(--accent-dim);
       }
-
       #topbar h1 {
         font-size: 0.8rem;
         font-weight: 600;
         color: #c9d1d9;
         letter-spacing: -0.01em;
       }
-
+      #topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
       .ctrl-btn {
         display: flex;
         align-items: center;
@@ -107,19 +110,18 @@
           border-color 0.15s,
           background 0.15s;
       }
-
       .ctrl-btn:hover {
         color: var(--accent-light);
         border-color: var(--accent);
         background: var(--accent-dim);
       }
-
       #hint {
         font-size: 0.68rem;
         color: var(--muted);
         margin-left: 0.5rem;
       }
 
+      /* ── Canvas ── */
       #canvas {
         position: fixed;
         top: 52px;
@@ -129,7 +131,6 @@
         overflow: hidden;
         cursor: grab;
       }
-
       #canvas.grabbing {
         cursor: grabbing;
       }
@@ -141,7 +142,6 @@
         transform-origin: center center;
         transform: translate(-50%, -50%);
       }
-
       #diagram svg {
         display: block;
       }
@@ -150,7 +150,7 @@
   <body>
     <div id="topbar">
       <div id="topbar-left">
-        <a href="index.html#/30" id="back-btn">
+        <a href="index.html#/8" id="back-btn">
           <svg
             width="13"
             height="13"
@@ -165,7 +165,7 @@
           </svg>
           Back to slides
         </a>
-        <h1>ER Diagram — Corporate Project and Workforce Management System</h1>
+        <h1>ER Diagram — University Enrollment Management System</h1>
       </div>
       <div id="topbar-right">
         <span id="hint">Scroll to zoom · Drag to pan</span>
@@ -181,247 +181,171 @@
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
     <script>
+      if (window.frameElement?.name === "er-gallery-frame") {
+        document.body.classList.add("embedded");
+      }
+
       const nodes = [
-        { id: "DEPARTMENT", type: "entity", x: 1120, y: 230 },
-        { id: "EMPLOYEE", type: "entity", x: 760, y: 360 },
-        { id: "PROJECT", type: "entity", x: 1480, y: 360 },
-
-        { id: "employee_isa", type: "isa", x: 760, y: 550 },
-        { id: "MANAGER", type: "entity", x: 520, y: 780 },
-        { id: "TEAM_LEADER", type: "entity", x: 760, y: 780 },
-        { id: "SPECIALIST", type: "entity", x: 1000, y: 780 },
-
-        { id: "employs", type: "rel", x: 940, y: 270 },
-        { id: "oversees", type: "rel", x: 1300, y: 270 },
-        { id: "works_on", type: "rel", x: 1115, y: 480 },
-        { id: "supervises", type: "rel", x: 500, y: 360 },
-        { id: "depends_on", type: "rel", x: 1690, y: 360 },
-
-        // Department attrs
+        // Entities
+        { id: "STUDENT", type: "entity", x: 150, y: 450 },
+        { id: "COURSE_OFFERING", type: "entity", x: 700, y: 450 },
+        { id: "COURSE", type: "entity", x: 1050, y: 250 },
+        { id: "SEMESTER", type: "entity", x: 1050, y: 650 },
+        { id: "PROFESSOR", type: "entity", x: 150, y: 750 },
+        // Relationships
+        { id: "enrolls", type: "rel", x: 425, y: 450 },
+        { id: "of", type: "rel", x: 875, y: 350 },
+        { id: "occurs_in", type: "rel", x: 875, y: 550 },
+        { id: "teaches", type: "rel", x: 425, y: 650 },
+        // enrolls attributes (relationship attributes)
+        { id: "grade", type: "attr", x: 370, y: 560, label: "grade" },
         {
-          id: "department_id",
+          id: "enrollment_date",
+          type: "attr",
+          x: 510,
+          y: 525,
+          label: "enrollment_date",
+        },
+        // STUDENT attributes
+        {
+          id: "student_id",
           type: "key-attr",
-          x: 1010,
-          y: 160,
-          label: "department_id",
+          x: 65,
+          y: 315,
+          label: "student_id",
         },
-        { id: "department_name", type: "attr", x: 1130, y: 130, label: "name" },
+        { id: "s_name", type: "attr", x: 155, y: 285, label: "name" },
+        { id: "s_email", type: "attr", x: 265, y: 310, label: "email" },
+        // PROFESSOR attributes
         {
-          id: "department_loc",
-          type: "attr",
-          x: 1250,
-          y: 160,
-          label: "location",
-        },
-
-        // Employee attrs
-        {
-          id: "employee_id",
+          id: "professor_id",
           type: "key-attr",
-          x: 620,
-          y: 210,
-          label: "employee_id",
+          x: 80,
+          y: 860,
+          label: "professor_id",
         },
-        { id: "employee_name", type: "attr", x: 760, y: 180, label: "name" },
-        { id: "employee_email", type: "attr", x: 900, y: 210, label: "email" },
-        { id: "employee_phone", type: "attr", x: 650, y: 480, label: "phone" },
-        { id: "hire_date", type: "attr", x: 875, y: 480, label: "hire_date" },
-
-        // Project attrs
+        { id: "p_name", type: "attr", x: 155, y: 895, label: "name" },
+        { id: "p_email", type: "attr", x: 265, y: 870, label: "email" },
+        // COURSE_OFFERING attributes
         {
-          id: "project_id",
+          id: "offering_id",
           type: "key-attr",
-          x: 1340,
-          y: 210,
-          label: "project_id",
+          x: 615,
+          y: 320,
+          label: "offering_id",
         },
-        { id: "project_name", type: "attr", x: 1480, y: 175, label: "name" },
+        { id: "co_section", type: "attr", x: 740, y: 305, label: "section" },
+        // COURSE attributes
         {
-          id: "project_start",
-          type: "attr",
-          x: 1615,
-          y: 210,
-          label: "start_date",
+          id: "course_id",
+          type: "key-attr",
+          x: 950,
+          y: 120,
+          label: "course_id",
         },
-        { id: "project_end", type: "attr", x: 1360, y: 480, label: "end_date" },
+        { id: "c_title", type: "attr", x: 1060, y: 95, label: "title" },
+        // SEMESTER attributes
         {
-          id: "project_budget",
-          type: "attr",
-          x: 1590,
-          y: 480,
-          label: "budget",
+          id: "semester_id",
+          type: "key-attr",
+          x: 950,
+          y: 760,
+          label: "semester_id",
         },
-
-        // Subtype attrs
-        {
-          id: "management_level",
-          type: "attr",
-          x: 430,
-          y: 910,
-          label: "management_level",
-        },
-        { id: "lead_area", type: "attr", x: 760, y: 920, label: "lead_area" },
-        { id: "specialty", type: "attr", x: 1095, y: 910, label: "specialty" },
-
-        // Relationship attrs
-        {
-          id: "assigned_hours",
-          type: "attr",
-          x: 1015,
-          y: 630,
-          label: "assigned_hours",
-        },
-        {
-          id: "role_in_project",
-          type: "attr",
-          x: 1205,
-          y: 635,
-          label: "role_in_project",
-        },
-        {
-          id: "dependency_type",
-          type: "attr",
-          x: 1810,
-          y: 500,
-          label: "dependency_type",
-        },
+        { id: "sem_name", type: "attr", x: 1060, y: 785, label: "name" },
       ];
 
       const links = [
-        { source: "DEPARTMENT", target: "department_id" },
-        { source: "DEPARTMENT", target: "department_name" },
-        { source: "DEPARTMENT", target: "department_loc" },
-
-        { source: "EMPLOYEE", target: "employee_id" },
-        { source: "EMPLOYEE", target: "employee_name" },
-        { source: "EMPLOYEE", target: "employee_email" },
-        { source: "EMPLOYEE", target: "employee_phone" },
-        { source: "EMPLOYEE", target: "hire_date" },
-
-        { source: "PROJECT", target: "project_id" },
-        { source: "PROJECT", target: "project_name" },
-        { source: "PROJECT", target: "project_start" },
-        { source: "PROJECT", target: "project_end" },
-        { source: "PROJECT", target: "project_budget" },
-
-        { source: "MANAGER", target: "management_level" },
-        { source: "TEAM_LEADER", target: "lead_area" },
-        { source: "SPECIALIST", target: "specialty" },
-
-        { source: "works_on", target: "assigned_hours" },
-        { source: "works_on", target: "role_in_project" },
-        { source: "depends_on", target: "dependency_type" },
-
-        { source: "EMPLOYEE", target: "employee_isa" },
-        { source: "employee_isa", target: "MANAGER" },
-        { source: "employee_isa", target: "TEAM_LEADER" },
-        { source: "employee_isa", target: "SPECIALIST" },
-
+        // enrolls relationship attributes
+        { source: "enrolls", target: "grade" },
+        { source: "enrolls", target: "enrollment_date" },
+        // STUDENT attributes
+        { source: "STUDENT", target: "student_id" },
+        { source: "STUDENT", target: "s_name" },
+        { source: "STUDENT", target: "s_email" },
+        // PROFESSOR attributes
+        { source: "PROFESSOR", target: "professor_id" },
+        { source: "PROFESSOR", target: "p_name" },
+        { source: "PROFESSOR", target: "p_email" },
+        // COURSE_OFFERING attributes
+        { source: "COURSE_OFFERING", target: "offering_id" },
+        { source: "COURSE_OFFERING", target: "co_section" },
+        // COURSE attributes
+        { source: "COURSE", target: "course_id" },
+        { source: "COURSE", target: "c_title" },
+        // SEMESTER attributes
+        { source: "SEMESTER", target: "semester_id" },
+        { source: "SEMESTER", target: "sem_name" },
+        // Relationships
         {
-          source: "DEPARTMENT",
-          target: "employs",
-          label: "(1,N)",
-          labelPos: 0.3,
+          source: "STUDENT",
+          target: "enrolls",
+          label: "(0,N)",
+          labelPos: 0.28,
           labelDx: 0,
+          labelDy: -4,
+        },
+        {
+          source: "enrolls",
+          target: "COURSE_OFFERING",
+          label: "(0,N)",
+          labelPos: 0.72,
+          labelDx: 0,
+          labelDy: -4,
+        },
+        {
+          source: "COURSE_OFFERING",
+          target: "of",
+          label: "(1,N)",
+          labelPos: 0.26,
+          labelDx: -18,
           labelDy: 0,
         },
         {
-          source: "employs",
-          target: "EMPLOYEE",
+          source: "of",
+          target: "COURSE",
           label: "(1,1)",
           labelPos: 0.72,
-          labelDx: 0,
-          labelDy: 0,
-        },
-
-        {
-          source: "DEPARTMENT",
-          target: "oversees",
-          label: "(0,N)",
-          labelPos: 0.3,
-          labelDx: 0,
-          labelDy: 0,
+          labelDx: 12,
+          labelDy: 10,
         },
         {
-          source: "oversees",
-          target: "PROJECT",
+          source: "COURSE_OFFERING",
+          target: "occurs_in",
+          label: "(1,N)",
+          labelPos: 0.26,
+          labelDx: -15,
+          labelDy: 8,
+        },
+        {
+          source: "occurs_in",
+          target: "SEMESTER",
           label: "(1,1)",
           labelPos: 0.72,
-          labelDx: 0,
-          labelDy: 0,
-        },
-
-        {
-          source: "EMPLOYEE",
-          target: "works_on",
-          label: "(0,N)",
-          labelPos: 0.34,
-          labelDx: 0,
-          labelDy: 0,
+          labelDx: 20,
+          labelDy: 2,
         },
         {
-          source: "works_on",
-          target: "PROJECT",
+          source: "PROFESSOR",
+          target: "teaches",
           label: "(1,N)",
-          labelPos: 0.72,
-          labelDx: 0,
+          labelPos: 0.28,
+          labelDx: -20,
           labelDy: 0,
         },
-
         {
-          source: "EMPLOYEE",
-          target: "supervises",
-          label: "(0,N)",
-          labelPos: 0.34,
-          labelDx: 0,
-          labelDy: 0,
-          x1: 684,
-          y1: 336,
-          x2: 500,
-          y2: 330,
-        },
-        {
-          source: "supervises",
-          target: "EMPLOYEE",
-          label: "(0,1)",
-          labelPos: 0.72,
-          labelDx: 0,
-          labelDy: 0,
-          x1: 500,
-          y1: 390,
-          x2: 684,
-          y2: 384,
-        },
-
-        {
-          source: "PROJECT",
-          target: "depends_on",
-          label: "(0,N)",
-          labelPos: 0.34,
-          labelDx: 0,
-          labelDy: 0,
-          x1: 1556,
-          y1: 336,
-          x2: 1690,
-          y2: 330,
-        },
-        {
-          source: "depends_on",
-          target: "PROJECT",
-          label: "(0,N)",
-          labelPos: 0.72,
-          labelDx: 0,
-          labelDy: 0,
-          x1: 1690,
-          y1: 390,
-          x2: 1556,
-          y2: 384,
+          source: "teaches",
+          target: "COURSE_OFFERING",
+          label: "(1,1)",
+          labelPos: 0.7,
+          labelDx: 20,
+          labelDy: -26,
         },
       ];
 
-      const W = 2700,
-        H = 1320;
-      const nodeMap = new Map(nodes.map((node) => [node.id, node]));
+      const W = 1400,
+        H = 950;
+      const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
       const svg = d3
         .select("#diagram")
@@ -431,6 +355,7 @@
 
       const g = svg.append("g");
 
+      // Links
       g.append("g")
         .selectAll("line")
         .data(links)
@@ -438,11 +363,12 @@
         .append("line")
         .attr("stroke", "#848d97")
         .attr("stroke-width", 1.2)
-        .attr("x1", (d) => d.x1 ?? nodeMap.get(d.source).x)
-        .attr("y1", (d) => d.y1 ?? nodeMap.get(d.source).y)
-        .attr("x2", (d) => d.x2 ?? nodeMap.get(d.target).x)
-        .attr("y2", (d) => d.y2 ?? nodeMap.get(d.target).y);
+        .attr("x1", (d) => nodeMap.get(d.source).x)
+        .attr("y1", (d) => nodeMap.get(d.source).y)
+        .attr("x2", (d) => nodeMap.get(d.target).x)
+        .attr("y2", (d) => nodeMap.get(d.target).y);
 
+      // Nodes
       const nodeSel = g
         .append("g")
         .selectAll("g")
@@ -454,10 +380,10 @@
       const entities = nodeSel.filter((d) => d.type === "entity");
       entities
         .append("rect")
-        .attr("x", -78)
-        .attr("y", -24)
-        .attr("width", 156)
-        .attr("height", 48)
+        .attr("x", -62)
+        .attr("y", -22)
+        .attr("width", 124)
+        .attr("height", 44)
         .attr("rx", 2)
         .attr("fill", "#1f2937")
         .attr("stroke", "#7c3aed")
@@ -470,12 +396,12 @@
         .attr("font-size", 13)
         .attr("font-weight", 700)
         .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
-        .text((d) => d.label ?? d.id);
+        .text((d) => d.id);
 
       const rels = nodeSel.filter((d) => d.type === "rel");
       rels
         .append("polygon")
-        .attr("points", "0,-30 64,0 0,30 -64,0")
+        .attr("points", "0,-28 58,0 0,28 -58,0")
         .attr("fill", "#2d1b6b")
         .attr("stroke", "#a78bfa")
         .attr("stroke-width", 1.5);
@@ -488,27 +414,10 @@
         .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
         .text((d) => d.id);
 
-      const isaNodes = nodeSel.filter((d) => d.type === "isa");
-      isaNodes
-        .append("polygon")
-        .attr("points", "0,-36 44,34 -44,34")
-        .attr("fill", "#6d28d9")
-        .attr("stroke", "#c4b5fd")
-        .attr("stroke-width", 1.5);
-      isaNodes
-        .append("text")
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")
-        .attr("y", 10)
-        .attr("fill", "#f5f3ff")
-        .attr("font-size", 12)
-        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
-        .text("IsA");
-
       const keyAttrs = nodeSel.filter((d) => d.type === "key-attr");
       keyAttrs
         .append("ellipse")
-        .attr("rx", 58)
+        .attr("rx", 52)
         .attr("ry", 20)
         .attr("fill", "#0d1117")
         .attr("stroke", "#a78bfa")
@@ -524,8 +433,8 @@
         .text((d) => d.label);
       keyAttrs
         .append("line")
-        .attr("x1", (d) => -Math.min(d.label.length * 3.0, 50))
-        .attr("x2", (d) => Math.min(d.label.length * 3.0, 50))
+        .attr("x1", (d) => -Math.min(d.label.length * 3.0, 44))
+        .attr("x2", (d) => Math.min(d.label.length * 3.0, 44))
         .attr("y1", 5)
         .attr("y2", 5)
         .attr("stroke", "#c9d1d9")
@@ -534,7 +443,7 @@
       const attrs = nodeSel.filter((d) => d.type === "attr");
       attrs
         .append("ellipse")
-        .attr("rx", 56)
+        .attr("rx", 48)
         .attr("ry", 18)
         .attr("fill", "#0d1117")
         .attr("stroke", "#848d97")
@@ -548,9 +457,10 @@
         .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
         .text((d) => d.label);
 
+      // Cardinality labels — rendered last
       g.append("g")
         .selectAll("text")
-        .data(links.filter((link) => link.label))
+        .data(links.filter((l) => l.label))
         .enter()
         .append("text")
         .attr("fill", "#a78bfa")
@@ -559,25 +469,26 @@
         .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
         .attr("text-anchor", "middle")
         .attr("x", (d) => {
-          const source = nodeMap.get(d.source);
-          const target = nodeMap.get(d.target);
-          const pos = d.labelPos ?? (source.type === "entity" ? 0.3 : 0.7);
-          return source.x + (target.x - source.x) * pos + (d.labelDx ?? 0);
+          const s = nodeMap.get(d.source),
+            t = nodeMap.get(d.target);
+          const p = d.labelPos ?? (s.type === "entity" ? 0.3 : 0.7);
+          return s.x + (t.x - s.x) * p + (d.labelDx ?? 0);
         })
         .attr("y", (d) => {
-          const source = nodeMap.get(d.source);
-          const target = nodeMap.get(d.target);
-          const pos = d.labelPos ?? (source.type === "entity" ? 0.3 : 0.7);
-          return source.y + (target.y - source.y) * pos + (d.labelDy ?? -10);
+          const s = nodeMap.get(d.source),
+            t = nodeMap.get(d.target);
+          const p = d.labelPos ?? (s.type === "entity" ? 0.3 : 0.7);
+          return s.y + (t.y - s.y) * p + (d.labelDy ?? -10);
         })
         .text((d) => d.label);
 
-      let scale = 1;
-      let originX = 0;
-      let originY = 0;
-      const ZOOM_STEP = 0.15;
-      const MIN_SCALE = 0.2;
-      const MAX_SCALE = 4;
+      // ── Pan / zoom ──
+      let scale = 1,
+        originX = 0,
+        originY = 0;
+      const ZOOM_STEP = 0.15,
+        MIN_SCALE = 0.2,
+        MAX_SCALE = 4;
       const canvas = document.getElementById("canvas");
       const diagram = document.getElementById("diagram");
 
@@ -609,62 +520,45 @@
 
       canvas.addEventListener(
         "wheel",
-        (event) => {
-          event.preventDefault();
-          zoomAt(
-            event.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP,
-            event.clientX,
-            event.clientY,
-          );
+        (e) => {
+          e.preventDefault();
+          zoomAt(e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP, e.clientX, e.clientY);
         },
         { passive: false },
       );
 
-      let dragging = false;
-      let dragStartX = 0;
-      let dragStartY = 0;
-      let originAtDragX = 0;
-      let originAtDragY = 0;
-
-      canvas.addEventListener("mousedown", (event) => {
+      let dragging = false,
+        dragStartX = 0,
+        dragStartY = 0,
+        originAtDragX = 0,
+        originAtDragY = 0;
+      canvas.addEventListener("mousedown", (e) => {
         dragging = true;
-        dragStartX = event.clientX;
-        dragStartY = event.clientY;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
         originAtDragX = originX;
         originAtDragY = originY;
         canvas.classList.add("grabbing");
       });
-
-      window.addEventListener("mousemove", (event) => {
+      window.addEventListener("mousemove", (e) => {
         if (!dragging) return;
-        originX = originAtDragX + (event.clientX - dragStartX);
-        originY = originAtDragY + (event.clientY - dragStartY);
+        originX = originAtDragX + (e.clientX - dragStartX);
+        originY = originAtDragY + (e.clientY - dragStartY);
         applyTransform();
       });
-
       window.addEventListener("mouseup", () => {
         dragging = false;
         canvas.classList.remove("grabbing");
       });
 
       document.getElementById("zoom-in-btn").addEventListener("click", () => {
-        const rect = canvas.getBoundingClientRect();
-        zoomAt(
-          ZOOM_STEP,
-          rect.left + rect.width / 2,
-          rect.top + rect.height / 2,
-        );
+        const r = canvas.getBoundingClientRect();
+        zoomAt(ZOOM_STEP, r.left + r.width / 2, r.top + r.height / 2);
       });
-
       document.getElementById("zoom-out-btn").addEventListener("click", () => {
-        const rect = canvas.getBoundingClientRect();
-        zoomAt(
-          -ZOOM_STEP,
-          rect.left + rect.width / 2,
-          rect.top + rect.height / 2,
-        );
+        const r = canvas.getBoundingClientRect();
+        zoomAt(-ZOOM_STEP, r.left + r.width / 2, r.top + r.height / 2);
       });
-
       document.getElementById("reset-btn").addEventListener("click", resetView);
     </script>
   </body>

@@ -32,6 +32,13 @@
         font-family: ui-sans-serif, system-ui, sans-serif;
       }
 
+      body.embedded #topbar {
+        display: none;
+      }
+      body.embedded #canvas {
+        top: 0;
+      }
+
       #topbar {
         position: fixed;
         top: 0;
@@ -181,6 +188,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
     <script>
+      if (window.frameElement?.name === "er-gallery-frame") {
+        document.body.classList.add("embedded");
+      }
+
       const nodes = [
         { id: "PATIENT", type: "entity", x: 190, y: 470 },
         { id: "APPOINTMENT", type: "entity", x: 650, y: 470 },

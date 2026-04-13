@@ -114,14 +114,16 @@ export default function TICS320() {
                     >
                       {c.exercises.openExercise} <ExternalLink size={11} />
                     </a>
-                    <a
-                      href={`${BASE}${item.solutionHref}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs text-[#848d97] transition-colors hover:text-[#a78bfa]"
-                    >
-                      {c.exercises.openSolution} <ExternalLink size={11} />
-                    </a>
+                    {item.solutionHref ? (
+                      <a
+                        href={`${BASE}${item.solutionHref}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-xs text-[#848d97] transition-colors hover:text-[#a78bfa]"
+                      >
+                        {c.exercises.openSolution} <ExternalLink size={11} />
+                      </a>
+                    ) : null}
                   </div>
                 </div>
                 <p className="mt-1.5 pl-9 text-xs text-[#848d97]">{item.description}</p>

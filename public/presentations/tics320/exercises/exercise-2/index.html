@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Practicum 2 — TICS320</title>
+    <title>Exercise 2 — TICS320</title>
 
     <link
       rel="stylesheet"
@@ -13,7 +13,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
     />
-    <link rel="stylesheet" href="../../shared/tokens.css" />
+    <link rel="stylesheet" href="../../../shared/tokens.css" />
 
     <style>
       :root {
@@ -479,48 +479,57 @@
         left: 0;
         right: 0;
         height: var(--toggle-h);
-        background: var(--surface);
-        border-top: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         z-index: 101;
-        gap: 0.5rem;
-        transition: background 0.18s;
+        background: transparent;
       }
-      #strip-toggle:hover {
-        background: var(--accent-dim);
-      }
-      #toggle-grip {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-        opacity: 0.4;
-        transition: opacity 0.18s;
-      }
-      #strip-toggle:hover #toggle-grip {
-        opacity: 0.9;
-      }
-      #toggle-grip span {
-        display: block;
-        width: 18px;
-        height: 2px;
-        border-radius: 2px;
-        background: var(--muted);
-      }
-      #strip-toggle:hover #toggle-grip span {
-        background: var(--accent-light);
-      }
-      #toggle-chevron {
+      #toggle-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 20px;
+        min-width: 44px;
+        justify-content: center;
+        padding: 0.42rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--surface) 84%, transparent);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
         color: var(--muted);
-        transition: transform var(--transition), color 0.18s;
+        transition:
+          border-color 0.18s,
+          background 0.18s,
+          color 0.18s,
+          transform 0.18s;
+        backdrop-filter: blur(10px);
       }
-      #strip-toggle:hover #toggle-chevron {
+      #strip-toggle:hover #toggle-pill {
         color: var(--accent-light);
+        border-color: color-mix(in srgb, var(--accent) 58%, var(--border));
+        background: color-mix(in srgb, var(--accent-dim) 60%, var(--surface));
+        transform: translateY(-1px);
       }
-      #toggle-chevron.rotated {
-        transform: rotate(180deg);
+      #toggle-pill svg {
+        display: block;
+      }
+      .toggle-icon {
+        width: 18px;
+        height: 18px;
+      }
+      #toggle-open-icon {
+        display: none;
+      }
+      #strip-toggle.is-collapsed #toggle-open-icon {
+        display: block;
+      }
+      #strip-toggle.is-collapsed #toggle-close-icon {
+        display: none;
+      }
+      #strip-toggle:hover #toggle-pill,
+      #strip-toggle:hover #toggle-pill {
+        color: var(--accent-light);
       }
 
       /* ── Filmstrip ── */
@@ -663,7 +672,7 @@
 
         <!-- ① Title -->
         <section data-title-en="Title" data-title-es="Título">
-          <div class="label" data-i18n="s1_label">TICS320 · Practicum 2</div>
+          <div class="label" data-i18n="s1_label">TICS320 · Exercise 2</div>
           <h1 data-i18n="s1_title">ER Diagram<br />Practice</h1>
           <div class="divider"></div>
           <p class="muted">
@@ -785,7 +794,7 @@
           <h2 data-i18n="s9_title">Entity-Relationship Diagram</h2>
           <div class="divider"></div>
           <p class="muted" style="margin-bottom: 2rem" data-i18n="s9_sub">Open the interactive diagram to inspect the proposed solution with zoom and pan controls.</p>
-          <a href="er-solution.html" style="
+          <a href="er-gallery.html?case=university&mode=single" style="
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
@@ -915,7 +924,7 @@
           <h2 data-i18n="s14_title">Clinic ER Diagram</h2>
           <div class="divider"></div>
           <p class="muted" style="margin-bottom: 2rem" data-i18n="s14_sub">Open the page that will host the interactive ER diagram for the clinic case.</p>
-          <a href="clinic-er-solution.html" style="
+          <a href="er-gallery.html?case=clinic&mode=single" style="
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
@@ -1049,7 +1058,7 @@
           <h2 data-i18n="s19_title">Event ER Diagram</h2>
           <div class="divider"></div>
           <p class="muted" style="margin-bottom: 2rem" data-i18n="s19_sub">Open the page that will host the interactive ER diagram for the event case.</p>
-          <a href="event-er-solution.html" style="
+          <a href="er-gallery.html?case=event&mode=single" style="
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
@@ -1204,7 +1213,7 @@
           <h2 data-i18n="s25_title">Dealership ER Diagram</h2>
           <div class="divider"></div>
           <p class="muted" style="margin-bottom: 2rem" data-i18n="s25_sub">Open the page that will host the interactive ER diagram for the dealership case.</p>
-          <a href="dealership-er-solution.html" style="
+          <a href="er-gallery.html?case=dealership&mode=single" style="
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
@@ -1359,7 +1368,7 @@
           <h2 data-i18n="s31_title">Workforce ER Diagram</h2>
           <div class="divider"></div>
           <p class="muted" style="margin-bottom: 2rem" data-i18n="s31_sub">Open the page that will host the interactive ER diagram for the workforce case.</p>
-          <a href="workforce-er-solution.html" style="
+          <a href="er-gallery.html?case=workforce&mode=single" style="
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
@@ -1382,10 +1391,18 @@
 
     <!-- Filmstrip toggle -->
     <div id="strip-toggle">
-      <div id="toggle-grip">
-        <span></span><span></span><span></span>
+      <div id="toggle-pill">
+        <svg id="toggle-close-icon" class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="5" y="4.5" width="14" height="5" rx="1.5"></rect>
+          <path d="M6 13.5l6 4 6-4"></path>
+          <path d="M6 17.5l6 4 6-4"></path>
+        </svg>
+        <svg id="toggle-open-icon" class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 18.5l6-4 6 4"></path>
+          <path d="M6 14.5l6-4 6 4"></path>
+          <rect x="5" y="4.5" width="14" height="5" rx="1.5"></rect>
+        </svg>
       </div>
-      <svg id="toggle-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </div>
     <div id="filmstrip"></div>
 
@@ -1394,7 +1411,7 @@
       // ── i18n ──
       const i18n = {
         en: {
-          s1_label: "TICS320 · Practicum 2",
+          s1_label: "TICS320 · Exercise 2",
           s1_title: "ER Diagram<br />Practice",
 
           s2_label: "Case Study",
@@ -1709,7 +1726,7 @@
           s31_open: "Open ER Diagram",
         },
         es: {
-          s1_label: "TICS320 · Practicum 2",
+          s1_label: "TICS320 · Ejercicio 2",
           s1_title: "Práctica de<br />Diagramas ER",
 
           s2_label: "Caso de Estudio",
@@ -2130,15 +2147,15 @@
       let collapsed = false;
       const filmstrip = document.getElementById("filmstrip");
       const viewport = document.querySelector(".reveal-viewport");
-      const chevron = document.getElementById("toggle-chevron");
+      const stripToggle = document.getElementById("strip-toggle");
       const arrows = document.querySelectorAll(".nav-arrow");
 
-      document.getElementById("strip-toggle").addEventListener("click", () => {
+      stripToggle.addEventListener("click", () => {
         collapsed = !collapsed;
         filmstrip.classList.toggle("collapsed", collapsed);
         viewport.classList.toggle("strip-collapsed", collapsed);
         arrows.forEach((a) => a.classList.toggle("strip-collapsed", collapsed));
-        chevron.classList.toggle("rotated", collapsed);
+        stripToggle.classList.toggle("is-collapsed", collapsed);
         setTimeout(() => Reveal.layout(), 320);
       });
     </script>

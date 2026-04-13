@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ER Diagram — University Enrollment</title>
+    <title>ER Diagram — MarBrisa Disco</title>
     <style>
       :root {
         --accent: #7c3aed;
@@ -32,7 +32,6 @@
         font-family: ui-sans-serif, system-ui, sans-serif;
       }
 
-      /* ── Top bar ── */
       #topbar {
         position: fixed;
         top: 0;
@@ -114,7 +113,6 @@
         margin-left: 0.5rem;
       }
 
-      /* ── Canvas ── */
       #canvas {
         position: fixed;
         top: 52px;
@@ -143,7 +141,7 @@
   <body>
     <div id="topbar">
       <div id="topbar-left">
-        <a href="index.html#/8" id="back-btn">
+        <a href="index.html#/9" id="back-btn">
           <svg
             width="13"
             height="13"
@@ -158,7 +156,7 @@
           </svg>
           Back to slides
         </a>
-        <h1>ER Diagram — University Enrollment Management System</h1>
+        <h1>ER Diagram — MarBrisa Disco</h1>
       </div>
       <div id="topbar-right">
         <span id="hint">Scroll to zoom · Drag to pan</span>
@@ -175,165 +173,158 @@
     <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
     <script>
       const nodes = [
-        // Entities
-        { id: "STUDENT", type: "entity", x: 150, y: 450 },
-        { id: "COURSE_OFFERING", type: "entity", x: 700, y: 450 },
-        { id: "COURSE", type: "entity", x: 1050, y: 250 },
-        { id: "SEMESTER", type: "entity", x: 1050, y: 650 },
-        { id: "PROFESSOR", type: "entity", x: 150, y: 750 },
-        // Relationships
-        { id: "enrolls", type: "rel", x: 425, y: 450 },
-        { id: "of", type: "rel", x: 875, y: 350 },
-        { id: "occurs_in", type: "rel", x: 875, y: 550 },
-        { id: "teaches", type: "rel", x: 425, y: 650 },
-        // enrolls attributes (relationship attributes)
-        { id: "grade", type: "attr", x: 370, y: 560, label: "grade" },
+        { id: "CUSTOMER", label: "Customer", type: "entity", x: 180, y: 160 },
+        { id: "TICKET", label: "Ticket", type: "entity", x: 520, y: 160 },
+        { id: "EVENT", label: "Event", type: "entity", x: 940, y: 160 },
+        { id: "PURCHASE", label: "Purchase", type: "entity", x: 420, y: 470 },
+        { id: "DRINK", label: "Drink", type: "entity", x: 920, y: 470 },
+
+        { id: "BUYS", label: "buys", type: "rel", x: 350, y: 160 },
+        { id: "BELONGS_TO", label: "belongs to", type: "rel", x: 715, y: 160 },
+        { id: "MAKES", label: "makes", type: "rel", x: 180, y: 470 },
+        { id: "INCLUDES", label: "includes", type: "rel", x: 670, y: 470 },
+
         {
-          id: "enrollment_date",
+          id: "customer_id",
+          label: "customer_id",
+          type: "key-attr",
+          x: 95,
+          y: 80,
+        },
+        { id: "customer_name", label: "name", type: "attr", x: 180, y: 45 },
+        { id: "customer_email", label: "email", type: "attr", x: 290, y: 80 },
+
+        {
+          id: "ticket_id",
+          label: "ticket_id",
+          type: "key-attr",
+          x: 445,
+          y: 80,
+        },
+        { id: "ticket_price", label: "price", type: "attr", x: 520, y: 45 },
+        {
+          id: "purchase_type",
+          label: "purchase_type",
           type: "attr",
-          x: 510,
-          y: 525,
-          label: "enrollment_date",
+          x: 655,
+          y: 80,
         },
-        // STUDENT attributes
+
+        { id: "event_id", label: "event_id", type: "key-attr", x: 865, y: 80 },
+        { id: "event_name", label: "name", type: "attr", x: 940, y: 45 },
+        { id: "event_date", label: "date", type: "attr", x: 1055, y: 80 },
+
         {
-          id: "student_id",
+          id: "purchase_id",
+          label: "purchase_id",
           type: "key-attr",
-          x: 65,
-          y: 315,
-          label: "student_id",
+          x: 320,
+          y: 360,
         },
-        { id: "s_name", type: "attr", x: 155, y: 285, label: "name" },
-        { id: "s_email", type: "attr", x: 265, y: 310, label: "email" },
-        // PROFESSOR attributes
         {
-          id: "professor_id",
-          type: "key-attr",
-          x: 80,
-          y: 860,
-          label: "professor_id",
+          id: "purchase_time",
+          label: "timestamp",
+          type: "attr",
+          x: 500,
+          y: 340,
         },
-        { id: "p_name", type: "attr", x: 155, y: 895, label: "name" },
-        { id: "p_email", type: "attr", x: 265, y: 870, label: "email" },
-        // COURSE_OFFERING attributes
-        {
-          id: "offering_id",
-          type: "key-attr",
-          x: 615,
-          y: 320,
-          label: "offering_id",
-        },
-        { id: "co_section", type: "attr", x: 740, y: 305, label: "section" },
-        // COURSE attributes
-        {
-          id: "course_id",
-          type: "key-attr",
-          x: 950,
-          y: 120,
-          label: "course_id",
-        },
-        { id: "c_title", type: "attr", x: 1060, y: 95, label: "title" },
-        // SEMESTER attributes
-        {
-          id: "semester_id",
-          type: "key-attr",
-          x: 950,
-          y: 760,
-          label: "semester_id",
-        },
-        { id: "sem_name", type: "attr", x: 1060, y: 785, label: "name" },
+
+        { id: "quantity", label: "quantity", type: "attr", x: 670, y: 610 },
+
+        { id: "drink_id", label: "drink_id", type: "key-attr", x: 830, y: 360 },
+        { id: "drink_name", label: "name", type: "attr", x: 920, y: 325 },
+        { id: "drink_price", label: "price", type: "attr", x: 1030, y: 360 },
       ];
 
       const links = [
-        // enrolls relationship attributes
-        { source: "enrolls", target: "grade" },
-        { source: "enrolls", target: "enrollment_date" },
-        // STUDENT attributes
-        { source: "STUDENT", target: "student_id" },
-        { source: "STUDENT", target: "s_name" },
-        { source: "STUDENT", target: "s_email" },
-        // PROFESSOR attributes
-        { source: "PROFESSOR", target: "professor_id" },
-        { source: "PROFESSOR", target: "p_name" },
-        { source: "PROFESSOR", target: "p_email" },
-        // COURSE_OFFERING attributes
-        { source: "COURSE_OFFERING", target: "offering_id" },
-        { source: "COURSE_OFFERING", target: "co_section" },
-        // COURSE attributes
-        { source: "COURSE", target: "course_id" },
-        { source: "COURSE", target: "c_title" },
-        // SEMESTER attributes
-        { source: "SEMESTER", target: "semester_id" },
-        { source: "SEMESTER", target: "sem_name" },
-        // Relationships
+        { source: "CUSTOMER", target: "customer_id" },
+        { source: "CUSTOMER", target: "customer_name" },
+        { source: "CUSTOMER", target: "customer_email" },
+
+        { source: "TICKET", target: "ticket_id" },
+        { source: "TICKET", target: "ticket_price" },
+        { source: "TICKET", target: "purchase_type" },
+
+        { source: "EVENT", target: "event_id" },
+        { source: "EVENT", target: "event_name" },
+        { source: "EVENT", target: "event_date" },
+
+        { source: "PURCHASE", target: "purchase_id" },
+        { source: "PURCHASE", target: "purchase_time" },
+        { source: "INCLUDES", target: "quantity" },
+
+        { source: "DRINK", target: "drink_id" },
+        { source: "DRINK", target: "drink_name" },
+        { source: "DRINK", target: "drink_price" },
+
         {
-          source: "STUDENT",
-          target: "enrolls",
-          label: "(0,N)",
+          source: "CUSTOMER",
+          target: "BUYS",
+          label: "(1,1)",
           labelPos: 0.28,
-          labelDx: 0,
+          labelDx: 38,
           labelDy: -4,
         },
         {
-          source: "enrolls",
-          target: "COURSE_OFFERING",
+          source: "BUYS",
+          target: "TICKET",
           label: "(0,N)",
-          labelPos: 0.72,
-          labelDx: 0,
+          labelPos: 0.74,
+          labelDx: -40,
           labelDy: -4,
         },
         {
-          source: "COURSE_OFFERING",
-          target: "of",
-          label: "(1,N)",
-          labelPos: 0.26,
-          labelDx: -18,
-          labelDy: 0,
+          source: "TICKET",
+          target: "BELONGS_TO",
+          label: "(0,N)",
+          labelPos: 0.3,
+          labelDx: 26,
+          labelDy: -4,
         },
         {
-          source: "of",
-          target: "COURSE",
+          source: "BELONGS_TO",
+          target: "EVENT",
           label: "(1,1)",
           labelPos: 0.72,
-          labelDx: 12,
-          labelDy: 10,
-        },
-        {
-          source: "COURSE_OFFERING",
-          target: "occurs_in",
-          label: "(1,N)",
-          labelPos: 0.26,
-          labelDx: -15,
-          labelDy: 8,
-        },
-        {
-          source: "occurs_in",
-          target: "SEMESTER",
-          label: "(1,1)",
-          labelPos: 0.72,
-          labelDx: 20,
-          labelDy: 2,
-        },
-        {
-          source: "PROFESSOR",
-          target: "teaches",
-          label: "(1,N)",
-          labelPos: 0.28,
           labelDx: -20,
-          labelDy: 0,
+          labelDy: -4,
         },
         {
-          source: "teaches",
-          target: "COURSE_OFFERING",
+          source: "CUSTOMER",
+          target: "MAKES",
           label: "(1,1)",
-          labelPos: 0.7,
-          labelDx: 20,
-          labelDy: -26,
+          labelPos: 0.35,
+          labelDx: -18,
+          labelDy: -74,
+        },
+        {
+          source: "MAKES",
+          target: "PURCHASE",
+          label: "(0,N)",
+          labelPos: 0.76,
+          labelDx: -26,
+          labelDy: -4,
+        },
+        {
+          source: "PURCHASE",
+          target: "INCLUDES",
+          label: "(0,N)",
+          labelPos: 0.34,
+          labelDx: 0,
+          labelDy: -4,
+        },
+        {
+          source: "INCLUDES",
+          target: "DRINK",
+          label: "(1,N)",
+          labelPos: 0.74,
+          labelDx: -20,
+          labelDy: -4,
         },
       ];
 
-      const W = 1400,
-        H = 950;
+      const W = 1320;
+      const H = 920;
       const nodeMap = new Map(nodes.map((n) => [n.id, n]));
 
       const svg = d3
@@ -344,20 +335,26 @@
 
       const g = svg.append("g");
 
-      // Links
-      g.append("g")
-        .selectAll("line")
+      function linkPath(d) {
+        if (d.path) {
+          return d3.line()(d.path);
+        }
+        const s = nodeMap.get(d.source);
+        const t = nodeMap.get(d.target);
+        return `M ${s.x} ${s.y} L ${t.x} ${t.y}`;
+      }
+
+      const edgeGroup = g.append("g");
+      edgeGroup
+        .selectAll("path")
         .data(links)
         .enter()
-        .append("line")
+        .append("path")
+        .attr("d", linkPath)
+        .attr("fill", "none")
         .attr("stroke", "#848d97")
-        .attr("stroke-width", 1.2)
-        .attr("x1", (d) => nodeMap.get(d.source).x)
-        .attr("y1", (d) => nodeMap.get(d.source).y)
-        .attr("x2", (d) => nodeMap.get(d.target).x)
-        .attr("y2", (d) => nodeMap.get(d.target).y);
+        .attr("stroke-width", 1.25);
 
-      // Nodes
       const nodeSel = g
         .append("g")
         .selectAll("g")
@@ -369,9 +366,9 @@
       const entities = nodeSel.filter((d) => d.type === "entity");
       entities
         .append("rect")
-        .attr("x", -62)
+        .attr("x", -68)
         .attr("y", -22)
-        .attr("width", 124)
+        .attr("width", 136)
         .attr("height", 44)
         .attr("rx", 2)
         .attr("fill", "#1f2937")
@@ -384,29 +381,38 @@
         .attr("fill", "#c9d1d9")
         .attr("font-size", 13)
         .attr("font-weight", 700)
-        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
-        .text((d) => d.id);
+        .text((d) => d.label);
 
       const rels = nodeSel.filter((d) => d.type === "rel");
       rels
         .append("polygon")
-        .attr("points", "0,-28 58,0 0,28 -58,0")
+        .attr("points", "0,-28 60,0 0,28 -60,0")
         .attr("fill", "#2d1b6b")
         .attr("stroke", "#a78bfa")
         .attr("stroke-width", 1.5);
-      rels
-        .append("text")
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")
-        .attr("fill", "#c9d1d9")
-        .attr("font-size", 12)
-        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
-        .text((d) => d.id);
+
+      rels.each(function (d) {
+        const group = d3.select(this);
+        const lines = d.label.split(" ");
+        group
+          .selectAll("text")
+          .data(lines)
+          .enter()
+          .append("text")
+          .attr("x", 0)
+          .attr("y", (_, i) => (lines.length === 1 ? 0 : i * 12 - 6))
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("fill", "#c9d1d9")
+          .attr("font-size", 10)
+          .attr("font-weight", 600)
+          .text((line) => line);
+      });
 
       const keyAttrs = nodeSel.filter((d) => d.type === "key-attr");
       keyAttrs
         .append("ellipse")
-        .attr("rx", 52)
+        .attr("rx", 56)
         .attr("ry", 20)
         .attr("fill", "#0d1117")
         .attr("stroke", "#a78bfa")
@@ -418,12 +424,11 @@
         .attr("fill", "#c9d1d9")
         .attr("font-size", 11)
         .attr("y", -1)
-        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
         .text((d) => d.label);
       keyAttrs
         .append("line")
-        .attr("x1", (d) => -Math.min(d.label.length * 3.0, 44))
-        .attr("x2", (d) => Math.min(d.label.length * 3.0, 44))
+        .attr("x1", (d) => -Math.min(d.label.length * 3.1, 48))
+        .attr("x2", (d) => Math.min(d.label.length * 3.1, 48))
         .attr("y1", 5)
         .attr("y2", 5)
         .attr("stroke", "#c9d1d9")
@@ -432,7 +437,7 @@
       const attrs = nodeSel.filter((d) => d.type === "attr");
       attrs
         .append("ellipse")
-        .attr("rx", 48)
+        .attr("rx", 52)
         .attr("ry", 18)
         .attr("fill", "#0d1117")
         .attr("stroke", "#848d97")
@@ -443,10 +448,8 @@
         .attr("dominant-baseline", "middle")
         .attr("fill", "#848d97")
         .attr("font-size", 11)
-        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
         .text((d) => d.label);
 
-      // Cardinality labels — rendered last
       g.append("g")
         .selectAll("text")
         .data(links.filter((l) => l.label))
@@ -455,29 +458,41 @@
         .attr("fill", "#a78bfa")
         .attr("font-size", 12)
         .attr("font-weight", 600)
-        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
         .attr("text-anchor", "middle")
         .attr("x", (d) => {
-          const s = nodeMap.get(d.source),
-            t = nodeMap.get(d.target);
-          const p = d.labelPos ?? (s.type === "entity" ? 0.3 : 0.7);
+          if (d.path) {
+            const pathLen = d.path.length;
+            const p = d.labelPos ?? 0.5;
+            const start = d.path[pathLen - 2];
+            const end = d.path[pathLen - 1];
+            return start[0] + (end[0] - start[0]) * p + (d.labelDx ?? 0);
+          }
+          const s = nodeMap.get(d.source);
+          const t = nodeMap.get(d.target);
+          const p = d.labelPos ?? 0.5;
           return s.x + (t.x - s.x) * p + (d.labelDx ?? 0);
         })
         .attr("y", (d) => {
-          const s = nodeMap.get(d.source),
-            t = nodeMap.get(d.target);
-          const p = d.labelPos ?? (s.type === "entity" ? 0.3 : 0.7);
+          if (d.path) {
+            const pathLen = d.path.length;
+            const p = d.labelPos ?? 0.5;
+            const start = d.path[pathLen - 2];
+            const end = d.path[pathLen - 1];
+            return start[1] + (end[1] - start[1]) * p + (d.labelDy ?? -10);
+          }
+          const s = nodeMap.get(d.source);
+          const t = nodeMap.get(d.target);
+          const p = d.labelPos ?? 0.5;
           return s.y + (t.y - s.y) * p + (d.labelDy ?? -10);
         })
         .text((d) => d.label);
 
-      // ── Pan / zoom ──
-      let scale = 1,
-        originX = 0,
-        originY = 0;
-      const ZOOM_STEP = 0.15,
-        MIN_SCALE = 0.2,
-        MAX_SCALE = 4;
+      let scale = 1;
+      let originX = 0;
+      let originY = 0;
+      const ZOOM_STEP = 0.15;
+      const MIN_SCALE = 0.2;
+      const MAX_SCALE = 4;
       const canvas = document.getElementById("canvas");
       const diagram = document.getElementById("diagram");
 
@@ -516,11 +531,12 @@
         { passive: false },
       );
 
-      let dragging = false,
-        dragStartX = 0,
-        dragStartY = 0,
-        originAtDragX = 0,
-        originAtDragY = 0;
+      let dragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let originAtDragX = 0;
+      let originAtDragY = 0;
+
       canvas.addEventListener("mousedown", (e) => {
         dragging = true;
         dragStartX = e.clientX;
@@ -529,12 +545,14 @@
         originAtDragY = originY;
         canvas.classList.add("grabbing");
       });
+
       window.addEventListener("mousemove", (e) => {
         if (!dragging) return;
         originX = originAtDragX + (e.clientX - dragStartX);
         originY = originAtDragY + (e.clientY - dragStartY);
         applyTransform();
       });
+
       window.addEventListener("mouseup", () => {
         dragging = false;
         canvas.classList.remove("grabbing");
@@ -544,10 +562,12 @@
         const r = canvas.getBoundingClientRect();
         zoomAt(ZOOM_STEP, r.left + r.width / 2, r.top + r.height / 2);
       });
+
       document.getElementById("zoom-out-btn").addEventListener("click", () => {
         const r = canvas.getBoundingClientRect();
         zoomAt(-ZOOM_STEP, r.left + r.width / 2, r.top + r.height / 2);
       });
+
       document.getElementById("reset-btn").addEventListener("click", resetView);
     </script>
   </body>

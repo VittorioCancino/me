@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ER Diagram — Event Management</title>
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+
+      body.embedded #topbar {
+        display: none;
+      }
+      body.embedded #canvas {
+        top: 0;
+      }
+
+      #topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 52px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.25rem;
+        z-index: 100;
+      }
+
+      #topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      #topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      #back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        cursor: pointer;
+        transition:
+          color 0.15s,
+          border-color 0.15s,
+          background 0.15s;
+      }
+
+      #back-btn:hover {
+        color: var(--accent-light);
+        border-color: var(--accent);
+        background: var(--accent-dim);
+      }
+
+      #topbar h1 {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #c9d1d9;
+        letter-spacing: -0.01em;
+      }
+
+      .ctrl-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: var(--muted);
+        padding: 0.3rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        cursor: pointer;
+        transition:
+          color 0.15s,
+          border-color 0.15s,
+          background 0.15s;
+      }
+
+      .ctrl-btn:hover {
+        color: var(--accent-light);
+        border-color: var(--accent);
+        background: var(--accent-dim);
+      }
+
+      #hint {
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-left: 0.5rem;
+      }
+
+      #canvas {
+        position: fixed;
+        top: 52px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        cursor: grab;
+      }
+
+      #canvas.grabbing {
+        cursor: grabbing;
+      }
+
+      #diagram {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: center center;
+        transform: translate(-50%, -50%);
+      }
+
+      #diagram svg {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="topbar">
+      <div id="topbar-left">
+        <a href="index.html#/18" id="back-btn">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          Back to slides
+        </a>
+        <h1>ER Diagram — Event Management System</h1>
+      </div>
+      <div id="topbar-right">
+        <span id="hint">Scroll to zoom · Drag to pan</span>
+        <button class="ctrl-btn" id="zoom-in-btn">+ Zoom in</button>
+        <button class="ctrl-btn" id="zoom-out-btn">− Zoom out</button>
+        <button class="ctrl-btn" id="reset-btn">Reset view</button>
+      </div>
+    </div>
+
+    <div id="canvas">
+      <div id="diagram"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <script>
+      if (window.frameElement?.name === "er-gallery-frame") {
+        document.body.classList.add("embedded");
+      }
+
+      const nodes = [
+        { id: "EVENT", type: "entity", x: 210, y: 310 },
+        { id: "SESSION", type: "entity", x: 720, y: 310 },
+        { id: "SPEAKER", type: "entity", x: 1240, y: 230 },
+        { id: "ROOM", type: "entity", x: 1240, y: 510 },
+        { id: "ATTENDEE", type: "entity", x: 210, y: 760 },
+
+        { id: "includes", type: "rel", x: 465, y: 310 },
+        { id: "participates_in", type: "rel", x: 980, y: 270 },
+        { id: "held_in", type: "rel", x: 980, y: 450 },
+        { id: "registers_for", type: "rel", x: 210, y: 550 },
+
+        { id: "speaker_role", type: "attr", x: 1035, y: 140, label: "role" },
+        {
+          id: "registration_date",
+          type: "attr",
+          x: 90,
+          y: 660,
+          label: "registration_date",
+        },
+        {
+          id: "registration_status",
+          type: "attr",
+          x: 340,
+          y: 670,
+          label: "status",
+        },
+
+        { id: "event_id", type: "key-attr", x: 130, y: 165, label: "event_id" },
+        { id: "event_name", type: "attr", x: 220, y: 135, label: "name" },
+
+        {
+          id: "session_id",
+          type: "key-attr",
+          x: 615,
+          y: 150,
+          label: "session_id",
+        },
+        { id: "session_title", type: "attr", x: 730, y: 120, label: "title" },
+        { id: "session_date", type: "attr", x: 835, y: 145, label: "date" },
+        { id: "session_time", type: "attr", x: 865, y: 430, label: "time" },
+
+        {
+          id: "speaker_id",
+          type: "key-attr",
+          x: 1170,
+          y: 95,
+          label: "speaker_id",
+        },
+        { id: "speaker_name", type: "attr", x: 1260, y: 65, label: "name" },
+
+        { id: "room_id", type: "key-attr", x: 1165, y: 650, label: "room_id" },
+        { id: "room_name", type: "attr", x: 1270, y: 675, label: "name" },
+
+        {
+          id: "attendee_id",
+          type: "key-attr",
+          x: 120,
+          y: 905,
+          label: "attendee_id",
+        },
+        { id: "attendee_name", type: "attr", x: 230, y: 930, label: "name" },
+      ];
+
+      const links = [
+        { source: "EVENT", target: "event_id" },
+        { source: "EVENT", target: "event_name" },
+
+        { source: "SESSION", target: "session_id" },
+        { source: "SESSION", target: "session_title" },
+        { source: "SESSION", target: "session_date" },
+        { source: "SESSION", target: "session_time" },
+
+        { source: "SPEAKER", target: "speaker_id" },
+        { source: "SPEAKER", target: "speaker_name" },
+
+        { source: "ROOM", target: "room_id" },
+        { source: "ROOM", target: "room_name" },
+
+        { source: "ATTENDEE", target: "attendee_id" },
+        { source: "ATTENDEE", target: "attendee_name" },
+
+        { source: "participates_in", target: "speaker_role" },
+        { source: "registers_for", target: "registration_date" },
+        { source: "registers_for", target: "registration_status" },
+
+        {
+          source: "EVENT",
+          target: "includes",
+          label: "(1,1)",
+          labelPos: 0.28,
+          labelDx: 18,
+          labelDy: -4,
+        },
+        {
+          source: "includes",
+          target: "SESSION",
+          label: "(1,N)",
+          labelPos: 0.72,
+          labelDx: -18,
+          labelDy: -4,
+        },
+
+        {
+          source: "SESSION",
+          target: "participates_in",
+          label: "(1,N)",
+          labelPos: 0.34,
+          labelDx: 0,
+          labelDy: -4,
+        },
+        {
+          source: "participates_in",
+          target: "SPEAKER",
+          label: "(0,N)",
+          labelPos: 0.72,
+          labelDx: -16,
+          labelDy: -4,
+        },
+
+        {
+          source: "SESSION",
+          target: "held_in",
+          label: "(1,1)",
+          labelPos: 0.34,
+          labelDx: -10,
+          labelDy: -14,
+        },
+        {
+          source: "held_in",
+          target: "ROOM",
+          label: "(0,N)",
+          labelPos: 0.72,
+          labelDx: -14,
+          labelDy: -8,
+        },
+
+        {
+          source: "ATTENDEE",
+          target: "registers_for",
+          label: "(0,N)",
+          labelPos: 0.28,
+          labelDx: -16,
+          labelDy: 30,
+        },
+        {
+          source: "registers_for",
+          target: "EVENT",
+          label: "(0,N)",
+          labelPos: 0.72,
+          labelDx: -16,
+          labelDy: -30,
+        },
+      ];
+
+      const W = 1500,
+        H = 1040;
+      const nodeMap = new Map(nodes.map((node) => [node.id, node]));
+
+      const svg = d3
+        .select("#diagram")
+        .append("svg")
+        .attr("width", W)
+        .attr("height", H);
+
+      const g = svg.append("g");
+
+      g.append("g")
+        .selectAll("line")
+        .data(links)
+        .enter()
+        .append("line")
+        .attr("stroke", "#848d97")
+        .attr("stroke-width", 1.2)
+        .attr("x1", (d) => nodeMap.get(d.source).x)
+        .attr("y1", (d) => nodeMap.get(d.source).y)
+        .attr("x2", (d) => nodeMap.get(d.target).x)
+        .attr("y2", (d) => nodeMap.get(d.target).y);
+
+      const nodeSel = g
+        .append("g")
+        .selectAll("g")
+        .data(nodes)
+        .enter()
+        .append("g")
+        .attr("transform", (d) => `translate(${d.x},${d.y})`);
+
+      const entities = nodeSel.filter((d) => d.type === "entity");
+      entities
+        .append("rect")
+        .attr("x", -72)
+        .attr("y", -24)
+        .attr("width", 144)
+        .attr("height", 48)
+        .attr("rx", 2)
+        .attr("fill", "#1f2937")
+        .attr("stroke", "#7c3aed")
+        .attr("stroke-width", 2);
+      entities
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 13)
+        .attr("font-weight", 700)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.id);
+
+      const rels = nodeSel.filter((d) => d.type === "rel");
+      rels
+        .append("polygon")
+        .attr("points", "0,-30 64,0 0,30 -64,0")
+        .attr("fill", "#2d1b6b")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1.5);
+      rels
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 12)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.id);
+
+      const keyAttrs = nodeSel.filter((d) => d.type === "key-attr");
+      keyAttrs
+        .append("ellipse")
+        .attr("rx", 56)
+        .attr("ry", 20)
+        .attr("fill", "#0d1117")
+        .attr("stroke", "#a78bfa")
+        .attr("stroke-width", 1.5);
+      keyAttrs
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#c9d1d9")
+        .attr("font-size", 11)
+        .attr("y", -1)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.label);
+      keyAttrs
+        .append("line")
+        .attr("x1", (d) => -Math.min(d.label.length * 3.0, 48))
+        .attr("x2", (d) => Math.min(d.label.length * 3.0, 48))
+        .attr("y1", 5)
+        .attr("y2", 5)
+        .attr("stroke", "#c9d1d9")
+        .attr("stroke-width", 1);
+
+      const attrs = nodeSel.filter((d) => d.type === "attr");
+      attrs
+        .append("ellipse")
+        .attr("rx", 52)
+        .attr("ry", 18)
+        .attr("fill", "#0d1117")
+        .attr("stroke", "#848d97")
+        .attr("stroke-width", 1);
+      attrs
+        .append("text")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("fill", "#848d97")
+        .attr("font-size", 11)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .text((d) => d.label);
+
+      g.append("g")
+        .selectAll("text")
+        .data(links.filter((link) => link.label))
+        .enter()
+        .append("text")
+        .attr("fill", "#a78bfa")
+        .attr("font-size", 12)
+        .attr("font-weight", 600)
+        .attr("font-family", "ui-sans-serif, system-ui, sans-serif")
+        .attr("text-anchor", "middle")
+        .attr("x", (d) => {
+          const source = nodeMap.get(d.source);
+          const target = nodeMap.get(d.target);
+          const pos = d.labelPos ?? (source.type === "entity" ? 0.3 : 0.7);
+          return source.x + (target.x - source.x) * pos + (d.labelDx ?? 0);
+        })
+        .attr("y", (d) => {
+          const source = nodeMap.get(d.source);
+          const target = nodeMap.get(d.target);
+          const pos = d.labelPos ?? (source.type === "entity" ? 0.3 : 0.7);
+          return source.y + (target.y - source.y) * pos + (d.labelDy ?? -10);
+        })
+        .text((d) => d.label);
+
+      let scale = 1;
+      let originX = 0;
+      let originY = 0;
+      const ZOOM_STEP = 0.15;
+      const MIN_SCALE = 0.2;
+      const MAX_SCALE = 4;
+      const canvas = document.getElementById("canvas");
+      const diagram = document.getElementById("diagram");
+
+      function applyTransform() {
+        diagram.style.transform = `translate(calc(-50% + ${originX}px), calc(-50% + ${originY}px)) scale(${scale})`;
+      }
+
+      function resetView() {
+        scale = 1;
+        originX = 0;
+        originY = 0;
+        applyTransform();
+      }
+
+      function zoomAt(delta, clientX, clientY) {
+        const rect = canvas.getBoundingClientRect();
+        const cx = clientX - rect.left - rect.width / 2;
+        const cy = clientY - rect.top - rect.height / 2;
+        const newScale = Math.min(
+          MAX_SCALE,
+          Math.max(MIN_SCALE, scale + delta),
+        );
+        const ratio = newScale / scale;
+        originX = cx + (originX - cx) * ratio;
+        originY = cy + (originY - cy) * ratio;
+        scale = newScale;
+        applyTransform();
+      }
+
+      canvas.addEventListener(
+        "wheel",
+        (event) => {
+          event.preventDefault();
+          zoomAt(
+            event.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP,
+            event.clientX,
+            event.clientY,
+          );
+        },
+        { passive: false },
+      );
+
+      let dragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let originAtDragX = 0;
+      let originAtDragY = 0;
+
+      canvas.addEventListener("mousedown", (event) => {
+        dragging = true;
+        dragStartX = event.clientX;
+        dragStartY = event.clientY;
+        originAtDragX = originX;
+        originAtDragY = originY;
+        canvas.classList.add("grabbing");
+      });
+
+      window.addEventListener("mousemove", (event) => {
+        if (!dragging) return;
+        originX = originAtDragX + (event.clientX - dragStartX);
+        originY = originAtDragY + (event.clientY - dragStartY);
+        applyTransform();
+      });
+
+      window.addEventListener("mouseup", () => {
+        dragging = false;
+        canvas.classList.remove("grabbing");
+      });
+
+      document.getElementById("zoom-in-btn").addEventListener("click", () => {
+        const rect = canvas.getBoundingClientRect();
+        zoomAt(
+          ZOOM_STEP,
+          rect.left + rect.width / 2,
+          rect.top + rect.height / 2,
+        );
+      });
+
+      document.getElementById("zoom-out-btn").addEventListener("click", () => {
+        const rect = canvas.getBoundingClientRect();
+        zoomAt(
+          -ZOOM_STEP,
+          rect.left + rect.width / 2,
+          rect.top + rect.height / 2,
+        );
+      });
+
+      document.getElementById("reset-btn").addEventListener("click", resetView);
+    </script>
+  </body>
+</html>

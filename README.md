@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# mypage
 
-## Getting Started
+Personal website built with Next.js. The site includes regular app routes under `app/` and static course materials under `public/presentations/`.
 
-First, run the development server:
+## Development
+
+Run the local dev server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The site is served at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/`: Next.js app routes and UI
+- `lib/`: shared data and helpers
+- `public/`: static assets and standalone presentation pages
+- `public/presentations/tics320/`: TICS320 course materials
 
-## Learn More
+## TICS320 Layout
 
-To learn more about Next.js, take a look at the following resources:
+TICS320 materials are split by type:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `public/presentations/tics320/practicums/`
+- `public/presentations/tics320/exercises/`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Current patterns:
 
-## Deploy on Vercel
+- Practicums are Reveal.js decks.
+- Exercises are Reveal.js decks for the statement and guided reasoning.
+- ER solutions that need panning and zooming live in standalone D3 pages.
+- Multi-solution exercises can expose a wrapper gallery page that embeds the existing D3 solution pages.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## TICS320 Conventions
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Course metadata is defined in `lib/i18n/translations.ts`.
+
+Expected link patterns:
+
+- `href`: open the main deck
+- `solutionHref`: optional; use when the exercise should expose a direct path to a standalone solution page or gallery
+
+Presentation conventions are documented in `AGENTS.md`.
+
+## Notes
+
+- This repo uses a newer Next.js version than most stock examples. Read `node_modules/next/dist/docs/` before changing app behavior.
+- Static course pages in `public/` are intentionally independent from the Next.js app router.

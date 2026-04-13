@@ -108,14 +108,7 @@ export const translations = {
         title: "Database Design & Modeling",
         description:
           "ER diagrams, logical models, cardinality, and how to think when designing a database from scratch. Includes a hands-on exercise.",
-        href: "/presentations/tics320/practicum-1/index.html",
-      },
-      {
-        number: 2,
-        title: "ER Diagram Practice",
-        description:
-          "Hands-on session focused entirely on ER diagram creation and design. Covers worked examples and guided exercises to build fluency with entity-relationship modeling.",
-        href: "/presentations/tics320/practicum-2/index.html",
+        href: "/presentations/tics320/practicums/practicum-1/index.html",
       },
     ],
     exerciseItems: [
@@ -124,8 +117,16 @@ export const translations = {
         title: "MarBrisa Disco — ER Design",
         description:
           "Design an ER diagram for a disco that sells tickets, runs themed events, and has an in-house bar where customers can order drinks.",
-        href: "/presentations/tics320/exercise-1/index.html",
-        solutionHref: "/presentations/tics320/exercise-1-solution/index.html",
+        href: "/presentations/tics320/exercises/exercise-1/index.html",
+        solutionHref: "/presentations/tics320/exercises/exercise-1/er-solution.html",
+      },
+      {
+        number: 2,
+        title: "ER Diagram Practice",
+        description:
+          "Guided ER modeling practice with progressively harder case studies. This is an exercise deck rather than a lecture session.",
+        href: "/presentations/tics320/exercises/exercise-2/index.html",
+        solutionHref: "/presentations/tics320/exercises/exercise-2/er-gallery.html?case=university",
       },
     ],
     courseList: [
@@ -247,14 +248,7 @@ export const translations = {
         title: "Diseño y Modelado de Bases de Datos",
         description:
           "Diagramas ER, modelos lógicos, cardinalidad y cómo pensar al diseñar una base de datos desde cero. Incluye un ejercicio práctico.",
-        href: "/presentations/tics320/practicum-1/index.html",
-      },
-      {
-        number: 2,
-        title: "Práctica de Diagramas ER",
-        description:
-          "Sesión práctica enfocada exclusivamente en la creación y diseño de diagramas ER. Incluye ejemplos resueltos y ejercicios guiados para desarrollar fluidez en el modelado entidad-relación.",
-        href: "/presentations/tics320/practicum-2/index.html",
+        href: "/presentations/tics320/practicums/practicum-1/index.html",
       },
     ],
     exerciseItems: [
@@ -263,8 +257,16 @@ export const translations = {
         title: "Disco MarBrisa — Diseño ER",
         description:
           "Diseña un diagrama ER para una discoteca que vende entradas, organiza eventos temáticos y tiene un bar donde los clientes pueden pedir bebidas.",
-        href: "/presentations/tics320/exercise-1/index.html",
-        solutionHref: "/presentations/tics320/exercise-1-solution/index.html",
+        href: "/presentations/tics320/exercises/exercise-1/index.html",
+        solutionHref: "/presentations/tics320/exercises/exercise-1/er-solution.html",
+      },
+      {
+        number: 2,
+        title: "Práctica de Diagramas ER",
+        description:
+          "Práctica guiada de modelado ER con casos de estudio de dificultad progresiva. Este material funciona mejor como ejercicio que como sesión expositiva.",
+        href: "/presentations/tics320/exercises/exercise-2/index.html",
+        solutionHref: "/presentations/tics320/exercises/exercise-2/er-gallery.html?case=university",
       },
     ],
     courseList: [

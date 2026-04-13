@@ -13,6 +13,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
     />
+    <link rel="stylesheet" href="../../../shared/tokens.css" />
 
     <style>
       :root {
@@ -90,27 +91,27 @@
         color: #fff;
       }
       .reveal h1 {
-        font-size: 3.8rem;
+        font-size: var(--text-display);
         line-height: 1.1;
       }
       .reveal h2 {
-        font-size: 2.6rem;
+        font-size: var(--text-heading);
         line-height: 1.15;
       }
       .reveal h3 {
-        font-size: 1.7rem;
+        font-size: var(--text-subheading);
         color: var(--accent-light);
       }
       .reveal p {
         color: #c9d1d9;
-        font-size: 1.37rem;
+        font-size: var(--text-body);
         line-height: 1.75;
       }
 
       /* ── Utilities ── */
       .label {
         display: inline-block;
-        font-size: 0.65rem;
+        font-size: var(--text-label);
         font-weight: 700;
         letter-spacing: 0.14em;
         text-transform: uppercase;
@@ -130,7 +131,7 @@
       }
       .muted {
         color: var(--muted) !important;
-        font-size: 1.3rem;
+        font-size: var(--text-muted);
       }
 
       /* ── Data table ── */
@@ -138,14 +139,14 @@
         width: 100%;
         border-collapse: collapse;
         margin: 0.8rem 0;
-        font-size: 1rem;
+        font-size: var(--text-card);
       }
       .db-table th {
         background: var(--accent-dim);
         color: var(--accent-light);
         padding: 0.55rem 0.9rem;
         text-align: left;
-        font-size: 0.85rem;
+        font-size: var(--text-small);
         font-weight: 700;
         letter-spacing: 0.05em;
         border-bottom: 2px solid var(--accent);
@@ -154,7 +155,7 @@
       .db-table td {
         padding: 0.55rem 0.9rem;
         color: #c9d1d9;
-        font-size: 1rem;
+        font-size: var(--text-card);
         border-bottom: 1px solid var(--border);
         white-space: nowrap;
       }
@@ -235,7 +236,7 @@
       .card p,
       .card div {
         color: #c9d1d9;
-        font-size: 1.37rem;
+        font-size: var(--text-body);
         line-height: 1.75;
         margin: 0;
       }
@@ -247,7 +248,7 @@
         padding: 0;
         margin: 0 0 0.8rem 0;
         color: #c9d1d9;
-        font-size: 1.37rem;
+        font-size: var(--text-body);
         line-height: 1.75;
       }
       .card-list li {
@@ -288,7 +289,7 @@
         border-radius: 0 10px 10px 0;
         padding: 1.4rem 1.8rem;
         text-align: left;
-        font-size: 1.5rem;
+        font-size: var(--text-case-study);
         color: #c9d1d9;
         line-height: 1.85;
       }
@@ -321,7 +322,7 @@
         display: inline-block;
       }
       .truth-list li {
-        font-size: 1.3rem;
+        font-size: var(--text-muted);
         color: #c9d1d9;
         padding: 0.45rem 0;
         border-bottom: 1px solid var(--border);
@@ -333,7 +334,7 @@
         border-bottom: none;
       }
       .truth-list li .icon {
-        font-size: 1.3rem;
+        font-size: var(--text-muted);
         width: 1.8rem;
         text-align: center;
       }
@@ -364,7 +365,7 @@
       .timeline-item {
         position: relative;
         padding: 0.9rem 0 0.9rem 1rem;
-        font-size: 1.5rem;
+        font-size: var(--text-case-study);
         color: #c9d1d9;
       }
       .timeline-item::before {
@@ -392,7 +393,7 @@
       }
       .timeline-item .sub {
         color: var(--muted);
-        font-size: 1.3rem;
+        font-size: var(--text-muted);
       }
 
       /* ── Broken badge ── */
@@ -503,48 +504,57 @@
         left: 0;
         right: 0;
         height: var(--toggle-h);
-        background: var(--surface);
-        border-top: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         z-index: 101;
-        gap: 0.5rem;
-        transition: background 0.18s;
+        background: transparent;
       }
-      #strip-toggle:hover {
-        background: var(--accent-dim);
-      }
-      #toggle-grip {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-        opacity: 0.4;
-        transition: opacity 0.18s;
-      }
-      #strip-toggle:hover #toggle-grip {
-        opacity: 0.9;
-      }
-      #toggle-grip span {
-        display: block;
-        width: 18px;
-        height: 2px;
-        border-radius: 2px;
-        background: var(--muted);
-      }
-      #strip-toggle:hover #toggle-grip span {
-        background: var(--accent-light);
-      }
-      #toggle-chevron {
+      #toggle-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 20px;
+        min-width: 44px;
+        justify-content: center;
+        padding: 0.42rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--surface) 84%, transparent);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
         color: var(--muted);
-        transition: transform var(--transition), color 0.18s;
+        transition:
+          border-color 0.18s,
+          background 0.18s,
+          color 0.18s,
+          transform 0.18s;
+        backdrop-filter: blur(10px);
       }
-      #strip-toggle:hover #toggle-chevron {
+      #strip-toggle:hover #toggle-pill {
         color: var(--accent-light);
+        border-color: color-mix(in srgb, var(--accent) 58%, var(--border));
+        background: color-mix(in srgb, var(--accent-dim) 60%, var(--surface));
+        transform: translateY(-1px);
       }
-      #toggle-chevron.rotated {
-        transform: rotate(180deg);
+      #toggle-pill svg {
+        display: block;
+      }
+      .toggle-icon {
+        width: 18px;
+        height: 18px;
+      }
+      #toggle-open-icon {
+        display: none;
+      }
+      #strip-toggle.is-collapsed #toggle-open-icon {
+        display: block;
+      }
+      #strip-toggle.is-collapsed #toggle-close-icon {
+        display: none;
+      }
+      #strip-toggle:hover #toggle-pill,
+      #strip-toggle:hover #toggle-pill {
+        color: var(--accent-light);
       }
 
       /* ── Filmstrip ── */
@@ -582,32 +592,23 @@
       .thumb {
         flex-shrink: 0;
         width: 120px;
-        height: 64px;
+        height: 68px;
         border-radius: 8px;
         border: 1px solid var(--border);
         background: var(--bg);
         cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-end;
-        padding: 0.4rem 0.55rem;
-        gap: 0.2rem;
-        transition:
-          border-color 0.18s,
-          background 0.18s,
-          transform 0.18s;
         position: relative;
         overflow: hidden;
+        transition:
+          border-color 0.18s,
+          transform 0.18s;
       }
       .thumb:hover {
         border-color: var(--accent);
-        background: var(--accent-dim);
         transform: translateY(-2px);
       }
       .thumb.active {
         border-color: var(--accent);
-        background: var(--accent-dim);
         transform: translateY(-2px);
       }
       .thumb.active::before {
@@ -621,26 +622,52 @@
         border-radius: 2px 2px 0 0;
       }
       .thumb-num {
-        font-size: 0.6rem;
+        position: absolute;
+        bottom: 4px;
+        left: 6px;
+        z-index: 2;
+        font-size: 0.58rem;
         font-weight: 700;
-        color: var(--muted);
+        color: rgba(255, 255, 255, 0.75);
         letter-spacing: 0.06em;
-      }
-      .thumb-title {
-        font-size: 0.68rem;
-        color: #c9d1d9;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 100%;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
       }
       .thumb.active .thumb-num {
         color: var(--accent-light);
       }
-      .thumb.active .thumb-title {
-        color: #fff;
-        font-weight: 600;
+
+      /* ── Slide preview (scaled DOM clone) ── */
+      .slide-preview-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
       }
+      .slide-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
+        pointer-events: none;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 3rem 10rem;
+      }
+      .slide-preview h1,
+      .slide-preview h2,
+      .slide-preview h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+      .slide-preview h1 { font-size: var(--text-display); line-height: 1.1; }
+      .slide-preview h2 { font-size: var(--text-heading); line-height: 1.15; }
+      .slide-preview h3 { font-size: var(--text-subheading); color: var(--accent-light); }
+      .slide-preview p  { color: #c9d1d9; font-size: var(--text-body); line-height: 1.75; }
 
       /* ── ER Diagram ── */
       .er-wrap {
@@ -2387,8 +2414,18 @@
 
     <div id="filmstrip"></div>
     <div id="strip-toggle">
-      <div id="toggle-grip"><span></span><span></span></div>
-      <svg id="toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      <div id="toggle-pill">
+        <svg id="toggle-close-icon" class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="5" y="4.5" width="14" height="5" rx="1.5"></rect>
+          <path d="M6 13.5l6 4 6-4"></path>
+          <path d="M6 17.5l6 4 6-4"></path>
+        </svg>
+        <svg id="toggle-open-icon" class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 18.5l6-4 6 4"></path>
+          <path d="M6 14.5l6-4 6 4"></path>
+          <rect x="5" y="4.5" width="14" height="5" rx="1.5"></rect>
+        </svg>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
@@ -3005,13 +3042,6 @@
           const key = el.dataset.i18nHtml;
           if (dict[key] !== undefined) el.innerHTML = dict[key];
         });
-        // Update filmstrip titles
-        const sections = document.querySelectorAll(".reveal .slides section");
-        const thumbTitles = document.querySelectorAll(".thumb-title");
-        sections.forEach((s, i) => {
-          const title = lang === "en" ? s.dataset.titleEn : s.dataset.titleEs;
-          if (title && thumbTitles[i]) thumbTitles[i].textContent = title;
-        });
         // Update toggle buttons
         document.querySelectorAll(".lang-btn").forEach((b) => {
           b.classList.toggle("active", b.dataset.lang === lang);
@@ -3041,14 +3071,43 @@
       const strip = document.getElementById("filmstrip");
       const sections = document.querySelectorAll(".reveal .slides section");
 
-      sections.forEach((section, i) => {
-        const n = String(i + 1).padStart(2, "0");
-        const thumb = document.createElement("div");
-        thumb.className = "thumb";
-        thumb.innerHTML = `<span class="thumb-num">${n}</span><span class="thumb-title">${section.dataset.titleEn ?? "Slide " + (i + 1)}</span>`;
-        thumb.addEventListener("click", () => Reveal.slide(i));
-        strip.appendChild(thumb);
-      });
+      function buildThumbs() {
+        const revealEl = document.querySelector(".reveal");
+        const slideW = revealEl.offsetWidth;
+        const slideH = revealEl.offsetHeight;
+        const THUMB_W = 120;
+        const scale = THUMB_W / slideW;
+
+        sections.forEach((section, i) => {
+          const n = String(i + 1).padStart(2, "0");
+          const thumb = document.createElement("div");
+          thumb.className = "thumb";
+
+          const wrap = document.createElement("div");
+          wrap.className = "slide-preview-wrap";
+
+          const preview = document.createElement("div");
+          preview.className = "slide-preview";
+          preview.style.width = slideW + "px";
+          preview.style.height = slideH + "px";
+          preview.style.transform = `scale(${scale})`;
+
+          Array.from(section.childNodes).forEach((node) => {
+            preview.appendChild(node.cloneNode(true));
+          });
+
+          wrap.appendChild(preview);
+          thumb.appendChild(wrap);
+
+          const numEl = document.createElement("span");
+          numEl.className = "thumb-num";
+          numEl.textContent = n;
+          thumb.appendChild(numEl);
+
+          thumb.addEventListener("click", () => Reveal.slide(i));
+          strip.appendChild(thumb);
+        });
+      }
 
       function syncNav(e) {
         const idx = e.indexh;
@@ -3067,7 +3126,10 @@
       }
 
       Reveal.on("slidechanged", syncNav);
-      Reveal.on("ready", (e) => syncNav({ indexh: e.indexh }));
+      Reveal.on("ready", (e) => {
+        buildThumbs();
+        syncNav({ indexh: e.indexh });
+      });
       document
         .getElementById("arrow-prev")
         .addEventListener("click", () => Reveal.prev());
@@ -3079,15 +3141,15 @@
       let collapsed = false;
       const filmstrip = document.getElementById("filmstrip");
       const viewport = document.querySelector(".reveal-viewport");
-      const chevron = document.getElementById("toggle-chevron");
+      const stripToggle = document.getElementById("strip-toggle");
       const arrows = document.querySelectorAll(".nav-arrow");
 
-      document.getElementById("strip-toggle").addEventListener("click", () => {
+      stripToggle.addEventListener("click", () => {
         collapsed = !collapsed;
         filmstrip.classList.toggle("collapsed", collapsed);
         viewport.classList.toggle("strip-collapsed", collapsed);
         arrows.forEach((a) => a.classList.toggle("strip-collapsed", collapsed));
-        chevron.classList.toggle("rotated", collapsed);
+        stripToggle.classList.toggle("is-collapsed", collapsed);
         setTimeout(() => Reveal.layout(), 320);
       });
     </script>
