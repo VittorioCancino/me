@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalog Solutions — Exercise 3</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <link rel="stylesheet" href="../../../shared/tokens.css" />
+
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["\\(", "\\)"]],
+          displayMath: [["\\[", "\\]"]],
+        },
+        options: {
+          skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"],
+        },
+      };
+    </script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    ></script>
+
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+        --strip-h: 88px;
+        --toggle-h: 28px;
+        --arrow-w: 56px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+      }
+
+      body.embedded #back-link,
+      body.embedded #strip-toggle,
+      body.embedded #filmstrip {
+        display: none !important;
+      }
+
+      body.embedded .reveal-viewport {
+        height: 100vh !important;
+      }
+
+      body.embedded .reveal .slides section {
+        padding: 3rem 5rem;
+      }
+
+      .reveal-viewport {
+        background: var(--bg) !important;
+        height: calc(100vh - var(--strip-h) - var(--toggle-h)) !important;
+        transition: height var(--transition);
+      }
+
+      .reveal-viewport.strip-collapsed {
+        height: calc(100vh - var(--toggle-h)) !important;
+      }
+
+      .reveal {
+        height: 100% !important;
+      }
+
+      .reveal .slides {
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+      }
+
+      .reveal .slides section {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 3rem 8rem;
+        top: 0 !important;
+        left: 0 !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .reveal h1 {
+        font-size: var(--text-display);
+        line-height: 1.08;
+      }
+
+      .reveal h2 {
+        font-size: var(--text-heading);
+        line-height: 1.15;
+      }
+
+      .reveal p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+      }
+
+      .label {
+        display: inline-block;
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        border: 1px solid rgba(124, 58, 237, 0.45);
+        background: var(--accent-dim);
+        padding: 0.22em 0.85em;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+      }
+
+      .divider {
+        width: 2.5rem;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        margin: 0.8rem auto 1.1rem;
+      }
+
+      .schema-stage {
+        position: relative;
+        width: 100%;
+        max-width: 72rem;
+        min-height: 13.5rem;
+        margin-top: 0.7rem;
+      }
+
+      .schema-node {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        gap: 0.45rem;
+      }
+
+      .schema-node.top-left {
+        top: 0.4rem;
+        left: 2rem;
+      }
+
+      .schema-node.top-right {
+        top: 0.4rem;
+        right: 2rem;
+        align-items: flex-end;
+        text-align: right;
+      }
+
+      .schema-node.bottom-center {
+        left: 50%;
+        bottom: 2.1rem;
+        transform: translateX(-50%);
+        align-items: center;
+        text-align: center;
+      }
+
+      .schema-kicker {
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .schema-relation {
+        font-size: clamp(1.55rem, 2.2vw, 2.1rem);
+        line-height: 1.3;
+        color: #fff;
+      }
+
+      .schema-relation .attr {
+        color: var(--accent-light);
+      }
+
+      .schema-relation .key {
+        text-decoration: underline;
+        text-decoration-color: rgba(167, 139, 250, 0.7);
+        text-underline-offset: 0.12em;
+      }
+
+      .solution-stage {
+        width: 100%;
+        max-width: 68rem;
+        text-align: left;
+      }
+
+      .formula-block + .formula-block {
+        margin-top: 1.2rem;
+      }
+
+      .formula-title {
+        margin-bottom: 0.55rem;
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+      }
+
+      .math {
+        color: #fff;
+        font-size: 1.5rem;
+        line-height: 1.7;
+      }
+
+      #back-link {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 320;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        color: #c9d1d9;
+        text-decoration: none;
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 999px;
+        padding: 0.55rem 0.9rem;
+      }
+
+      #back-link:hover {
+        color: #fff;
+      }
+
+      .nav-arrow {
+        position: fixed;
+        top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
+        transform: translateY(-50%);
+        z-index: 200;
+        width: var(--arrow-w);
+        height: var(--arrow-w);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        transition:
+          background 0.18s,
+          color 0.18s,
+          border-color 0.18s,
+          opacity 0.18s,
+          top var(--transition);
+        user-select: none;
+      }
+
+      .nav-arrow:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent-light);
+      }
+
+      .nav-arrow.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .nav-arrow.strip-collapsed {
+        top: 50%;
+      }
+
+      #arrow-prev {
+        left: 1rem;
+      }
+
+      #arrow-next {
+        right: 1rem;
+      }
+
+      #strip-toggle {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--toggle-h);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 101;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+      }
+
+      #toggle-pill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: var(--muted);
+        transition:
+          background 0.18s,
+          color 0.18s;
+      }
+
+      #strip-toggle:hover #toggle-pill {
+        color: var(--accent-light);
+        background: color-mix(in srgb, var(--accent-dim) 42%, var(--surface));
+      }
+
+      .toggle-icon {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.18s;
+      }
+
+      #strip-toggle.is-collapsed .toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      #filmstrip {
+        position: fixed;
+        bottom: var(--toggle-h);
+        left: 0;
+        right: 0;
+        height: var(--strip-h);
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        z-index: 100;
+        padding: 0 1rem;
+        gap: 0.6rem;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        transform: translateY(0);
+        opacity: 1;
+        transition:
+          transform var(--transition),
+          opacity var(--transition);
+      }
+
+      #filmstrip::-webkit-scrollbar {
+        display: none;
+      }
+
+      #filmstrip.collapsed {
+        transform: translateY(100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .thumb {
+        flex-shrink: 0;
+        width: 120px;
+        height: 68px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.18s,
+          transform 0.18s;
+      }
+
+      .thumb:hover,
+      .thumb.active {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .thumb.active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+        z-index: 3;
+      }
+
+      .slide-preview-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .slide-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
+        pointer-events: none;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 3rem 8rem;
+      }
+
+      .slide-preview h1,
+      .slide-preview h2,
+      .slide-preview h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .slide-preview h1 {
+        font-size: var(--text-display);
+        line-height: 1.08;
+      }
+
+      .slide-preview h2 {
+        font-size: var(--text-heading);
+        line-height: 1.15;
+      }
+
+      .slide-preview p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+      }
+
+      .thumb-num {
+        position: absolute;
+        bottom: 4px;
+        left: 6px;
+        z-index: 2;
+        font-size: 0.58rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.75);
+        letter-spacing: 0.06em;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      }
+
+      @media (max-width: 900px) {
+        .reveal .slides section {
+          padding: 2rem 1.5rem;
+        }
+
+        .schema-node.top-left {
+          left: 0;
+        }
+
+        .schema-node.top-right {
+          right: 0;
+        }
+
+        .schema-relation {
+          font-size: 1.2rem;
+        }
+
+        .math {
+          font-size: 0.92rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a id="back-link" href="index.html#/9">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <span>Back to slides</span>
+    </a>
+
+    <button id="arrow-prev" class="nav-arrow" aria-label="Previous">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button id="arrow-next" class="nav-arrow" aria-label="Next">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="reveal">
+      <div class="slides">
+        <section data-title-en="Schema">
+          <div class="label">Shared Schema</div>
+          <h2>Question Set 2 Schema</h2>
+          <div class="divider"></div>
+          <div class="schema-stage">
+            <div class="schema-node top-left" style="left: 0.5rem">
+              <div class="schema-kicker">suppliers</div>
+              <div class="schema-relation">
+                <strong>suppliers</strong>(<span class="attr key">supplier_id</span>, supplier_name, address)
+              </div>
+            </div>
+            <div class="schema-node top-right" style="right: 0.5rem">
+              <div class="schema-kicker">parts</div>
+              <div class="schema-relation">
+                <strong>parts</strong>(<span class="attr key">part_id</span>, part_name, color)
+              </div>
+            </div>
+            <div class="schema-node bottom-center">
+              <div class="schema-kicker">catalog</div>
+              <div class="schema-relation">
+                <strong>catalog</strong>(<span class="attr key">supplier_id</span>, <span class="attr key">part_id</span>, price)
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Question 1">
+          <div class="label">Solution</div>
+          <h2>Could <span class="attr key">supplier_id</span> be a key for <strong>catalog</strong>?</h2>
+          <div class="divider"></div>
+          <div class="solution-stage">
+            <div class="formula-block">
+              <div class="formula-title">Answer</div>
+              <div class="math">
+                <p>
+                  <span class="attr key">supplier_id</span> being a key in
+                  <strong>suppliers</strong> does not imply it is a key in
+                  <strong>catalog</strong>.
+                </p>
+                <p style="margin-top: 1rem">
+                  In fact, it is not a key for <strong>catalog</strong>, since a
+                  supplier can supply multiple parts, which would produce multiple
+                  tuples with the same <span class="attr key">supplier_id</span>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Question 2">
+          <div class="label">Solution</div>
+          <h2>Find the names of all red parts.</h2>
+          <div class="divider"></div>
+          <div class="solution-stage">
+            <div class="formula-block">
+              <div class="formula-title">Reduced RA</div>
+              <div class="math">
+                \[
+                \pi_{pName} \left( \sigma_{colour = \text{'red'}}(Parts) \right)
+                \]
+              </div>
+            </div>
+
+            <div class="formula-block">
+              <div class="formula-title">Step By Step</div>
+              <div class="math">
+                \[
+                R_1 = \sigma_{colour = \text{'red'}}(Parts)
+                \]
+                \[
+                \text{Result} = \pi_{pName}(R_1)
+                \]
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Question 3">
+          <div class="label">Solution</div>
+          <h2>Find all prices for parts that are red or green.</h2>
+          <div class="divider"></div>
+          <div class="solution-stage">
+            <div class="formula-block">
+              <div class="formula-title">Reduced RA</div>
+              <div class="math">
+                \[
+                \pi_{price} \left(
+                \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
+                \;\bowtie_{Parts.pID = Catalog.pID}\;
+                Catalog
+                \right)
+                \]
+              </div>
+            </div>
+
+            <div class="formula-block">
+              <div class="formula-title">Step By Step</div>
+              <div class="math">
+                \[
+                R_1 = \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
+                \]
+                \[
+                R_2 = R_1 \;\bowtie_{R_1.pID = Catalog.pID}\; Catalog
+                \]
+                \[
+                \text{Result} = \pi_{price}(R_2)
+                \]
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Question 4">
+          <div class="label">Solution</div>
+          <h2>Find the supplier ids of suppliers who supply a part that is red or green.</h2>
+          <div class="divider"></div>
+          <div class="solution-stage">
+            <div class="formula-block">
+              <div class="formula-title">Reduced RA</div>
+              <div class="math">
+                \[
+                \pi_{sID} \left(
+                \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
+                \;\bowtie_{Parts.pID = Catalog.pID}\;
+                Catalog
+                \right)
+                \]
+              </div>
+            </div>
+
+            <div class="formula-block">
+              <div class="formula-title">Step By Step</div>
+              <div class="math">
+                \[
+                R_1 = \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
+                \]
+                \[
+                R_2 = R_1 \;\bowtie_{R_1.pID = Catalog.pID}\; Catalog
+                \]
+                \[
+                \text{Result} = \pi_{sID}(R_2)
+                \]
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Question 5">
+          <div class="label">Solution</div>
+          <h2>Find the supplier ids of suppliers who supply a part that is red and green.</h2>
+          <div class="divider"></div>
+          <div class="solution-stage">
+            <div class="formula-block">
+              <div class="formula-title">Reduced RA</div>
+              <div class="math">
+                <p>No expression. The result is the empty set.</p>
+              </div>
+            </div>
+
+            <div class="formula-block">
+              <div class="formula-title">Step By Step</div>
+              <div class="math">
+                <p>No expression is needed.</p>
+                <p style="margin-top: 1rem">
+                  Since each part has exactly one colour because
+                  <span class="attr key">pID</span> is a key, no tuple can satisfy:
+                </p>
+                \[
+                colour = \text{'red'} \;\wedge\; colour = \text{'green'}
+                \]
+                <p style="margin-top: 1rem">Therefore, the result is the empty set.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Question 6">
+          <div class="label">Solution</div>
+          <h2>Find the names of suppliers who supply a part that is red or green.</h2>
+          <div class="divider"></div>
+          <div class="solution-stage">
+            <div class="formula-block">
+              <div class="formula-title">Reduced RA</div>
+              <div class="math">
+                \[
+                \pi_{sName} \left(
+                \left(
+                \pi_{sID} \left(
+                \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
+                \;\bowtie_{Parts.pID = Catalog.pID}\;
+                Catalog
+                \right)
+                \right)
+                \;\bowtie_{sID = Suppliers.sID}\;
+                Suppliers
+                \right)
+                \]
+              </div>
+            </div>
+
+            <div class="formula-block">
+              <div class="formula-title">Step By Step</div>
+              <div class="math">
+                \[
+                R_1 = \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
+                \]
+                \[
+                R_2 = R_1 \;\bowtie_{R_1.pID = Catalog.pID}\; Catalog
+                \]
+                \[
+                R_3 = \pi_{sID}(R_2)
+                \]
+                \[
+                R_4 = R_3 \;\bowtie_{R_3.sID = Suppliers.sID}\; Suppliers
+                \]
+                \[
+                \text{Result} = \pi_{sName}(R_4)
+                \]
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="strip-toggle">
+      <div id="toggle-pill">
+        <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 10l5 5 5-5"></path>
+        </svg>
+      </div>
+    </div>
+    <div id="filmstrip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      if (window.frameElement?.name === "exercise-3-solutions-frame") {
+        document.body.classList.add("embedded");
+      }
+
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        minScale: 1,
+        maxScale: 1,
+      });
+
+      const strip = document.getElementById("filmstrip");
+      const sections = document.querySelectorAll(".reveal .slides section");
+
+      function buildThumbs() {
+        const revealEl = document.querySelector(".reveal");
+        const slideW = revealEl.offsetWidth;
+        const slideH = revealEl.offsetHeight;
+        const thumbWidth = 120;
+        const scale = thumbWidth / slideW;
+
+        sections.forEach((section, index) => {
+          const thumb = document.createElement("div");
+          thumb.className = "thumb";
+
+          const wrap = document.createElement("div");
+          wrap.className = "slide-preview-wrap";
+
+          const preview = document.createElement("div");
+          preview.className = "slide-preview";
+          preview.style.width = slideW + "px";
+          preview.style.height = slideH + "px";
+          preview.style.transform = `scale(${scale})`;
+
+          Array.from(section.childNodes).forEach((node) => {
+            preview.appendChild(node.cloneNode(true));
+          });
+
+          wrap.appendChild(preview);
+          thumb.appendChild(wrap);
+
+          const num = document.createElement("span");
+          num.className = "thumb-num";
+          num.textContent = String(index + 1).padStart(2, "0");
+          thumb.appendChild(num);
+
+          thumb.addEventListener("click", () => Reveal.slide(index));
+          strip.appendChild(thumb);
+        });
+      }
+
+      function syncNav(event) {
+        const idx = event.indexh;
+        const thumbs = strip.querySelectorAll(".thumb");
+        thumbs.forEach((thumb, index) => {
+          thumb.classList.toggle("active", index === idx);
+        });
+
+        const active = thumbs[idx];
+        if (active) {
+          strip.scrollLeft =
+            active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
+        }
+
+        document
+          .getElementById("arrow-prev")
+          .classList.toggle("hidden", idx === 0);
+        document
+          .getElementById("arrow-next")
+          .classList.toggle("hidden", idx === sections.length - 1);
+      }
+
+      Reveal.on("slidechanged", syncNav);
+      Reveal.on("ready", async (event) => {
+        buildThumbs();
+        syncNav({ indexh: event.indexh });
+        if (window.MathJax?.typesetPromise) {
+          await window.MathJax.typesetPromise();
+        }
+      });
+
+      document
+        .getElementById("arrow-prev")
+        .addEventListener("click", () => Reveal.prev());
+      document
+        .getElementById("arrow-next")
+        .addEventListener("click", () => Reveal.next());
+
+      let collapsed = false;
+      const filmstrip = document.getElementById("filmstrip");
+      const viewport = document.querySelector(".reveal-viewport");
+      const stripToggle = document.getElementById("strip-toggle");
+      const arrows = document.querySelectorAll(".nav-arrow");
+
+      stripToggle.addEventListener("click", () => {
+        collapsed = !collapsed;
+        filmstrip.classList.toggle("collapsed", collapsed);
+        viewport.classList.toggle("strip-collapsed", collapsed);
+        arrows.forEach((arrow) => {
+          arrow.classList.toggle("strip-collapsed", collapsed);
+        });
+        stripToggle.classList.toggle("is-collapsed", collapsed);
+        setTimeout(() => Reveal.layout(), 320);
+      });
+    </script>
+  </body>
+</html>

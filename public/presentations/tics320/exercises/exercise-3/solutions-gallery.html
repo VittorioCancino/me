@@ -4,33 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exercise 3 Solutions — TICS320</title>
-
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
-    />
-    <link rel="stylesheet" href="../../../shared/tokens.css" />
-
-    <script>
-      window.MathJax = {
-        tex: {
-          inlineMath: [["\\(", "\\)"]],
-          displayMath: [["\\[", "\\]"]],
-        },
-        options: {
-          skipHtmlTags: ["script", "noscript", "style", "textarea", "pre"],
-        },
-      };
-    </script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
-    ></script>
-
     <style>
       :root {
         --accent: #7c3aed;
@@ -40,10 +13,6 @@
         --surface: #161b22;
         --border: #21262d;
         --muted: #848d97;
-        --strip-h: 88px;
-        --toggle-h: 28px;
-        --arrow-w: 56px;
-        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
       *,
@@ -59,198 +28,13 @@
         width: 100%;
         height: 100%;
         background: var(--bg);
+        color: #c9d1d9;
+        font-family: ui-sans-serif, system-ui, sans-serif;
         overflow: hidden;
+        color-scheme: dark;
       }
 
-      .reveal-viewport {
-        background: var(--bg) !important;
-        height: calc(100vh - var(--strip-h) - var(--toggle-h)) !important;
-        transition: height var(--transition);
-      }
-
-      .reveal-viewport.strip-collapsed {
-        height: calc(100vh - var(--toggle-h)) !important;
-      }
-
-      .reveal {
-        height: 100% !important;
-      }
-
-      .reveal .slides {
-        width: 100% !important;
-        height: 100% !important;
-        left: 0 !important;
-        top: 0 !important;
-        transform: none !important;
-      }
-
-      .reveal .slides section {
-        width: 100% !important;
-        height: 100% !important;
-        padding: 3rem 8rem;
-        top: 0 !important;
-        left: 0 !important;
-        display: flex !important;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-
-      .reveal h1,
-      .reveal h2,
-      .reveal h3 {
-        text-transform: none;
-        letter-spacing: -0.02em;
-        color: #fff;
-      }
-
-      .reveal h1 {
-        font-size: var(--text-display);
-        line-height: 1.08;
-      }
-
-      .reveal h2 {
-        font-size: var(--text-heading);
-        line-height: 1.15;
-      }
-
-      .reveal p {
-        color: #c9d1d9;
-        font-size: var(--text-body);
-        line-height: 1.75;
-      }
-
-      .label {
-        display: inline-block;
-        font-size: var(--text-label);
-        font-weight: 700;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--accent-light);
-        border: 1px solid rgba(124, 58, 237, 0.45);
-        background: var(--accent-dim);
-        padding: 0.22em 0.85em;
-        border-radius: 999px;
-        margin-bottom: 1rem;
-      }
-
-      .divider {
-        width: 2.5rem;
-        height: 3px;
-        background: var(--accent);
-        border-radius: 2px;
-        margin: 0.8rem auto 1.1rem;
-      }
-
-      .muted {
-        color: var(--muted) !important;
-        font-size: var(--text-muted);
-      }
-
-      .schema-stage {
-        position: relative;
-        width: 100%;
-        max-width: 72rem;
-        min-height: 13.5rem;
-        margin-top: 0.7rem;
-      }
-
-      .schema-node {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-        gap: 0.45rem;
-      }
-
-      .schema-node.top-left {
-        top: 0.4rem;
-        left: 2rem;
-      }
-
-      .schema-node.top-right {
-        top: 0.4rem;
-        right: 2rem;
-        align-items: flex-end;
-        text-align: right;
-      }
-
-      .schema-node.bottom-center {
-        left: 50%;
-        bottom: 2.1rem;
-        transform: translateX(-50%);
-        align-items: center;
-        text-align: center;
-      }
-
-      .schema-kicker {
-        font-size: var(--text-label);
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .schema-relation {
-        font-size: clamp(1.55rem, 2.2vw, 2.1rem);
-        line-height: 1.3;
-        color: #fff;
-      }
-
-      .schema-relation .attr {
-        color: var(--accent-light);
-      }
-
-      .schema-relation .key {
-        text-decoration: underline;
-        text-decoration-color: rgba(167, 139, 250, 0.7);
-        text-underline-offset: 0.12em;
-      }
-
-      .schema-caption {
-        max-width: 54rem;
-        margin-top: 1.4rem;
-        font-size: var(--text-body);
-        color: #c9d1d9;
-        line-height: 1.75;
-      }
-
-      .solution-stage {
-        width: 100%;
-        max-width: 68rem;
-        text-align: left;
-      }
-
-      .formula-block + .formula-block {
-        margin-top: 1.2rem;
-      }
-
-      .formula-title {
-        margin-bottom: 0.55rem;
-        font-size: var(--text-label);
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: var(--accent-light);
-      }
-
-      .math {
-        color: #fff;
-        font-size: 1.5rem;
-        line-height: 1.7;
-      }
-
-      #wrapper-app {
-        display: none;
-      }
-
-      body.embed-mode #back-link {
-        display: none;
-      }
-
-      #wrapper-topbar {
+      #topbar {
         position: fixed;
         top: 0;
         left: 0;
@@ -262,17 +46,21 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 1rem;
-        z-index: 400;
+        z-index: 100;
       }
 
-      #wrapper-left,
-      #wrapper-right {
+      #topbar-left,
+      #topbar-right {
         display: flex;
         align-items: center;
         gap: 0.6rem;
       }
 
-      #wrapper-title {
+      body.single-mode #topbar-right {
+        display: none;
+      }
+
+      #title {
         font-size: 0.82rem;
         font-weight: 700;
         color: #c9d1d9;
@@ -280,7 +68,7 @@
         white-space: nowrap;
       }
 
-      .wrapper-btn,
+      .btn,
       #case-select {
         display: inline-flex;
         align-items: center;
@@ -301,7 +89,7 @@
           background 0.15s;
       }
 
-      .wrapper-btn:hover,
+      .btn:hover,
       #case-select:hover {
         color: var(--accent-light);
         border-color: var(--accent);
@@ -340,12 +128,12 @@
         color: #c9d1d9;
       }
 
-      #wrapper-hint {
+      #hint {
         font-size: 0.68rem;
         color: var(--muted);
       }
 
-      #wrapper-frame {
+      #frame {
         position: fixed;
         top: 56px;
         left: 0;
@@ -354,1492 +142,121 @@
         border: 0;
         background: var(--bg);
       }
-
-      #back-link {
-        position: fixed;
-        top: 1rem;
-        left: 1rem;
-        z-index: 320;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.55rem;
-        color: #c9d1d9;
-        text-decoration: none;
-        background: #161b22;
-        border: 1px solid #21262d;
-        border-radius: 999px;
-        padding: 0.55rem 0.9rem;
-      }
-
-      #back-link:hover {
-        color: #fff;
-      }
-
-      .nav-arrow {
-        position: fixed;
-        top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
-        transform: translateY(-50%);
-        z-index: 200;
-        width: var(--arrow-w);
-        height: var(--arrow-w);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        border-radius: 14px;
-        border: 1px solid var(--border);
-        background: var(--surface);
-        color: var(--muted);
-        transition:
-          background 0.18s,
-          color 0.18s,
-          border-color 0.18s,
-          opacity 0.18s,
-          top var(--transition);
-        user-select: none;
-      }
-
-      .nav-arrow:hover {
-        background: var(--accent-dim);
-        border-color: var(--accent);
-        color: var(--accent-light);
-      }
-
-      .nav-arrow.hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .nav-arrow.strip-collapsed {
-        top: 50%;
-      }
-
-      #arrow-prev {
-        left: 1rem;
-      }
-
-      #arrow-next {
-        right: 1rem;
-      }
-
-      #strip-toggle {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: var(--toggle-h);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 101;
-        background: var(--surface);
-        border-top: 1px solid var(--border);
-      }
-
-      #toggle-pill {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        color: var(--muted);
-        transition:
-          background 0.18s,
-          color 0.18s;
-      }
-
-      #strip-toggle:hover #toggle-pill {
-        color: var(--accent-light);
-        background: color-mix(in srgb, var(--accent-dim) 42%, var(--surface));
-      }
-
-      .toggle-icon {
-        width: 18px;
-        height: 18px;
-        transition: transform 0.18s;
-      }
-
-      #strip-toggle.is-collapsed .toggle-icon {
-        transform: rotate(180deg);
-      }
-
-      #filmstrip {
-        position: fixed;
-        bottom: var(--toggle-h);
-        left: 0;
-        right: 0;
-        height: var(--strip-h);
-        background: var(--surface);
-        border-top: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        z-index: 100;
-        padding: 0 1rem;
-        gap: 0.6rem;
-        overflow-x: auto;
-        scroll-behavior: smooth;
-        scrollbar-width: none;
-        transform: translateY(0);
-        opacity: 1;
-        transition:
-          transform var(--transition),
-          opacity var(--transition);
-      }
-
-      #filmstrip::-webkit-scrollbar {
-        display: none;
-      }
-
-      #filmstrip.collapsed {
-        transform: translateY(100%);
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .thumb {
-        flex-shrink: 0;
-        width: 120px;
-        height: 68px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        background: var(--bg);
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        transition:
-          border-color 0.18s,
-          transform 0.18s;
-      }
-
-      .thumb:hover,
-      .thumb.active {
-        border-color: var(--accent);
-        transform: translateY(-2px);
-      }
-
-      .thumb.active::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: var(--accent);
-        z-index: 3;
-      }
-
-      .slide-preview-wrap {
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-        pointer-events: none;
-      }
-
-      .slide-preview {
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform-origin: top left;
-        pointer-events: none;
-        background: var(--bg);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 3rem 8rem;
-      }
-
-      .slide-preview h1,
-      .slide-preview h2,
-      .slide-preview h3 {
-        text-transform: none;
-        letter-spacing: -0.02em;
-        color: #fff;
-      }
-
-      .slide-preview h1 {
-        font-size: var(--text-display);
-        line-height: 1.08;
-      }
-
-      .slide-preview h2 {
-        font-size: var(--text-heading);
-        line-height: 1.15;
-      }
-
-      .slide-preview p {
-        color: #c9d1d9;
-        font-size: var(--text-body);
-        line-height: 1.75;
-      }
-
-      .thumb-num {
-        position: absolute;
-        bottom: 4px;
-        left: 6px;
-        z-index: 2;
-        font-size: 0.58rem;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.75);
-        letter-spacing: 0.06em;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-      }
-
-      @media (max-width: 900px) {
-        .reveal .slides section {
-          padding: 2rem 1.5rem;
-        }
-
-        .schema-node.top-left {
-          left: 0;
-        }
-
-        .schema-node.top-right {
-          right: 0;
-        }
-
-        .schema-relation {
-          font-size: 1.2rem;
-        }
-
-        .math {
-          font-size: 0.92rem;
-        }
-      }
     </style>
   </head>
   <body>
-    <div id="wrapper-app">
-      <div id="wrapper-topbar">
-        <div id="wrapper-left">
-          <a class="wrapper-btn" href="index.html#/">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
-            Back to slides
-          </a>
-          <div id="wrapper-title">Exercise 3 Solutions</div>
-        </div>
-        <div id="wrapper-right">
-          <button id="gallery-prev" class="wrapper-btn nav-btn" aria-label="Previous solution set">&lt;</button>
-          <select id="case-select" aria-label="Select solution set"></select>
-          <button id="gallery-next" class="wrapper-btn nav-btn" aria-label="Next solution set">&gt;</button>
-          <span id="wrapper-hint">Each solution set opens as its own focused deck.</span>
-        </div>
-      </div>
-      <iframe id="wrapper-frame" title="Solution Viewer"></iframe>
-    </div>
-
-    <div id="single-app">
-      <a id="back-link" href="index.html#/">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        <span>Back to slides</span>
-      </a>
-
-      <button id="arrow-prev" class="nav-arrow" aria-label="Previous">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <button id="arrow-next" class="nav-arrow" aria-label="Next">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-
-      <div class="reveal">
-        <div class="slides" id="slides-root"></div>
-      </div>
-
-      <div id="strip-toggle">
-        <div id="toggle-pill">
-          <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M7 10l5 5 5-5"></path>
+    <div id="topbar">
+      <div id="topbar-left">
+        <a id="back-btn" class="btn" href="index.html#/5">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
           </svg>
-        </div>
+          Back to slides
+        </a>
+        <div id="title">Exercise 3 Solutions</div>
       </div>
-      <div id="filmstrip"></div>
+      <div id="topbar-right">
+        <button id="prev-btn" class="btn nav-btn" aria-label="Previous solution set">&lt;</button>
+        <select id="case-select" aria-label="Select solution set"></select>
+        <button id="next-btn" class="btn nav-btn" aria-label="Next solution set">&gt;</button>
+        <span id="hint">Each solution set opens as its own focused deck.</span>
+      </div>
     </div>
 
-    <template id="sailors-schema-slide">
-      <section data-title-en="Schema">
-        <div class="label">Shared Schema</div>
-        <h2>Exercise 1 Schema</h2>
-        <div class="divider"></div>
-        <div class="schema-stage">
-          <div class="schema-node top-left">
-            <div class="schema-kicker">sailors</div>
-            <div class="schema-relation">
-              <strong>sailors</strong>(<span class="attr key">sailor_id</span>, sailor_name, rating, age)
-            </div>
-          </div>
-          <div class="schema-node top-right">
-            <div class="schema-kicker">boats</div>
-            <div class="schema-relation">
-              <strong>boats</strong>(<span class="attr key">boat_id</span>, boat_name, color)
-            </div>
-          </div>
-          <div class="schema-node bottom-center">
-            <div class="schema-kicker">rentals</div>
-            <div class="schema-relation">
-              <strong>rentals</strong>(<span class="attr key">sailor_id</span>, <span class="attr key">boat_id</span>, rental_date)
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
+    <iframe
+      id="frame"
+      title="Exercise 3 Solution Viewer"
+      name="exercise-3-solutions-frame"
+    ></iframe>
 
-    <template id="sailors-q1-slide">
-      <section data-title-en="Exercise 1">
-        <div class="label">Solution</div>
-        <h2>Find the colors of boats reserved by Albert.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{\text{color}} \left(
-              \sigma_{sname = \text{'Albert'}}(S)
-              \;\bowtie_{S.sid = R.sid}\;
-              R
-              \;\bowtie_{R.bid = B.bid}\;
-              B
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{sname = \text{'Albert'}}(S)
-              \]
-              \[
-              R_2 = R_1 \;\bowtie_{R_1.sid = R.sid}\; R
-              \]
-              \[
-              R_3 = R_2 \;\bowtie_{R_2.bid = B.bid}\; B
-              \]
-              \[
-              \text{Result} = \pi_{\text{color}}(R_3)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q2-slide">
-      <section data-title-en="Exercise 2">
-        <div class="label">Solution</div>
-        <h2>Sailors with rating at least 8 or who reserved boat 103.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sid} \left( \sigma_{rating \geq 8}(S) \right)
-              \;\cup\;
-              \pi_{sid} \left( \sigma_{bid = 103}(R) \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{rating \geq 8}(S)
-              \]
-              \[
-              R_2 = \pi_{sid}(R_1)
-              \]
-              \[
-              R_3 = \sigma_{bid = 103}(R)
-              \]
-              \[
-              R_4 = \pi_{sid}(R_3)
-              \]
-              \[
-              \text{Result} = R_2 \cup R_4
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q3-slide">
-      <section data-title-en="Exercise 3">
-        <div class="label">Solution</div>
-        <h2>Sailors who have not reserved a red boat.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sname} \left(
-              \left(
-              \pi_{sid}(S)
-              -
-              \pi_{sid} \left(
-              \sigma_{color = \text{'red'}}(B)
-              \;\bowtie_{B.bid = R.bid}\;
-              R
-              \right)
-              \right)
-              \;\bowtie_{sid = S.sid}\;
-              S
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{color = \text{'red'}}(B)
-              \]
-              \[
-              R_2 = R_1 \;\bowtie_{R_1.bid = R.bid}\; R
-              \]
-              \[
-              R_3 = \pi_{sid}(R_2)
-              \]
-              \[
-              R_4 = \pi_{sid}(S)
-              \]
-              \[
-              R_5 = R_4 - R_3
-              \]
-              \[
-              R_6 = R_5 \;\bowtie_{R_5.sid = S.sid}\; S
-              \]
-              \[
-              \text{Result} = \pi_{sname}(R_6)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q4-slide">
-      <section data-title-en="Exercise 4">
-        <div class="label">Solution</div>
-        <h2>Sailor ids of sailors over 20 who have not reserved a red boat.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sid} \left(
-              \sigma_{age > 20}(S)
-              -
-              \pi_{sid} \left(
-              \sigma_{color = \text{'red'}}(B)
-              \;\bowtie_{B.bid = R.bid}\;
-              R
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{age > 20}(S)
-              \]
-              \[
-              R_2 = \pi_{sid}(R_1)
-              \]
-              \[
-              R_3 = \sigma_{color = \text{'red'}}(B)
-              \]
-              \[
-              R_4 = R_3 \;\bowtie_{R_3.bid = R.bid}\; R
-              \]
-              \[
-              R_5 = \pi_{sid}(R_4)
-              \]
-              \[
-              \text{Result} = R_2 - R_5
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q5-slide">
-      <section data-title-en="Exercise 5">
-        <div class="label">Solution</div>
-        <h2>Names of sailors who have reserved at least two boats.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sname} \left(
-              S
-              \;\bowtie_{S.sid = R_1.sid}\;
-              \left(
-              \rho_{R_1}(R)
-              \;\bowtie_{R_1.sid = R_2.sid \;\wedge\; R_1.bid \neq R_2.bid}\;
-              \rho_{R_2}(R)
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \rho_{R_1}(R)
-              \]
-              \[
-              R_2 = \rho_{R_2}(R)
-              \]
-              \[
-              R_3 = R_1 \;\bowtie_{R_1.sid = R_2.sid \;\wedge\; R_1.bid \neq R_2.bid}\; R_2
-              \]
-              \[
-              R_4 = \pi_{R_1.sid}(R_3)
-              \]
-              \[
-              R_5 = R_4 \;\bowtie_{R_4.sid = S.sid}\; S
-              \]
-              \[
-              \text{Result} = \pi_{sname}(R_5)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q6-slide">
-      <section data-title-en="Exercise 6">
-        <div class="label">Solution</div>
-        <h2>Names of sailors who have reserved all boats.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sname} \left(
-              S
-              \;\bowtie_{S.sid = R.sid}\;
-              \left(
-              \pi_{sid, bid}(R)
-              \div
-              \pi_{bid}(B)
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \pi_{sid, bid}(R)
-              \]
-              \[
-              R_2 = \pi_{bid}(B)
-              \]
-              \[
-              R_3 = R_1 \div R_2
-              \]
-              \[
-              R_4 = R_3 \;\bowtie_{R_3.sid = S.sid}\; S
-              \]
-              \[
-              \text{Result} = \pi_{sname}(R_4)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q7-slide">
-      <section data-title-en="Exercise 7">
-        <div class="label">Solution</div>
-        <h2>Sailor ids of sailors who have reserved only red boats.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sid}(R)
-              -
-              \pi_{sid} \left(
-              \sigma_{color \neq \text{'red'}}(B)
-              \;\bowtie_{B.bid = R.bid}\;
-              R
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{color \neq \text{'red'}}(B)
-              \]
-              \[
-              R_2 = R_1 \;\bowtie_{R_1.bid = R.bid}\; R
-              \]
-              \[
-              R_3 = \pi_{sid}(R_2)
-              \]
-              \[
-              R_4 = \pi_{sid}(R)
-              \]
-              \[
-              \text{Result} = R_4 - R_3
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q8-slide">
-      <section data-title-en="Exercise 8">
-        <div class="label">Solution</div>
-        <h2>Names of sailors who have reserved all red boats.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sname} \left(
-              S
-              \;\bowtie_{S.sid = R.sid}\;
-              \left(
-              \pi_{sid, bid} \left(
-              R \;\bowtie_{R.bid = B.bid}\; \sigma_{color = \text{'red'}}(B)
-              \right)
-              \div
-              \pi_{bid} \left( \sigma_{color = \text{'red'}}(B) \right)
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{color = \text{'red'}}(B)
-              \]
-              \[
-              R_2 = R \;\bowtie_{R.bid = R_1.bid}\; R_1
-              \]
-              \[
-              R_3 = \pi_{sid, bid}(R_2)
-              \]
-              \[
-              R_4 = \pi_{bid}(R_1)
-              \]
-              \[
-              R_5 = R_3 \div R_4
-              \]
-              \[
-              R_6 = R_5 \;\bowtie_{R_5.sid = S.sid}\; S
-              \]
-              \[
-              \text{Result} = \pi_{sname}(R_6)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q9-slide">
-      <section data-title-en="Exercise 9">
-        <div class="label">Solution</div>
-        <h2>Names of sailors who have reserved boats of every color.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sname} \left(
-              S
-              \;\bowtie_{S.sid = R.sid}\;
-              \left(
-              \pi_{sid, color} \left(
-              R \;\bowtie_{R.bid = B.bid}\; B
-              \right)
-              \div
-              \pi_{color}(B)
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = R \;\bowtie_{R.bid = B.bid}\; B
-              \]
-              \[
-              R_2 = \pi_{sid, color}(R_1)
-              \]
-              \[
-              R_3 = \pi_{color}(B)
-              \]
-              \[
-              R_4 = R_2 \div R_3
-              \]
-              \[
-              R_5 = R_4 \;\bowtie_{R_4.sid = S.sid}\; S
-              \]
-              \[
-              \text{Result} = \pi_{sname}(R_5)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q10-slide">
-      <section data-title-en="Exercise 10">
-        <div class="label">Solution</div>
-        <h2>Names of sailors with the highest rating.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sname} \left(
-              S
-              \;\bowtie_{S.sid = R_1.sid}\;
-              \left(
-              \rho_{R_1}(S)
-              -
-              \pi_{R_1.sid} \left(
-              \rho_{R_1}(S)
-              \;\bowtie_{R_1.rating < R_2.rating}\;
-              \rho_{R_2}(S)
-              \right)
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \rho_{R_1}(S)
-              \]
-              \[
-              R_2 = \rho_{R_2}(S)
-              \]
-              \[
-              R_3 = R_1 \;\bowtie_{R_1.rating < R_2.rating}\; R_2
-              \]
-              \[
-              R_4 = \pi_{R_1.sid}(R_3)
-              \]
-              \[
-              R_5 = \pi_{sid}(S)
-              \]
-              \[
-              R_6 = R_5 - R_4
-              \]
-              \[
-              R_7 = R_6 \;\bowtie_{R_6.sid = S.sid}\; S
-              \]
-              \[
-              \text{Result} = \pi_{sname}(R_7)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q11-slide">
-      <section data-title-en="Exercise 11">
-        <div class="label">Solution</div>
-        <h2>Names of sailors who have reserved exactly one boat.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sname} \left(
-              S
-              \;\bowtie_{S.sid = R_1.sid}\;
-              \left(
-              \pi_{sid, bid}(R)
-              -
-              \pi_{R_1.sid, R_1.bid} \left(
-              \rho_{R_1}(R)
-              \;\bowtie_{R_1.sid = R_2.sid \;\wedge\; R_1.bid \neq R_2.bid}\;
-              \rho_{R_2}(R)
-              \right)
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \rho_{R_1}(R)
-              \]
-              \[
-              R_2 = \rho_{R_2}(R)
-              \]
-              \[
-              R_3 = R_1 \;\bowtie_{R_1.sid = R_2.sid \;\wedge\; R_1.bid \neq R_2.bid}\; R_2
-              \]
-              \[
-              R_4 = \pi_{R_1.sid, R_1.bid}(R_3)
-              \]
-              \[
-              R_5 = \pi_{sid, bid}(R)
-              \]
-              \[
-              R_6 = R_5 - R_4
-              \]
-              \[
-              R_7 = \pi_{sid}(R_6)
-              \]
-              \[
-              R_8 = R_7 \;\bowtie_{R_7.sid = S.sid}\; S
-              \]
-              \[
-              \text{Result} = \pi_{sname}(R_8)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="sailors-q12-slide">
-      <section data-title-en="Exercise 12">
-        <div class="label">Solution</div>
-        <h2>Names of sailors who reserved every boat reserved by Albert.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sname} \left(
-              S
-              \;\bowtie_{S.sid = R.sid}\;
-              \left(
-              \pi_{sid, bid}(R)
-              \div
-              \pi_{bid} \left(
-              \sigma_{sname = \text{'Albert'}}(S)
-              \;\bowtie_{S.sid = R.sid}\;
-              R
-              \right)
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{sname = \text{'Albert'}}(S)
-              \]
-              \[
-              R_2 = R_1 \;\bowtie_{R_1.sid = R.sid}\; R
-              \]
-              \[
-              R_3 = \pi_{bid}(R_2)
-              \]
-              \[
-              R_4 = \pi_{sid, bid}(R)
-              \]
-              \[
-              R_5 = R_4 \div R_3
-              \]
-              \[
-              R_6 = R_5 \;\bowtie_{R_5.sid = S.sid}\; S
-              \]
-              \[
-              \text{Result} = \pi_{sname}(R_6)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="catalog-schema-slide">
-      <section data-title-en="Schema">
-        <div class="label">Shared Schema</div>
-        <h2>Question Set 2 Schema</h2>
-        <div class="divider"></div>
-        <div class="schema-stage">
-          <div class="schema-node top-left" style="left: 0.5rem">
-            <div class="schema-kicker">suppliers</div>
-            <div class="schema-relation">
-              <strong>suppliers</strong>(<span class="attr key">supplier_id</span>, supplier_name, address)
-            </div>
-          </div>
-          <div class="schema-node top-right" style="right: 0.5rem">
-            <div class="schema-kicker">parts</div>
-            <div class="schema-relation">
-              <strong>parts</strong>(<span class="attr key">part_id</span>, part_name, color)
-            </div>
-          </div>
-          <div class="schema-node bottom-center">
-            <div class="schema-kicker">catalog</div>
-            <div class="schema-relation">
-              <strong>catalog</strong>(<span class="attr key">supplier_id</span>, <span class="attr key">part_id</span>, price)
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="catalog-q1-slide">
-      <section data-title-en="Question 1">
-        <div class="label">Solution</div>
-        <h2>Could <span class="attr key">supplier_id</span> be a key for <strong>catalog</strong>?</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Answer</div>
-            <div class="math">
-              <p>
-                <span class="attr key">supplier_id</span> being a key in
-                <strong>suppliers</strong> does not imply it is a key in
-                <strong>catalog</strong>.
-              </p>
-              <p style="margin-top: 1rem">
-                In fact, it is not a key for <strong>catalog</strong>, since a
-                supplier can supply multiple parts, which would produce multiple
-                tuples with the same <span class="attr key">supplier_id</span>.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="catalog-q2-slide">
-      <section data-title-en="Question 2">
-        <div class="label">Solution</div>
-        <h2>Find the names of all red parts.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{pName} \left( \sigma_{colour = \text{'red'}}(Parts) \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{colour = \text{'red'}}(Parts)
-              \]
-              \[
-              \text{Result} = \pi_{pName}(R_1)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="catalog-q3-slide">
-      <section data-title-en="Question 3">
-        <div class="label">Solution</div>
-        <h2>Find all prices for parts that are red or green.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{price} \left(
-              \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
-              \;\bowtie_{Parts.pID = Catalog.pID}\;
-              Catalog
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
-              \]
-              \[
-              R_2 = R_1 \;\bowtie_{R_1.pID = Catalog.pID}\; Catalog
-              \]
-              \[
-              \text{Result} = \pi_{price}(R_2)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="catalog-q4-slide">
-      <section data-title-en="Question 4">
-        <div class="label">Solution</div>
-        <h2>Find the supplier ids of suppliers who supply a part that is red or green.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sID} \left(
-              \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
-              \;\bowtie_{Parts.pID = Catalog.pID}\;
-              Catalog
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
-              \]
-              \[
-              R_2 = R_1 \;\bowtie_{R_1.pID = Catalog.pID}\; Catalog
-              \]
-              \[
-              \text{Result} = \pi_{sID}(R_2)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="catalog-q5-slide">
-      <section data-title-en="Question 5">
-        <div class="label">Solution</div>
-        <h2>Find the supplier ids of suppliers who supply a part that is red and green.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              <p>No expression. The result is the empty set.</p>
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              <p>No expression is needed.</p>
-              <p style="margin-top: 1rem">
-                Since each part has exactly one colour because
-                <span class="attr key">pID</span> is a key, no tuple can satisfy:
-              </p>
-              \[
-              colour = \text{'red'} \;\wedge\; colour = \text{'green'}
-              \]
-              <p style="margin-top: 1rem">Therefore, the result is the empty set.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="catalog-q6-slide">
-      <section data-title-en="Question 6">
-        <div class="label">Solution</div>
-        <h2>Find the names of suppliers who supply a part that is red or green.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{sName} \left(
-              \left(
-              \pi_{sID} \left(
-              \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
-              \;\bowtie_{Parts.pID = Catalog.pID}\;
-              Catalog
-              \right)
-              \right)
-              \;\bowtie_{sID = Suppliers.sID}\;
-              Suppliers
-              \right)
-              \]
-            </div>
-          </div>
-
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{colour = \text{'red'} \;\vee\; colour = \text{'green'}}(Parts)
-              \]
-              \[
-              R_2 = R_1 \;\bowtie_{R_1.pID = Catalog.pID}\; Catalog
-              \]
-              \[
-              R_3 = \pi_{sID}(R_2)
-              \]
-              \[
-              R_4 = R_3 \;\bowtie_{R_3.sID = Suppliers.sID}\; Suppliers
-              \]
-              \[
-              \text{Result} = \pi_{sName}(R_4)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="appointments-schema-slide">
-      <section data-title-en="Schema">
-        <div class="label">Shared Schema</div>
-        <h2>Question Set 3 Schema</h2>
-        <div class="divider"></div>
-        <div class="schema-stage">
-          <div class="schema-node top-left">
-            <div class="schema-kicker">clients</div>
-            <div class="schema-relation">
-              <strong>clients</strong>(<span class="attr key">client_id</span>, client_name, phone)
-            </div>
-          </div>
-          <div class="schema-node top-right">
-            <div class="schema-kicker">staff</div>
-            <div class="schema-relation">
-              <strong>staff</strong>(<span class="attr key">staff_id</span>, staff_name)
-            </div>
-          </div>
-          <div class="schema-node bottom-center compact">
-            <div class="schema-kicker">appointments</div>
-            <div class="schema-relation">
-              <strong>appointments</strong>(<span class="attr key">client_id</span>, appointment_date, appointment_time, service, <span class="attr key">staff_id</span>)
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="appointments-q1a-slide">
-      <section data-title-en="Question 1A">
-        <div class="label">Solution</div>
-        <h2>Appointment time and client name for Giuliano on Feb 14.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{Clients.name,\;Appointments.time} \left(
-              \left(
-              \pi_{CID, SID, time} \left(
-              \sigma_{date = \text{'Feb14'}}(Appointments)
-              \right)
-              \right)
-              \;\bowtie_{Appointments.SID = Staff.SID}\;
-              \left(
-              \pi_{SID} \left(
-              \sigma_{name = \text{'Giuliano'}}(Staff)
-              \right)
-              \right)
-              \;\bowtie_{Appointments.CID = Clients.CID}\;
-              Clients
-              \right)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="appointments-q1b-slide">
-      <section data-title-en="Question 1B">
-        <div class="label">Solution</div>
-        <h2>Appointment time and client name for Giuliano on Feb 14.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = \sigma_{date = \text{'Feb14'}}(Appointments)
-              \]
-              \[
-              R_2 = \pi_{CID, SID, time}(R_1)
-              \]
-              \[
-              R_3 = \sigma_{name = \text{'Giuliano'}}(Staff)
-              \]
-              \[
-              R_4 = \pi_{SID}(R_3)
-              \]
-              \[
-              R_5 = R_2 \;\bowtie_{R_2.SID = R_4.SID}\; R_4
-              \]
-              \[
-              R_6 = R_5 \;\bowtie_{R_5.CID = Clients.CID}\; Clients
-              \]
-              \[
-              \text{Result} = \pi_{Clients.name,\;R_5.time}(R_6)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="appointments-q2a-slide">
-      <section data-title-en="Question 2A">
-        <div class="label">Solution</div>
-        <h2>Same query, but begin with all three relations in full.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Reduced RA</div>
-            <div class="math">
-              \[
-              \pi_{Clients.name,\;Appointments.time} \left(
-              \sigma_{
-              Appointments.date = \text{'Feb14'}
-              \;\wedge\;
-              Staff.name = \text{'Giuliano'}
-              \;\wedge\;
-              Appointments.SID = Staff.SID
-              \;\wedge\;
-              Appointments.CID = Clients.CID
-              }
-              \left(
-              Appointments \times Staff \times Clients
-              \right)
-              \right)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="appointments-q2b-slide">
-      <section data-title-en="Question 2B">
-        <div class="label">Solution</div>
-        <h2>Same query, but begin with all three relations in full.</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Step By Step</div>
-            <div class="math">
-              \[
-              R_1 = Appointments \times Staff
-              \]
-              \[
-              R_2 = R_1 \times Clients
-              \]
-              \[
-              R_3 = \sigma_{
-              Appointments.date = \text{'Feb14'}
-              \;\wedge\;
-              Staff.name = \text{'Giuliano'}
-              \;\wedge\;
-              Appointments.SID = Staff.SID
-              \;\wedge\;
-              Appointments.CID = Clients.CID
-              }(R_2)
-              \]
-              \[
-              \text{Result} = \pi_{Clients.name,\;Appointments.time}(R_3)
-              \]
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="appointments-q3-slide">
-      <section data-title-en="Question 3">
-        <div class="label">Solution</div>
-        <h2>Which answer is better?</h2>
-        <div class="divider"></div>
-        <div class="solution-stage">
-          <div class="formula-block">
-            <div class="formula-title">Answer</div>
-            <div class="math">
-              <p>
-                The first query is better because it reduces the size of
-                intermediate results by applying selection and projection early.
-              </p>
-              <p style="margin-top: 1rem">
-                The second query builds a large Cartesian product before
-                filtering, which makes it less efficient.
-              </p>
-              <p style="margin-top: 1rem">
-                In relational algebra, both queries are equivalent in result,
-                but in practice the first approach is preferred because it leads
-                to better execution performance.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </template>
-
-    <template id="empty-slide">
-      <section data-title-en="Pending">
-        <div class="label">Solutions</div>
-        <h2>Solution View Pending</h2>
-        <div class="divider"></div>
-        <p class="muted">This solution set has not been added yet.</p>
-      </section>
-    </template>
-
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
     <script>
-      const params = new URLSearchParams(window.location.search);
-      const caseId = params.get("case") || "all";
-      const mode = params.get("mode");
-      const isSingleMode = mode === "single" || mode === "embed";
-      const isEmbedMode = mode === "embed";
-      const slidesRoot = document.getElementById("slides-root");
-      const singleApp = document.getElementById("single-app");
-      const wrapperApp = document.getElementById("wrapper-app");
-
-      const decks = {
-        sailors: [
-          "sailors-schema-slide",
-          "sailors-q1-slide",
-          "sailors-q2-slide",
-          "sailors-q3-slide",
-          "sailors-q4-slide",
-          "sailors-q5-slide",
-          "sailors-q6-slide",
-          "sailors-q7-slide",
-          "sailors-q8-slide",
-          "sailors-q9-slide",
-          "sailors-q10-slide",
-          "sailors-q11-slide",
-          "sailors-q12-slide",
-        ],
-        catalog: [
-          "catalog-schema-slide",
-          "catalog-q1-slide",
-          "catalog-q2-slide",
-          "catalog-q3-slide",
-          "catalog-q4-slide",
-          "catalog-q5-slide",
-          "catalog-q6-slide",
-        ],
-        appointments: [
-          "appointments-schema-slide",
-          "appointments-q1a-slide",
-          "appointments-q1b-slide",
-          "appointments-q2a-slide",
-          "appointments-q2b-slide",
-          "appointments-q3-slide",
-        ],
-      };
-
       const cases = [
-        { id: "sailors", title: "Sailors, Boats, and Rentals" },
-        { id: "catalog", title: "Suppliers, Parts, and Catalog" },
-        { id: "appointments", title: "Clients, Staff, and Appointments" },
+        {
+          id: "sailors",
+          title: "Sailors, Boats, and Rentals",
+          file: "sailors-solutions.html",
+          backHash: "#/5",
+        },
+        {
+          id: "catalog",
+          title: "Suppliers, Parts, and Catalog",
+          file: "catalog-solutions.html",
+          backHash: "#/9",
+        },
+        {
+          id: "appointments",
+          title: "Clients, Staff, and Appointments",
+          file: "appointments-solutions.html",
+          backHash: "#/13",
+        },
       ];
 
-      if (!isSingleMode) {
-        singleApp.style.display = "none";
-        wrapperApp.style.display = "block";
+      const titleEl = document.getElementById("title");
+      const frameEl = document.getElementById("frame");
+      const selectEl = document.getElementById("case-select");
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+      const backBtn = document.getElementById("back-btn");
+      const isSingleMode =
+        new URLSearchParams(window.location.search).get("mode") === "single";
 
-        const byId = new Map(cases.map((item) => [item.id, item]));
-        const titleEl = document.getElementById("wrapper-title");
-        const frameEl = document.getElementById("wrapper-frame");
-        const selectEl = document.getElementById("case-select");
-        const prevBtn = document.getElementById("gallery-prev");
-        const nextBtn = document.getElementById("gallery-next");
+      if (isSingleMode) {
+        document.body.classList.add("single-mode");
+      }
 
-        cases.forEach((item) => {
-          const option = document.createElement("option");
-          option.value = item.id;
-          option.textContent = item.title;
-          selectEl.appendChild(option);
-        });
+      cases.forEach((item) => {
+        const option = document.createElement("option");
+        option.value = item.id;
+        option.textContent = item.title;
+        selectEl.appendChild(option);
+      });
 
-        function getCurrentCaseId() {
-          return new URLSearchParams(window.location.search).get("case") || "sailors";
-        }
+      function getCurrentCaseId() {
+        return new URLSearchParams(window.location.search).get("case");
+      }
 
-        function getCurrentIndex() {
-          const activeId = getCurrentCaseId();
-          const idx = cases.findIndex((item) => item.id === activeId);
-          return idx >= 0 ? idx : 0;
-        }
+      function getCurrentIndex() {
+        const caseId = getCurrentCaseId();
+        const idx = cases.findIndex((item) => item.id === caseId);
+        return idx >= 0 ? idx : 0;
+      }
 
-        function applyCase(index, { replace = false } = {}) {
-          const item = cases[index];
-          if (!item) return;
+      function applyCase(index, { replace = false } = {}) {
+        const item = cases[index];
+        if (!item) return;
 
-          selectEl.value = item.id;
-          titleEl.textContent = `Solutions — ${item.title}`;
-          frameEl.src = `solutions-gallery.html?case=${item.id}&mode=embed`;
-          prevBtn.disabled = index === 0;
-          nextBtn.disabled = index === cases.length - 1;
+        selectEl.value = item.id;
+        titleEl.textContent = `Solutions — ${item.title}`;
+        frameEl.src = item.file;
+        backBtn.href = `index.html${item.backHash}`;
+        prevBtn.disabled = index === 0;
+        nextBtn.disabled = index === cases.length - 1;
 
-          const nextUrl = new URL(window.location.href);
-          nextUrl.searchParams.set("case", item.id);
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set("case", item.id);
+        if (isSingleMode) {
+          nextUrl.searchParams.set("mode", "single");
+        } else {
           nextUrl.searchParams.delete("mode");
-          if (replace) {
-            window.history.replaceState(null, "", nextUrl);
-          } else {
-            window.history.pushState(null, "", nextUrl);
-          }
         }
 
+        if (replace) {
+          window.history.replaceState(null, "", nextUrl);
+        } else {
+          window.history.pushState(null, "", nextUrl);
+        }
+      }
+
+      if (!isSingleMode) {
         selectEl.addEventListener("change", () => {
           const idx = cases.findIndex((item) => item.id === selectEl.value);
           applyCase(idx);
@@ -1854,133 +271,13 @@
           const idx = getCurrentIndex();
           if (idx < cases.length - 1) applyCase(idx + 1);
         });
-
-        window.addEventListener("popstate", () => {
-          applyCase(getCurrentIndex(), { replace: true });
-        });
-
-        applyCase(getCurrentIndex(), { replace: true });
-      } else {
-        wrapperApp.style.display = "none";
-        singleApp.style.display = "block";
-        if (isEmbedMode) {
-          document.body.classList.add("embed-mode");
-        }
-
-        const deck = decks[caseId] || ["empty-slide"];
-        deck.forEach((id) => {
-          slidesRoot.appendChild(
-            document.getElementById(id).content.cloneNode(true),
-          );
-        });
-
-        Reveal.initialize({
-          controls: false,
-          progress: false,
-          hash: true,
-          transition: "fade",
-          transitionSpeed: "fast",
-          width: "100%",
-          height: "100%",
-          margin: 0,
-          minScale: 1,
-          maxScale: 1,
-        });
-
-        const strip = document.getElementById("filmstrip");
-        const sections = document.querySelectorAll(".reveal .slides section");
-
-        function buildThumbs() {
-          const revealEl = document.querySelector(".reveal");
-          const slideW = revealEl.offsetWidth;
-          const slideH = revealEl.offsetHeight;
-          const thumbWidth = 120;
-          const scale = thumbWidth / slideW;
-
-          sections.forEach((section, index) => {
-            const thumb = document.createElement("div");
-            thumb.className = "thumb";
-
-            const wrap = document.createElement("div");
-            wrap.className = "slide-preview-wrap";
-
-            const preview = document.createElement("div");
-            preview.className = "slide-preview";
-            preview.style.width = slideW + "px";
-            preview.style.height = slideH + "px";
-            preview.style.transform = `scale(${scale})`;
-
-            Array.from(section.childNodes).forEach((node) => {
-              preview.appendChild(node.cloneNode(true));
-            });
-
-            wrap.appendChild(preview);
-            thumb.appendChild(wrap);
-
-            const num = document.createElement("span");
-            num.className = "thumb-num";
-            num.textContent = String(index + 1).padStart(2, "0");
-            thumb.appendChild(num);
-
-            thumb.addEventListener("click", () => Reveal.slide(index));
-            strip.appendChild(thumb);
-          });
-        }
-
-        function syncNav(event) {
-          const idx = event.indexh;
-          const thumbs = strip.querySelectorAll(".thumb");
-          thumbs.forEach((thumb, index) => {
-            thumb.classList.toggle("active", index === idx);
-          });
-
-          const active = thumbs[idx];
-          if (active) {
-            strip.scrollLeft =
-              active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
-          }
-
-          document
-            .getElementById("arrow-prev")
-            .classList.toggle("hidden", idx === 0);
-          document
-            .getElementById("arrow-next")
-            .classList.toggle("hidden", idx === sections.length - 1);
-        }
-
-        Reveal.on("slidechanged", syncNav);
-        Reveal.on("ready", async (event) => {
-          buildThumbs();
-          syncNav({ indexh: event.indexh });
-          if (window.MathJax?.typesetPromise) {
-            await window.MathJax.typesetPromise();
-          }
-        });
-
-        document
-          .getElementById("arrow-prev")
-          .addEventListener("click", () => Reveal.prev());
-        document
-          .getElementById("arrow-next")
-          .addEventListener("click", () => Reveal.next());
-
-        let collapsed = false;
-        const filmstrip = document.getElementById("filmstrip");
-        const viewport = document.querySelector(".reveal-viewport");
-        const stripToggle = document.getElementById("strip-toggle");
-        const arrows = document.querySelectorAll(".nav-arrow");
-
-        stripToggle.addEventListener("click", () => {
-          collapsed = !collapsed;
-          filmstrip.classList.toggle("collapsed", collapsed);
-          viewport.classList.toggle("strip-collapsed", collapsed);
-          arrows.forEach((arrow) => {
-            arrow.classList.toggle("strip-collapsed", collapsed);
-          });
-          stripToggle.classList.toggle("is-collapsed", collapsed);
-          setTimeout(() => Reveal.layout(), 320);
-        });
       }
+
+      window.addEventListener("popstate", () => {
+        applyCase(getCurrentIndex(), { replace: true });
+      });
+
+      applyCase(getCurrentIndex(), { replace: true });
     </script>
   </body>
 </html>
