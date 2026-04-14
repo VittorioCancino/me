@@ -135,6 +135,15 @@ export const translations = {
         href: "/presentations/tics320/exercises/exercise-2/index.html",
         solutionHref: "/presentations/tics320/exercises/exercise-2/er-gallery.html?case=university",
       },
+      {
+        number: 3,
+        title: "Relational Algebra Exercises",
+        description:
+          "Practice the core operators of relational algebra and build query expressions from a shared schema.",
+        href: "/presentations/tics320/exercises/exercise-3/index.html",
+        solutionHref:
+          "/presentations/tics320/exercises/exercise-3/solutions-gallery.html?case=sailors",
+      },
     ],
     courseList: [
       {
@@ -281,6 +290,15 @@ export const translations = {
           "Práctica guiada de modelado ER con casos de estudio de dificultad progresiva. Este material funciona mejor como ejercicio que como sesión expositiva.",
         href: "/presentations/tics320/exercises/exercise-2/index.html",
         solutionHref: "/presentations/tics320/exercises/exercise-2/er-gallery.html?case=university",
+      },
+      {
+        number: 3,
+        title: "Ejercicios de Álgebra Relacional",
+        description:
+          "Practica los operadores centrales del álgebra relacional y construye expresiones de consulta sobre un esquema compartido.",
+        href: "/presentations/tics320/exercises/exercise-3/index.html",
+        solutionHref:
+          "/presentations/tics320/exercises/exercise-3/solutions-gallery.html?case=sailors",
       },
     ],
     courseList: [
