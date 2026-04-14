@@ -1,0 +1,3701 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practicum 2 — TICS320</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <link rel="stylesheet" href="../../../shared/tokens.css" />
+
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+        --strip-h: 88px;
+        --toggle-h: 28px;
+        --arrow-w: 56px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+      }
+
+      .reveal-viewport {
+        background: var(--bg) !important;
+        height: calc(100vh - var(--strip-h) - var(--toggle-h)) !important;
+        transition: height var(--transition);
+      }
+
+      .reveal-viewport.strip-collapsed {
+        height: calc(100vh - var(--toggle-h)) !important;
+      }
+
+      .reveal {
+        height: 100% !important;
+      }
+
+      .reveal .slides {
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+      }
+
+      .reveal .slides section {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 3rem 10rem;
+        top: 0 !important;
+        left: 0 !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .reveal h1 {
+        font-size: var(--text-display);
+        line-height: 1.1;
+      }
+
+      .reveal h2 {
+        font-size: var(--text-heading);
+        line-height: 1.15;
+      }
+
+      .reveal h3 {
+        font-size: var(--text-subheading);
+        line-height: 1.2;
+      }
+
+      .reveal p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+      }
+
+      .label {
+        display: inline-block;
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        border: 1px solid rgba(124, 58, 237, 0.45);
+        background: var(--accent-dim);
+        padding: 0.22em 0.85em;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+      }
+
+      .divider {
+        width: 2.5rem;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        margin: 0.8rem auto 1.1rem;
+      }
+
+      .muted {
+        color: var(--muted) !important;
+        font-size: var(--text-muted);
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+
+      .story {
+        background: var(--surface);
+        border-left: 4px solid var(--accent);
+        border-radius: 0 10px 10px 0;
+        padding: 1.35rem 1.6rem;
+        text-align: left;
+        font-size: var(--text-body);
+        color: #c9d1d9;
+        line-height: 1.8;
+      }
+
+      .story em {
+        color: #fff;
+        font-style: normal;
+        font-weight: 600;
+      }
+
+      .reveal-text {
+        font-size: var(--text-display);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: #fff;
+        line-height: 1.04;
+      }
+
+      .reveal-text .accent {
+        color: var(--accent-light);
+      }
+
+      .truth-list {
+        list-style: none;
+        padding: 0;
+        text-align: left;
+        display: inline-block;
+      }
+
+      .truth-list li {
+        font-size: var(--text-subheading);
+        color: #c9d1d9;
+        line-height: 1.58;
+        padding: 0.45rem 0;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+      }
+
+      .truth-list li:last-child {
+        border-bottom: none;
+      }
+
+      .truth-list li .icon {
+        font-size: var(--text-subheading);
+        width: 2.2rem;
+        text-align: center;
+        flex-shrink: 0;
+      }
+
+      .truth-list li .icon:empty::before {
+        content: "•";
+        color: #fff;
+      }
+
+      .truth-list li strong {
+        color: #fff;
+      }
+
+      .callout {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        font-size: var(--text-card);
+        color: #c9d1d9;
+        text-align: left;
+        margin-top: 0.7rem;
+      }
+
+      .callout.info {
+        background: var(--accent-dim);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+      }
+
+      .callout.warn {
+        background: rgba(251, 191, 36, 0.08);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+      }
+
+      .callout .icon {
+        font-size: var(--text-body);
+        flex-shrink: 0;
+      }
+
+      .callout strong {
+        color: #fff;
+      }
+
+      #lang-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 300;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 3px;
+      }
+
+      .lang-btn {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 0.25em 0.75em;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+
+      .lang-btn.active {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .lang-btn:not(.active):hover {
+        color: #fff;
+      }
+
+      .nav-arrow {
+        position: fixed;
+        top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
+        transform: translateY(-50%);
+        z-index: 200;
+        width: var(--arrow-w);
+        height: var(--arrow-w);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        transition:
+          background 0.18s,
+          color 0.18s,
+          border-color 0.18s,
+          opacity 0.18s,
+          top var(--transition);
+        user-select: none;
+      }
+
+      .nav-arrow:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent-light);
+      }
+
+      .nav-arrow.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .nav-arrow.strip-collapsed {
+        top: 50%;
+      }
+
+      #arrow-prev {
+        left: 1rem;
+      }
+
+      #arrow-next {
+        right: 1rem;
+      }
+
+      #strip-toggle {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--toggle-h);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 101;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+      }
+
+      #toggle-pill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: var(--muted);
+        transition:
+          background 0.18s,
+          color 0.18s;
+      }
+
+      #strip-toggle:hover #toggle-pill {
+        color: var(--accent-light);
+        background: color-mix(in srgb, var(--accent-dim) 42%, var(--surface));
+      }
+
+      .toggle-icon {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.18s;
+      }
+
+      #strip-toggle.is-collapsed .toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      #filmstrip {
+        position: fixed;
+        bottom: var(--toggle-h);
+        left: 0;
+        right: 0;
+        height: var(--strip-h);
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        z-index: 100;
+        padding: 0 1rem;
+        gap: 0.6rem;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        transform: translateY(0);
+        opacity: 1;
+        transition:
+          transform var(--transition),
+          opacity var(--transition);
+      }
+
+      #filmstrip::-webkit-scrollbar {
+        display: none;
+      }
+
+      #filmstrip.collapsed {
+        transform: translateY(100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .thumb {
+        flex-shrink: 0;
+        width: 120px;
+        height: 68px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.18s,
+          transform 0.18s;
+      }
+
+      .thumb:hover,
+      .thumb.active {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .thumb.active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+      }
+
+      .thumb-num {
+        position: absolute;
+        bottom: 4px;
+        left: 6px;
+        z-index: 2;
+        font-size: 0.58rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.75);
+        letter-spacing: 0.06em;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      }
+
+      .thumb.active .thumb-num {
+        color: var(--accent-light);
+      }
+
+      .slide-preview-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .slide-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
+        pointer-events: none;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 3rem 10rem;
+      }
+
+      .slide-preview h1,
+      .slide-preview h2,
+      .slide-preview h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .slide-preview h1 {
+        font-size: var(--text-display);
+        line-height: 1.1;
+      }
+
+      .slide-preview h2 {
+        font-size: var(--text-heading);
+        line-height: 1.15;
+      }
+
+      .slide-preview h3 {
+        font-size: var(--text-subheading);
+        line-height: 1.2;
+      }
+
+      .slide-preview p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button id="arrow-prev" class="nav-arrow" aria-label="Previous">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </button>
+    <button id="arrow-next" class="nav-arrow" aria-label="Next">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </button>
+
+    <div class="reveal">
+      <div class="slides">
+        <section data-title-en="Title" data-title-es="Título">
+          <div class="label">TICS320 · Practicum 2</div>
+          <h1>From ER to Relational Models<br />&amp; Relational Algebra</h1>
+          <div class="divider"></div>
+          <p class="muted">
+            Vittorio Cancino &nbsp;·&nbsp; Universidad Adolfo Ibáñez
+          </p>
+        </section>
+
+        <section data-title-en="Why a New Model?" data-title-es="¿Por Qué Un Nuevo Modelo?">
+          <div class="label">Why The Shift</div>
+          <h2>Why Do We Need a New Model?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            The ER model helps us understand reality, but implementation needs a
+            stricter structure.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 1rem;
+              margin-bottom: 0.9rem;
+              align-items: start;
+            "
+          >
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                padding: 1rem 1.2rem;
+                text-align: left;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.6rem;
+                  margin-bottom: 0.65rem;
+                "
+              >
+                <div
+                  style="
+                    width: 2rem;
+                    height: 2rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 999px;
+                    background: var(--accent-dim);
+                    color: var(--accent-light);
+                    font-size: var(--text-body);
+                  "
+                >
+                  👁️
+                </div>
+                <h3 style="margin-bottom: 0; color: var(--accent-light)">
+                  ER Model
+                </h3>
+              </div>
+              <ul
+                style="
+                  margin: 0;
+                  padding-left: 1.2rem;
+                  color: #c9d1d9;
+                  font-size: var(--text-body);
+                  line-height: 1.7;
+                "
+              >
+                <li>Intuitive and visual</li>
+                <li>Useful for understanding requirements</li>
+              </ul>
+            </div>
+
+            <div
+              style="
+                background: rgba(239, 68, 68, 0.08);
+                border: 1px solid rgba(239, 68, 68, 0.3);
+                border-radius: 12px;
+                padding: 1rem 1.2rem;
+                text-align: left;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.6rem;
+                  margin-bottom: 0.65rem;
+                "
+              >
+                <div
+                  style="
+                    width: 2rem;
+                    height: 2rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 999px;
+                    background: rgba(239, 68, 68, 0.14);
+                    color: #ef4444;
+                    font-size: var(--text-body);
+                  "
+                >
+                  ⚠️
+                </div>
+                <h3 style="margin-bottom: 0; color: #ef4444">But</h3>
+              </div>
+              <ul
+                style="
+                  margin: 0;
+                  padding-left: 1.2rem;
+                  color: #c9d1d9;
+                  font-size: var(--text-body);
+                  line-height: 1.7;
+                "
+              >
+                <li>Not precise enough for implementation</li>
+                <li>Lacks formal structure for querying</li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 48rem;
+              background: var(--surface);
+              border-left: 4px solid var(--accent);
+              border-radius: 0 12px 12px 0;
+              padding: 1.15rem 1.4rem;
+              text-align: left;
+            "
+          >
+            <p style="font-size: var(--text-body); color: #c9d1d9">
+              We need a model that is <strong>precise</strong>, can be
+              <strong>implemented in a DBMS</strong>, and
+              <strong>supports querying</strong>.
+            </p>
+          </div>
+        </section>
+
+        <section data-title-en="Everything Becomes Tables" data-title-es="Todo Se Convierte En Tablas">
+          <div class="label">Core Idea</div>
+          <h2>Everything Becomes Tables</h2>
+          <p class="muted" style="margin-bottom: 1rem">
+            The relational model represents data using tables. Each table
+            represents a set of similar objects.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              display: grid;
+              grid-template-columns: 1.05fr 1.35fr;
+              gap: 1rem;
+              align-items: start;
+              margin-bottom: 1rem;
+            "
+          >
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                padding: 1rem 1.2rem;
+                text-align: left;
+              "
+            >
+              <h3 style="margin-bottom: 0.65rem; color: var(--accent-light)">
+                Mapping
+              </h3>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.65rem;
+                  font-size: var(--text-body);
+                  color: #c9d1d9;
+                "
+              >
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 2.5rem 1fr;
+                    align-items: center;
+                    padding: 0.7rem 0.85rem;
+                    background: rgba(124, 58, 237, 0.08);
+                    border: 1px solid rgba(124, 58, 237, 0.22);
+                    border-radius: 10px;
+                  "
+                >
+                  <strong style="color: #fff; text-align: left">Entity</strong>
+                  <span style="color: var(--accent-light); text-align: center"
+                    >→</span
+                  >
+                  <strong style="color: #fff; text-align: right">Table</strong>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 2.5rem 1fr;
+                    align-items: center;
+                    padding: 0.7rem 0.85rem;
+                    background: rgba(124, 58, 237, 0.08);
+                    border: 1px solid rgba(124, 58, 237, 0.22);
+                    border-radius: 10px;
+                  "
+                >
+                  <strong style="color: #fff; text-align: left"
+                    >Relationship</strong
+                  >
+                  <span style="color: var(--accent-light); text-align: center"
+                    >→</span
+                  >
+                  <strong style="color: #fff; text-align: right">Table</strong>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 2.5rem 1fr;
+                    align-items: center;
+                    padding: 0.7rem 0.85rem;
+                    background: rgba(124, 58, 237, 0.08);
+                    border: 1px solid rgba(124, 58, 237, 0.22);
+                    border-radius: 10px;
+                  "
+                >
+                  <strong style="color: #fff; text-align: left"
+                    >Attribute</strong
+                  >
+                  <span style="color: var(--accent-light); text-align: center"
+                    >→</span
+                  >
+                  <strong style="color: #fff; text-align: right">Column</strong>
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                padding: 1rem 1.2rem;
+                text-align: left;
+              "
+            >
+              <h3 style="margin-bottom: 0.65rem; color: var(--accent-light)">
+                From ER Concepts To Relational Structure
+              </h3>
+
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr auto 1fr;
+                  gap: 0.8rem;
+                  align-items: center;
+                  margin-bottom: 0.95rem;
+                "
+              >
+                <div
+                  style="
+                    padding: 0.8rem 0.95rem;
+                    border: 1px solid rgba(124, 58, 237, 0.25);
+                    border-radius: 10px;
+                    background: rgba(124, 58, 237, 0.08);
+                    text-align: center;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: var(--text-card);
+                      color: var(--muted);
+                      margin-bottom: 0.2rem;
+                    "
+                  >
+                    ER Entity
+                  </div>
+                  <div style="font-size: var(--text-body); color: #fff">
+                    Product
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    font-size: 1.6rem;
+                    color: var(--accent-light);
+                    font-weight: 700;
+                  "
+                >
+                  →
+                </div>
+
+                <div
+                  style="
+                    padding: 0.8rem 0.95rem;
+                    border: 1px solid rgba(34, 197, 94, 0.28);
+                    border-radius: 10px;
+                    background: rgba(34, 197, 94, 0.08);
+                    text-align: center;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: var(--text-card);
+                      color: var(--muted);
+                      margin-bottom: 0.2rem;
+                    "
+                  >
+                    Relation Schema
+                  </div>
+                  <div style="font-size: var(--text-body); color: #fff">
+                    Product(name, category, price)
+                  </div>
+                </div>
+              </div>
+
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 0.75rem;
+                "
+              >
+                <div
+                  style="
+                    padding: 0.85rem 0.95rem;
+                    border-radius: 10px;
+                    background: rgba(255, 255, 255, 0.02);
+                    border: 1px solid var(--border);
+                  "
+                >
+                  <div
+                    style="
+                      font-size: var(--text-card);
+                      color: var(--muted);
+                      margin-bottom: 0.35rem;
+                    "
+                  >
+                    Example 1
+                  </div>
+                  <div style="font-size: var(--text-body); color: #fff">
+                    Product(<span
+                      style="color: #60a5fa; text-decoration: underline"
+                      >name</span
+                    >, category, price)
+                  </div>
+                </div>
+                <div
+                  style="
+                    padding: 0.85rem 0.95rem;
+                    border-radius: 10px;
+                    background: rgba(255, 255, 255, 0.02);
+                    border: 1px solid var(--border);
+                  "
+                >
+                  <div
+                    style="
+                      font-size: var(--text-card);
+                      color: var(--muted);
+                      margin-bottom: 0.35rem;
+                    "
+                  >
+                    Example 2
+                  </div>
+                  <div style="font-size: var(--text-body); color: #fff">
+                    Company(<span
+                      style="color: #60a5fa; text-decoration: underline"
+                      >name</span
+                    >, stock_value)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 48rem;
+              background: var(--surface);
+              border-left: 4px solid var(--accent);
+              border-radius: 0 12px 12px 0;
+              padding: 1.15rem 1.4rem;
+              text-align: left;
+            "
+          >
+            <p style="font-size: var(--text-body); color: #c9d1d9">
+              We are translating <strong>concepts</strong> into
+              <strong>structure</strong>: from entities and relationships to
+              relation schemas written as strings.
+            </p>
+          </div>
+        </section>
+
+        <section data-title-en="Entities to Tables" data-title-es="Entidades A Tablas">
+          <div class="label">Translation Rule 1</div>
+          <h2>Entities → Tables</h2>
+          <p class="muted" style="margin-bottom: 1rem">
+            The first translation rule is straightforward: each entity becomes a
+            table, and its descriptive properties become columns.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 62rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 1rem;
+              margin-bottom: 1rem;
+            "
+          >
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid rgba(124, 58, 237, 0.24);
+                border-radius: 14px;
+                padding: 1rem 1.15rem;
+                text-align: left;
+                width: 16rem;
+              "
+            >
+              <p
+                style="
+                  font-size: var(--text-card);
+                  color: var(--muted);
+                  margin-bottom: 0.55rem;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                "
+              >
+                ER Entity
+              </p>
+              <div
+                style="
+                  background: rgba(124, 58, 237, 0.14);
+                  border: 1px solid rgba(124, 58, 237, 0.28);
+                  border-radius: 10px;
+                  padding: 0.75rem 0.9rem;
+                  color: #fff;
+                  font-size: var(--text-subheading);
+                  font-weight: 700;
+                  text-align: center;
+                  margin-bottom: 0.8rem;
+                "
+              >
+                Product
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 0.55rem;
+                  justify-content: center;
+                "
+              >
+                <span
+                  style="
+                    padding: 0.38rem 0.7rem;
+                    border-radius: 999px;
+                    background: rgba(251, 191, 36, 0.12);
+                    border: 1px solid rgba(251, 191, 36, 0.28);
+                    color: #fbbf24;
+                    font-size: var(--text-card);
+                    text-decoration: underline;
+                    text-underline-offset: 0.14em;
+                  "
+                  >id</span
+                >
+                <span
+                  style="
+                    padding: 0.38rem 0.7rem;
+                    border-radius: 999px;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid var(--border);
+                    color: #c9d1d9;
+                    font-size: var(--text-card);
+                  "
+                  >name</span
+                >
+                <span
+                  style="
+                    padding: 0.38rem 0.7rem;
+                    border-radius: 999px;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid var(--border);
+                    color: #c9d1d9;
+                    font-size: var(--text-card);
+                  "
+                  >category</span
+                >
+                <span
+                  style="
+                    padding: 0.38rem 0.7rem;
+                    border-radius: 999px;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid var(--border);
+                    color: #c9d1d9;
+                    font-size: var(--text-card);
+                  "
+                  >price</span
+                >
+              </div>
+            </div>
+
+            <div
+              style="
+                font-size: 2rem;
+                color: var(--accent-light);
+                font-weight: 700;
+                flex-shrink: 0;
+              "
+            >
+              →
+            </div>
+
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid rgba(34, 197, 94, 0.24);
+                border-radius: 14px;
+                padding: 0.9rem 1rem;
+                text-align: left;
+                width: 20rem;
+              "
+            >
+              <p
+                style="
+                  font-size: var(--text-card);
+                  color: var(--muted);
+                  margin-bottom: 0.5rem;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                "
+              >
+                Relation Schema
+              </p>
+              <div
+                style="
+                  padding: 0.8rem 0.95rem;
+                  border: 1px solid rgba(34, 197, 94, 0.22);
+                  border-radius: 10px;
+                  background: rgba(34, 197, 94, 0.08);
+                  color: #fff;
+                  font-size: var(--text-body);
+                  line-height: 1.55;
+                "
+              >
+                Product(<span
+                  style="color: #60a5fa; text-decoration: underline"
+                  >id</span
+                >, name, category, price)
+              </div>
+            </div>
+
+            <div
+              style="
+                font-size: 2rem;
+                color: var(--accent-light);
+                font-weight: 700;
+                flex-shrink: 0;
+              "
+            >
+              →
+            </div>
+
+            <div
+              style="
+                width: 19rem;
+                background: var(--surface);
+                border: 1px solid rgba(34, 197, 94, 0.22);
+                border-radius: 14px;
+                padding: 0.9rem 1rem;
+                text-align: left;
+              "
+            >
+              <p
+                style="
+                  font-size: var(--text-card);
+                  color: var(--muted);
+                  margin-bottom: 0.5rem;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                "
+              >
+                Example Table
+              </p>
+              <div
+                style="
+                  border: 1px solid rgba(34, 197, 94, 0.28);
+                  border-radius: 10px;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 0.55fr 1.05fr 1fr 0.9fr;
+                    background: rgba(34, 197, 94, 0.1);
+                    border-bottom: 1px solid rgba(34, 197, 94, 0.24);
+                  "
+                >
+                  <div
+                    style="
+                      padding: 0.7rem 0.8rem;
+                      color: #fff;
+                      font-size: var(--text-card);
+                      font-weight: 700;
+                      text-decoration: underline;
+                      text-underline-offset: 0.14em;
+                    "
+                  >
+                    id
+                  </div>
+                  <div
+                    style="
+                      padding: 0.7rem 0.8rem;
+                      color: #fff;
+                      font-size: var(--text-card);
+                      font-weight: 700;
+                    "
+                  >
+                    name
+                  </div>
+                  <div
+                    style="
+                      padding: 0.7rem 0.8rem;
+                      color: #fff;
+                      font-size: var(--text-card);
+                      font-weight: 700;
+                    "
+                  >
+                    category
+                  </div>
+                  <div
+                    style="
+                      padding: 0.7rem 0.8rem;
+                      color: #fff;
+                      font-size: var(--text-card);
+                      font-weight: 700;
+                      text-align: right;
+                    "
+                  >
+                    price
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 0.55fr 1.05fr 1fr 0.9fr;
+                    border-bottom: 1px solid var(--border);
+                    background: rgba(255, 255, 255, 0.02);
+                  "
+                >
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    1
+                  </div>
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    Laptop
+                  </div>
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    Electronics
+                  </div>
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                      text-align: right;
+                    "
+                  >
+                    1200
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 0.55fr 1.05fr 1fr 0.9fr;
+                    background: rgba(255, 255, 255, 0.01);
+                  "
+                >
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    2
+                  </div>
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    Chair
+                  </div>
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    Furniture
+                  </div>
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                      text-align: right;
+                    "
+                  >
+                    85
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 62rem;
+              background: var(--surface);
+              border-left: 4px solid var(--accent);
+              border-radius: 0 12px 12px 0;
+              padding: 1rem 1.2rem;
+              text-align: left;
+            "
+          >
+            <p style="font-size: var(--text-body); color: #c9d1d9">
+              The entity becomes a <strong>table</strong>, the attributes become
+              <strong>columns</strong>, and the entity key becomes the
+              <strong>primary key</strong>. The primary key uniquely identifies
+              each row.
+            </p>
+          </div>
+        </section>
+
+        <section data-title-en="Relationships to Tables" data-title-es="Relaciones A Tablas">
+          <div class="label">Translation Rule 2</div>
+          <h2>Relationships → Tables</h2>
+          <p class="muted" style="margin-bottom: 1rem">
+            When a relationship must be represented explicitly, it becomes a new
+            table built from the keys of the participating entities plus any
+            attributes of the relationship itself.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 60rem;
+              display: grid;
+              grid-template-columns: 1fr auto 1.3fr;
+              gap: 1rem;
+              align-items: center;
+              margin-bottom: 1rem;
+            "
+          >
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid rgba(124, 58, 237, 0.24);
+                border-radius: 14px;
+                padding: 1rem 1.1rem;
+                text-align: center;
+              "
+            >
+              <p
+                style="
+                  font-size: var(--text-card);
+                  color: var(--muted);
+                  margin-bottom: 0.55rem;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                "
+              >
+                Relationship
+              </p>
+              <div
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  min-width: 10rem;
+                  padding: 0.8rem 1.2rem;
+                  border-radius: 10px;
+                  background: rgba(124, 58, 237, 0.12);
+                  border: 1px solid rgba(124, 58, 237, 0.28);
+                  color: #fff;
+                  font-size: var(--text-subheading);
+                  font-weight: 700;
+                "
+              >
+                Production
+              </div>
+              <div
+                style="
+                  margin-top: 0.8rem;
+                  display: flex;
+                  justify-content: center;
+                  gap: 0.55rem;
+                  flex-wrap: wrap;
+                "
+              >
+                <span
+                  style="
+                    padding: 0.38rem 0.7rem;
+                    border-radius: 999px;
+                    background: rgba(255, 255, 255, 0.03);
+                    border: 1px solid var(--border);
+                    color: #c9d1d9;
+                    font-size: var(--text-card);
+                  "
+                  >desde</span
+                >
+              </div>
+            </div>
+
+            <div
+              style="
+                font-size: 2rem;
+                color: var(--accent-light);
+                font-weight: 700;
+              "
+            >
+              →
+            </div>
+
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid rgba(34, 197, 94, 0.24);
+                border-radius: 14px;
+                padding: 1rem 1.1rem;
+                text-align: left;
+              "
+            >
+              <p
+                style="
+                  font-size: var(--text-card);
+                  color: var(--muted);
+                  margin-bottom: 0.55rem;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                "
+              >
+                Table
+              </p>
+
+              <div
+                style="
+                  padding: 0.8rem 0.95rem;
+                  border: 1px solid rgba(34, 197, 94, 0.22);
+                  border-radius: 10px;
+                  background: rgba(34, 197, 94, 0.08);
+                  color: #fff;
+                  font-size: var(--text-body);
+                  line-height: 1.55;
+                  margin-bottom: 0.75rem;
+                "
+              >
+                Production(<span style="color: #60a5fa; text-decoration: underline"
+                  >product_id</span
+                >,
+                <span style="color: #60a5fa; text-decoration: underline"
+                  >company_id</span
+                >, since)
+              </div>
+
+              <div
+                style="
+                  border: 1px solid rgba(34, 197, 94, 0.28);
+                  border-radius: 10px;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1.2fr 1.2fr 0.8fr;
+                    background: rgba(34, 197, 94, 0.1);
+                    border-bottom: 1px solid rgba(34, 197, 94, 0.24);
+                  "
+                >
+                  <div
+                    style="
+                      padding: 0.7rem 0.8rem;
+                      color: #fff;
+                      font-size: var(--text-card);
+                      font-weight: 700;
+                    "
+                  >
+                    product_id
+                  </div>
+                  <div
+                    style="
+                      padding: 0.7rem 0.8rem;
+                      color: #fff;
+                      font-size: var(--text-card);
+                      font-weight: 700;
+                    "
+                  >
+                    company_id
+                  </div>
+                  <div
+                    style="
+                      padding: 0.7rem 0.8rem;
+                      color: #fff;
+                      font-size: var(--text-card);
+                      font-weight: 700;
+                    "
+                  >
+                    since
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1.2fr 1.2fr 0.8fr;
+                    background: rgba(255, 255, 255, 0.02);
+                  "
+                >
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    P01
+                  </div>
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    C07
+                  </div>
+                  <div
+                    style="
+                      padding: 0.65rem 0.8rem;
+                      color: #c9d1d9;
+                      font-size: var(--text-card);
+                    "
+                  >
+                    2022
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 60rem;
+              background: var(--surface);
+              border-left: 4px solid var(--accent);
+              border-radius: 0 12px 12px 0;
+              padding: 1rem 1.2rem;
+              text-align: left;
+            "
+          >
+            <p style="font-size: var(--text-body); color: #c9d1d9">
+              Each relationship becomes a <strong>new table</strong>. That table
+              includes the <strong>primary keys</strong> of the participating
+              entities and any <strong>relationship attributes</strong>. Keys
+              coming from the entities become <strong>foreign keys</strong>.
+            </p>
+          </div>
+        </section>
+
+        <section data-title-en="How Do We Tell Rows Apart?" data-title-es="¿Cómo Distinguimos Las Filas?">
+          <div class="label">A Question</div>
+          <h2>How Do We Tell Rows Apart?</h2>
+          <p class="muted" style="margin-bottom: 1.1rem">
+            Once we transform concepts into tables, a new problem appears.
+          </p>
+
+          <div class="story" style="max-width: 56rem; margin-bottom: 1rem">
+            Imagine two rows in <em>Product</em> with the same name, or two
+            rows in <em>Production</em> that involve the same company but different
+            products. If we want to update, delete, or reference exactly one
+            row, we need a way to say: <em>this one, and no other</em>.
+          </div>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.9rem"
+          >
+            That is the job of the <span class="accent">Primary Key</span>
+          </div>
+
+          <div class="callout warn" style="max-width: 46rem">
+            <span class="icon">⚠️</span>
+            <span
+              >Without a reliable key, two rows can become
+              <strong>indistinguishable</strong>.</span
+            >
+          </div>
+        </section>
+
+        <section data-title-en="Primary Key Rule" data-title-es="Regla De Clave Primaria">
+          <div class="label">Primary Keys</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            No two rows can share the same
+            <span class="accent">Primary Key</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            A primary key uniquely identifies each tuple, that is, each row in a
+            relation.
+          </p>
+
+          <div class="grid-2" style="width: 100%; max-width: 58rem">
+            <div class="story">
+              <p style="margin-bottom: 0.55rem; color: #fff">
+                <strong>Entity Table</strong>
+              </p>
+              <p>The key usually comes from the <em>entity key</em>.</p>
+              <p style="margin-top: 0.55rem; color: var(--accent-light)">
+                Product → id
+              </p>
+            </div>
+
+            <div class="story">
+              <p style="margin-bottom: 0.55rem; color: #fff">
+                <strong>Relationship Table</strong>
+              </p>
+              <p>The key often comes from a <em>combination of keys</em>.</p>
+              <p style="margin-top: 0.55rem; color: var(--accent-light)">
+                Production → (product_id, company_id)
+              </p>
+            </div>
+          </div>
+
+          <div class="callout info" style="max-width: 54rem; margin-top: 1rem">
+            <span class="icon">→</span>
+            <span
+              >For entity tables, the key comes from the entity. For
+              relationship tables, it can come from the
+              <strong>combination</strong> of participating keys.</span
+            >
+          </div>
+        </section>
+
+        <section data-title-en="Foreign Keys Diagram" data-title-es="Diagrama De Claves Foráneas">
+          <div class="label">Foreign Keys</div>
+          <h2>Tables Must Still Know Each Other</h2>
+          <p class="muted" style="margin-bottom: 1rem">
+            A foreign key references a primary key in another table. That is how
+            the relationship survives after the ER diagram becomes tables.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 60rem;
+              padding: 1.15rem 1.25rem 1rem;
+              background: var(--surface);
+              border: 1px solid var(--border);
+              border-radius: 14px;
+              margin-bottom: 1rem;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 1rem;
+                margin-bottom: 1rem;
+              "
+            >
+              <div
+                style="
+                  font-size: var(--text-body);
+                  color: #fff;
+                  text-align: left;
+                  white-space: nowrap;
+                "
+              >
+                Product(<span
+                  style="color: #60a5fa; text-decoration: underline"
+                  >id</span
+                >, name, category, price)
+              </div>
+              <div
+                style="
+                  font-size: var(--text-body);
+                  color: #fff;
+                  text-align: right;
+                  white-space: nowrap;
+                "
+              >
+                Company(<span
+                  style="color: #60a5fa; text-decoration: underline"
+                  >id</span
+                >, stock_value)
+              </div>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: var(--accent-light);
+                font-size: var(--text-body);
+                margin-bottom: 0.35rem;
+              "
+            >
+              Foreign Keys
+            </div>
+
+            <div
+              style="position: relative; height: 2.4rem; margin-bottom: 0.05rem"
+            >
+              <svg
+                viewBox="0 0 800 84"
+                style="width: 100%; height: 100%; overflow: visible"
+                aria-hidden="true"
+              >
+                <defs>
+                  <marker
+                    id="fk-arrow"
+                    markerWidth="10"
+                    markerHeight="10"
+                    refX="8"
+                    refY="3"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                  >
+                    <path d="M0,0 L0,6 L8,3 z" fill="#a78bfa"></path>
+                  </marker>
+                </defs>
+                <line
+                  x1="362"
+                  y1="74"
+                  x2="-350"
+                  y2="-100"
+                  stroke="#a78bfa"
+                  stroke-width="2.5"
+                  marker-end="url(#fk-arrow)"
+                ></line>
+                <line
+                  x1="438"
+                  y1="74"
+                  x2="1100"
+                  y2="-100"
+                  stroke="#a78bfa"
+                  stroke-width="2.5"
+                  marker-end="url(#fk-arrow)"
+                ></line>
+              </svg>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: var(--text-body);
+                color: #fff;
+                text-align: center;
+              "
+            >
+              Production(<span style="color: #60a5fa; text-decoration: underline"
+                >product_id</span
+              >,
+              <span style="color: #60a5fa; text-decoration: underline"
+                >company_id</span
+              >, since)
+            </div>
+          </div>
+
+          <div class="callout info" style="max-width: 56rem">
+            <span class="icon">🔗</span>
+            <span
+              >In the generated relation, <strong>product_id</strong> points to
+              <strong>Product</strong> and <strong>company_id</strong> points
+              to <strong>Company</strong>.</span
+            >
+          </div>
+        </section>
+
+        <section data-title-en="Why Foreign Keys Matter" data-title-es="Por Qué Importan Las Claves Foráneas">
+          <div class="label">Why They Matter</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            Foreign Keys <span class="accent">Protect</span><br />The Meaning Of
+            The Data
+          </div>
+          <div class="divider"></div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 58rem;
+              display: flex;
+              flex-direction: column;
+              gap: 0.8rem;
+              margin-top: 0.8rem;
+            "
+          >
+            <div class="callout info" style="margin-top: 0">
+              <span class="icon">1</span>
+              <span
+                >They <strong>maintain consistency</strong> between
+                tables.</span
+              >
+            </div>
+            <div class="callout info" style="margin-top: 0">
+              <span class="icon">2</span>
+              <span
+                >They <strong>enforce relationships</strong> instead of leaving
+                them implicit.</span
+              >
+            </div>
+            <div class="story" style="max-width: none; margin-top: 0.1rem">
+              Without foreign keys, <em>Production</em> could contain a
+              <em>product_id</em> that does not exist in <em>Product</em>, or a
+              <em>company_id</em> that points nowhere. The row would still
+              be stored, but the relationship would already be broken.
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="What We Achieved" data-title-es="Lo Que Logramos">
+          <div class="label">Checkpoint</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            We Converted The <span class="accent">Conceptual Model</span
+            ><br />Into A <span class="accent">Structured Schema</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            At this point, the main translation work is already in place.
+          </p>
+
+          <ul
+            class="truth-list"
+            style="
+              margin-bottom: 1rem;
+              max-width: 40rem;
+            "
+          >
+            <li>
+              <span class="icon" style="font-size: var(--text-subheading); width: 2.6rem">🧱</span>
+              <span style="font-size: var(--text-body)">We defined the <strong>tables</strong>.</span>
+            </li>
+            <li>
+              <span class="icon" style="font-size: var(--text-subheading); width: 2.6rem">🔑</span>
+              <span style="font-size: var(--text-body)">We defined the <strong>primary keys</strong>.</span>
+            </li>
+            <li>
+              <span class="icon" style="font-size: var(--text-subheading); width: 2.6rem">🔗</span>
+              <span style="font-size: var(--text-body)">We defined the <strong>foreign keys</strong>.</span>
+            </li>
+          </ul>
+
+          <div class="story" style="max-width: 44rem; margin: 0 auto">
+            The result is simple but important: the data is now ready to be
+            <em>stored in a database</em>.
+          </div>
+        </section>
+
+        <section data-title-en="Session 3" data-title-es="Sesión 3">
+          <div class="label">Session 3</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.55rem"
+          >
+            Special Cases<br />&amp; Design Decisions
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 0.9rem">
+            Advanced Transformation Rules
+          </p>
+          <div class="story" style="max-width: 42rem; margin: 0 auto">
+            The basic rules get us far, but real models are not always that
+            simple. Some structures need extra decisions before they can be
+            translated correctly.
+          </div>
+        </section>
+
+        <section data-title-en="Beyond Basic Transformation" data-title-es="Más Allá De La Transformación Básica">
+          <div class="label">Beyond The Basics</div>
+          <h2>Beyond Basic Transformation</h2>
+          <p class="muted" style="margin-bottom: 1rem">
+            Not all ER models fit the simple rules we have used so far.
+          </p>
+
+          <div class="grid-2" style="width: 100%; max-width: 58rem; margin-bottom: 1rem">
+            <div class="story">
+              <p style="margin-bottom: 0.6rem; color: #fff">
+                <strong>Real models include:</strong>
+              </p>
+              <ul
+                style="
+                  margin: 0;
+                  padding-left: 1.2rem;
+                  color: #c9d1d9;
+                  font-size: var(--text-body);
+                  line-height: 1.8;
+                "
+              >
+                <li>Multivalued attributes</li>
+                <li>Weak entities</li>
+                <li>Roles</li>
+                <li>Hierarchies</li>
+              </ul>
+            </div>
+
+            <div class="story">
+              <p style="margin-bottom: 0.6rem; color: #fff">
+                <strong>These require:</strong>
+              </p>
+              <ul
+                style="
+                  margin: 0;
+                  padding-left: 1.2rem;
+                  color: #c9d1d9;
+                  font-size: var(--text-body);
+                  line-height: 1.8;
+                "
+              >
+                <li>Additional tables</li>
+                <li>Different key structures</li>
+                <li>Design decisions</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="callout warn" style="max-width: 56rem; margin-top: 0">
+            <span class="icon">→</span>
+            <span
+              >Next: handling <strong>complex cases</strong> and deciding how to
+              transform them correctly.</span
+            >
+          </div>
+        </section>
+
+        <section data-title-en="Multivalued Attributes" data-title-es="Atributos Multivaluados">
+          <div class="label">Special Case 1</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.75rem"
+          >
+            One Attribute<br /><span class="accent">Many Values</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            This is the first case where the basic transformation rule is not
+            enough.
+          </p>
+
+          <div class="story" style="max-width: 54rem; margin: 0 auto 1rem">
+            Suppose a person can have several professions. That means one
+            attribute does not store one value anymore. It stores
+            <em>many</em>. If we force those values into extra columns, the
+            schema starts guessing how many professions a person is allowed to
+            have.
+          </div>
+
+          <div class="grid-2" style="width: 100%; max-width: 56rem; margin-bottom: 1rem">
+            <div class="callout warn" style="margin-top: 0">
+              <span class="icon">✗</span>
+              <span
+                ><strong>Incorrect:</strong> create multiple columns for the same
+                idea.</span
+              >
+            </div>
+            <div class="callout info" style="margin-top: 0">
+              <span class="icon">✓</span>
+              <span><strong>Correct:</strong> create a new table.</span>
+            </div>
+          </div>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.55rem"
+          >
+            Professions(<span class="accent">person_id</span>, profession)
+          </div>
+          <p class="muted">
+            Each profession becomes a separate row.
+          </p>
+        </section>
+
+        <section data-title-en="Why Not Multiple Columns?" data-title-es="¿Por Qué No Múltiples Columnas?">
+          <div class="label">Why The Shortcut Fails</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            Why Not<br /><span class="accent">Multiple Columns</span>?
+          </div>
+          <div class="divider"></div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 56rem;
+              display: flex;
+              flex-direction: column;
+              gap: 0.8rem;
+              margin-top: 0.8rem;
+            "
+          >
+            <div class="callout warn" style="margin-top: 0">
+              <span class="icon">1</span>
+              <span>It produces <strong>null values</strong>.</span>
+            </div>
+            <div class="callout warn" style="margin-top: 0">
+              <span class="icon">2</span>
+              <span>It <strong>limits the number of values</strong> in advance.</span>
+            </div>
+            <div class="callout warn" style="margin-top: 0">
+              <span class="icon">3</span>
+              <span
+                >It breaks <strong>relational design principles</strong>.</span
+              >
+            </div>
+          </div>
+
+          <div class="story" style="max-width: 52rem; margin: 1rem auto 0">
+            If a person can have 1 profession, 2 professions, or 10 professions,
+            the schema should not guess that number in advance. The relational
+            model handles repeating values by creating <em>more rows</em>, not
+            more columns.
+          </div>
+        </section>
+
+        <section data-title-en="Weak Entities" data-title-es="Entidades Débiles">
+          <div class="label">Special Case 2</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            A Weak Entity<br />Cannot Stand <span class="accent">Alone</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin: 0.8rem 0 1rem">
+            It depends on another entity to become identifiable.
+          </p>
+
+          <div class="story" style="max-width: 35rem; margin: 0 auto 1rem">
+            Think about an <em>Evaluation</em> inside a <em>Course</em>.<br />
+            <em>Midterm</em> is not enough by itself.<br />
+            It only becomes meaningful once we know
+            <em>which course</em> it belongs to.
+          </div>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-subheading); margin-bottom: 0.35rem"
+          >
+            Evaluation <span class="accent">Depends On</span> Course
+          </div>
+          <p class="muted" style="margin: 0">
+            A weak entity <strong>cannot be uniquely identified alone</strong>.
+          </p>
+        </section>
+
+        <section data-title-en="Transformation of Weak Entities" data-title-es="Transformación De Entidades Débiles">
+          <div class="label">Transformation Rule</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.75rem"
+          >
+            To Store A Weak Entity,<br />We Carry <span class="accent">Two Keys</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            The relation must include the weak entity's partial key and the key
+            of its parent.
+          </p>
+
+          <ul class="truth-list" style="margin-top: 0.2rem; max-width: 40rem">
+            <li>
+              <span class="icon">1</span>
+              <span>Create a <strong>table</strong> for the weak entity.</span>
+            </li>
+            <li>
+              <span class="icon">2</span>
+              <span
+                >Include its <strong>partial key</strong> and the
+                <strong>parent key</strong>.</span
+              >
+            </li>
+          </ul>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin: 0.9rem 0 0.35rem"
+          >
+            Evaluation(<span class="accent">name</span>,
+            <span class="accent">course_id</span>, date)
+          </div>
+          <p class="muted" style="margin-bottom: 0.9rem">
+            Primary key:
+            (<strong style="color: var(--accent-light)">name</strong>,
+            <strong style="color: var(--accent-light)">course_id</strong>)
+          </p>
+
+          <div class="story" style="max-width: 50rem; margin: 0 auto">
+            The row becomes identifiable only when the weak entity's own
+            identifier is combined with the parent key.
+          </div>
+        </section>
+
+        <section data-title-en="Roles in Relationships" data-title-es="Roles En Relaciones">
+          <div class="label">Special Case 3</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.75rem"
+          >
+            The Same Entity Can Appear<br />In <span class="accent">Two Roles</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            Sometimes one entity participates more than once in the same
+            relationship.
+          </p>
+
+          <div class="story" style="max-width: 54rem; margin: 0 auto 1rem">
+            Imagine a social network where a <em>User</em> follows another
+            <em>User</em>. It is still one entity type, but it appears twice in
+            the relationship with <em>different meanings</em>.
+          </div>
+
+          <div class="callout warn" style="max-width: 48rem; margin-top: 0">
+            <span class="icon">⚠️</span>
+            <span
+              ><strong>Problem:</strong> same entity, different roles.</span
+            >
+          </div>
+        </section>
+
+        <section data-title-en="Handling Roles" data-title-es="Manejo De Roles">
+          <div class="label">Design Decision</div>
+          <h2>Handling Roles</h2>
+          <p class="muted" style="margin-bottom: 1rem">
+            The relationship is stored once, but each participation must be
+            named according to its role.
+          </p>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.6rem"
+          >
+            Follows(<span class="accent">follower_id</span>,
+            <span class="accent">followed_id</span>, since)
+          </div>
+
+          <div class="grid-2" style="width: 100%; max-width: 56rem; margin-bottom: 1rem">
+            <div class="story">
+              <p style="margin-bottom: 0.55rem; color: #fff">
+                <strong>Role 1</strong>
+              </p>
+              <p>
+                <em>follower_id</em> identifies the user who follows.
+              </p>
+            </div>
+
+            <div class="story">
+              <p style="margin-bottom: 0.55rem; color: #fff">
+                <strong>Role 2</strong>
+              </p>
+              <p>
+                <em>followed_id</em> identifies the user being followed.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout info" style="max-width: 56rem; margin-top: 0">
+            <span class="icon">→</span>
+            <span
+              >Both attributes reference the <strong>same table</strong>, but
+              they represent <strong>different roles</strong>.</span
+            >
+          </div>
+        </section>
+
+        <section data-title-en="Simplification of Relationships" data-title-es="Simplificación De Relaciones">
+          <div class="label">Design Shortcut</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.75rem"
+          >
+            Not Every Relationship<br />Needs <span class="accent">Its Own Table</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            Sometimes the relationship can be simplified instead of being kept
+            as a separate relation.
+          </p>
+
+          <div class="story" style="max-width: 54rem; margin: 0 auto 1rem">
+            This happens when the multiplicity includes <em>1</em> and one
+            entity determines the other. In that case, the relationship does
+            not always need its own table.
+          </div>
+
+          <ul class="truth-list" style="margin-top: 0.4rem; max-width: 42rem">
+            <li>
+              <span class="icon"></span>
+              <span>When the multiplicity includes <strong>1</strong>.</span>
+            </li>
+            <li>
+              <span class="icon"></span>
+              <span>When one entity <strong>determines</strong> the other.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section data-title-en="Example of Simplification" data-title-es="Ejemplo De Simplificación">
+          <div class="label">Before And After</div>
+          <h2>Example Of Simplification</h2>
+          <p class="muted" style="margin-bottom: 1rem">
+            Instead of keeping the relationship as a separate table, we can
+            sometimes move the foreign key into one entity.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 60rem;
+              display: grid;
+              grid-template-columns: 1.1fr auto 1.1fr;
+              gap: 1rem;
+              align-items: center;
+              margin-bottom: 1rem;
+            "
+          >
+            <div class="story" style="padding: 1.1rem 1.25rem">
+              <p style="margin-bottom: 0.65rem; color: #fff">
+                <strong>Original Structure</strong>
+              </p>
+              <div
+                style="
+                  font-size: var(--text-card);
+                  line-height: 1.7;
+                  color: #c9d1d9;
+                "
+              >
+                Product(name, category, price)<br />
+                Company(name, stock_value)<br />
+                Production(product_name, company_name, since)
+              </div>
+            </div>
+
+            <div
+              class="reveal-text"
+              style="
+                font-size: var(--text-heading);
+                margin: 0;
+                color: var(--accent-light);
+              "
+            >
+              →
+            </div>
+
+            <div class="story" style="padding: 1.1rem 1.25rem">
+              <p style="margin-bottom: 0.65rem; color: #fff">
+                <strong>Simplified Structure</strong>
+              </p>
+              <div
+                class="reveal-text"
+                style="
+                  font-size: var(--text-subheading);
+                  margin-bottom: 0.45rem;
+                  line-height: 1.35;
+                "
+              >
+                Product(name, category,<br />price,
+                <span class="accent">company_name</span>, since)
+              </div>
+              <p class="muted" style="margin: 0">
+                The foreign key moves into the entity table.
+              </p>
+            </div>
+          </div>
+
+          <div class="story" style="max-width: 42rem; margin: 0 auto">
+            The result is a schema with <strong>fewer tables</strong> and a
+            <strong>simpler structure</strong>.
+          </div>
+        </section>
+
+        <section data-title-en="Trade-off in Simplification" data-title-es="Trade-off De La Simplificación">
+          <div class="label">Trade-off</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.7rem"
+          >
+            Simplification Is<br />A <span class="accent">Design Decision</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            The schema becomes easier to read, but the choice also changes what
+            the model can express later.
+          </p>
+
+          <div class="grid-2" style="width: 100%; max-width: 56rem; margin-bottom: 1rem">
+            <div class="callout info" style="margin-top: 0; align-items: flex-start">
+              <span class="icon">+</span>
+              <span>
+                <strong>Advantages</strong><br />
+                Simpler schema<br />
+                Fewer joins
+              </span>
+            </div>
+
+            <div class="callout warn" style="margin-top: 0; align-items: flex-start">
+              <span class="icon">−</span>
+              <span>
+                <strong>Disadvantages</strong><br />
+                Less flexibility<br />
+                May restrict future changes
+              </span>
+            </div>
+          </div>
+
+          <div class="story" style="max-width: 50rem; margin: 0 auto">
+            Simplifying a relationship is not just a technical shortcut. It is
+            a modeling choice, and that choice should match the meaning of the
+            domain.
+          </div>
+        </section>
+
+        <section data-title-en="Hierarchies" data-title-es="Jerarquías">
+          <div class="label">Special Case 4</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.75rem"
+          >
+            One Entity Can Split<br />Into <span class="accent">Subtypes</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            In an IsA hierarchy, a general entity can have more specific
+            versions.
+          </p>
+
+          <div class="story" style="max-width: 52rem; margin: 0 auto 1rem">
+            For example, an <em>Athlete</em> can become a
+            <em>Football Player</em> or a <em>Tennis Player</em>. The subclasses
+            inherit the common attributes of the parent and add their own
+            specific properties.
+          </div>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-subheading); margin-bottom: 0.55rem"
+          >
+            Athlete → Football Player, Tennis Player
+          </div>
+          <p class="muted" style="margin: 0">
+            Subclasses <strong>inherit</strong> shared attributes and
+            <strong>add</strong> their own.
+          </p>
+        </section>
+
+        <section data-title-en="Two Transformation Approaches" data-title-es="Dos Enfoques De Transformación">
+          <div class="label">Two Paths</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.75rem"
+          >
+            There Is More Than<br /><span class="accent">One Valid Mapping</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            Hierarchies are not translated with a single universal rule.
+          </p>
+
+          <div class="story" style="max-width: 54rem; margin: 0 auto 1rem">
+            Sometimes we keep the parent table and add one table for each
+            subclass. Other times we skip the parent table and keep only the
+            subclass tables, each one carrying all the attributes it needs.
+          </div>
+
+          <ul class="truth-list" style="margin-top: 0.2rem; max-width: 42rem">
+            <li>
+              <span class="icon"></span>
+              <span>Parent table <strong>plus</strong> one table per subclass.</span>
+            </li>
+            <li>
+              <span class="icon"></span>
+              <span>Only subclass tables, each with <strong>all attributes</strong>.</span>
+            </li>
+          </ul>
+        </section>
+
+        <section data-title-en="Choosing an Approach" data-title-es="Cómo Elegir Un Enfoque">
+          <div class="label">Design Choice</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.75rem"
+          >
+            The Right Transformation<br />Depends On The <span class="accent">Case</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            The hierarchy design should reflect both the semantics of the model
+            and the way the data will be used.
+          </p>
+
+          <ul class="truth-list" style="margin-top: 0.3rem; max-width: 44rem">
+            <li>
+              <span class="icon"></span>
+              <span>Whether all entities belong to a <strong>subclass</strong>.</span>
+            </li>
+            <li>
+              <span class="icon"></span>
+              <span>The amount of <strong>overlap</strong> between subclasses.</span>
+            </li>
+            <li>
+              <span class="icon"></span>
+              <span>The type of <strong>queries</strong> the system will run.</span>
+            </li>
+          </ul>
+
+          <div class="story" style="max-width: 48rem; margin: 1rem auto 0">
+            Choose the design that feels most natural for the domain and most
+            efficient for the queries you expect to make.
+          </div>
+        </section>
+
+        <section data-title-en="Key Idea" data-title-es="Idea Clave">
+          <div class="label">Key Idea</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            The Transformation<br />Is No Longer <span class="accent">Mechanical</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin: 0.8rem 0 1rem">
+            At this point, translating the ER model is not just applying rules.
+          </p>
+
+          <div class="story" style="max-width: 52rem; margin: 0 auto 1rem">
+            We now need to understand the structure of the model, recognize the
+            special cases, and make design decisions that preserve meaning
+            without creating unnecessary complexity.
+          </div>
+
+          <ul class="truth-list" style="margin-top: 0.2rem; max-width: 40rem">
+            <li>
+              <span class="icon"></span>
+              <span><strong>Understanding</strong> of the model.</span>
+            </li>
+            <li>
+              <span class="icon"></span>
+              <span><strong>Design decisions</strong> during translation.</span>
+            </li>
+          </ul>
+
+          <div class="story" style="max-width: 46rem; margin: 1rem auto 0">
+            The goal is a schema that is <strong>clean</strong>,
+            <strong>consistent</strong>, and <strong>flexible</strong>.
+          </div>
+        </section>
+
+        <section data-title-en="Transition" data-title-es="Transición">
+          <div class="label">Next Step</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            We Now Have<br /><span class="accent">A Relational Schema</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin: 0.8rem 0 1rem">
+            The structure is in place. Now the question becomes:
+          </p>
+
+          <div class="story" style="max-width: 36rem; margin: 0 auto 1rem">
+            How do we use that structure to ask questions and obtain data?
+          </div>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.45rem"
+          >
+            Next Topic:<br /><span class="accent">Relational Algebra</span>
+          </div>
+          <p class="muted" style="margin: 0">
+            Querying begins after the schema is defined.
+          </p>
+        </section>
+
+        <section data-title-en="From Structure to Queries">
+          <div class="label">Relational Algebra</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            Relational Algebra<br /><span class="accent">Begins Here</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            We already have structure. Now we need a formal way to query and manipulate data.
+          </p>
+
+          <div class="story" style="max-width: 52rem; margin: 0 auto 1rem">
+            Until now, we focused on <em>designing</em> the relational schema.
+            The next step is learning how to <em>work with it</em>: how to select,
+            combine, and transform relations to obtain information.
+          </div>
+
+          <div class="story" style="max-width: 46rem; margin: 0 auto">
+            Relational algebra gives us <strong>a set of operations over tables</strong>
+          </div>
+        </section>
+
+        <section data-title-en="What is a Relation?">
+          <div class="label">Basic Concept</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            What Is<br />A <span class="accent">Relation</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            In the relational model, a relation is the basic object we operate on.
+          </p>
+
+          <div class="story" style="max-width: 50rem; margin: 0 auto 1rem">
+            We already met this idea when we transformed the ER model into the
+            relational model. At that point, we were already thinking about
+            relations as <em>tables</em>.
+          </div>
+
+          <div class="story" style="max-width: 50rem; margin: 0 auto 1rem">
+            A relation is a <em>table</em>. It consists of <em>tuples</em>, which
+            are the rows, and <em>attributes</em>, which are the columns.
+          </div>
+
+          <ul class="truth-list" style="margin-top: 0.3rem; max-width: 42rem">
+            <li>
+              <span class="icon"></span>
+              <span>Relations are <strong>sets</strong></span>
+            </li>
+            <li>
+              <span class="icon"></span>
+              <span>There are <strong>no duplicate tuples</strong></span>
+            </li>
+            <li>
+              <span class="icon"></span>
+              <span><strong>Order does not matter</strong></span>
+            </li>
+          </ul>
+        </section>
+
+        <section data-title-en="Example of a Relation">
+          <div class="label">Example</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            A Relation Can Be Written<br />As A <span class="accent">Schema</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            We often describe a relation first by its structure, and then by the tuples that belong to it.
+          </p>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-subheading); margin-bottom: 0.7rem"
+          >
+            Student(student_id, name, major, year)
+          </div>
+
+          <div class="story" style="max-width: 50rem; margin: 0 auto 1rem">
+            This notation gives the name of the relation and its attributes.
+            After that, the tuples are just the specific rows that satisfy this structure.
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 54rem;
+              border: 1px solid rgba(34, 197, 94, 0.24);
+              border-radius: 12px;
+              overflow: hidden;
+              margin-bottom: 1rem;
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                background: rgba(34, 197, 94, 0.1);
+                border-bottom: 1px solid rgba(34, 197, 94, 0.24);
+              "
+            >
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">student_id</div>
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">name</div>
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">major</div>
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">year</div>
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                background: rgba(255, 255, 255, 0.02);
+                border-bottom: 1px solid var(--border);
+              "
+            >
+              <div style="padding: 0.65rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S01</div>
+              <div style="padding: 0.65rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Ana</div>
+              <div style="padding: 0.65rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">CS</div>
+              <div style="padding: 0.65rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">2</div>
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                background: rgba(255, 255, 255, 0.02);
+              "
+            >
+              <div style="padding: 0.65rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S02</div>
+              <div style="padding: 0.65rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Luis</div>
+              <div style="padding: 0.65rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Math</div>
+              <div style="padding: 0.65rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">3</div>
+            </div>
+          </div>
+
+          <div class="story" style="max-width: 52rem; margin: 0 auto">
+            We treat relations as <strong>unordered sets</strong> because they represent collections of facts, not sequences. That is also why <strong>duplicate tuples do not exist</strong>: repeating the same tuple would add no new information.
+          </div>
+        </section>
+
+        <section data-title-en="Operations Over Relations">
+          <div class="label">Core Property</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            Operations Work<br />Over <span class="accent">Relations</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            Queries are expressed as operations, not as informal questions.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 60rem;
+              display: grid;
+              grid-template-columns: 1.2fr auto 1fr auto 1.2fr;
+              gap: 0.9rem;
+              align-items: stretch;
+              margin: 0.4rem 0 1rem;
+            "
+          >
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 14px;
+                min-height: 9.2rem;
+                padding: 1rem 1.1rem;
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+              "
+            >
+              <p
+                style="
+                  font-size: var(--text-card);
+                  color: var(--muted);
+                  margin-bottom: 0.55rem;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                "
+              >
+                Input
+              </p>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.5rem;
+                "
+              >
+                <div
+                  style="
+                    padding: 0.55rem 0.8rem;
+                    border-radius: 999px;
+                    background: rgba(124, 58, 237, 0.08);
+                    border: 1px solid rgba(124, 58, 237, 0.22);
+                    color: #fff;
+                    font-size: var(--text-card);
+                    text-align: center;
+                  "
+                >
+                  Relation R
+                </div>
+                <div
+                  style="
+                    padding: 0.55rem 0.8rem;
+                    border-radius: 999px;
+                    background: rgba(124, 58, 237, 0.08);
+                    border: 1px solid rgba(124, 58, 237, 0.22);
+                    color: #fff;
+                    font-size: var(--text-card);
+                    text-align: center;
+                  "
+                >
+                  Relation S
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                font-size: var(--text-heading);
+                color: var(--accent-light);
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              →
+            </div>
+
+            <div
+              style="
+                width: 9rem;
+                aspect-ratio: 1 / 1;
+                min-height: 9rem;
+                border-radius: 999px;
+                background: rgba(124, 58, 237, 0.12);
+                border: 1px solid rgba(124, 58, 237, 0.3);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 1rem;
+                align-self: center;
+                justify-self: center;
+                margin: 0 auto;
+              "
+            >
+              <div
+                style="
+                  font-size: var(--text-card);
+                  color: var(--muted);
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                  margin-bottom: 0.25rem;
+                "
+              >
+                Operation
+              </div>
+              <div style="font-size: var(--text-body); color: #fff; font-weight: 700">
+                σ π ⋈
+              </div>
+            </div>
+
+            <div
+              style="
+                font-size: var(--text-heading);
+                color: var(--accent-light);
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              →
+            </div>
+
+            <div
+              style="
+                background: var(--surface);
+                border: 1px solid rgba(34, 197, 94, 0.24);
+                border-radius: 14px;
+                min-height: 9.2rem;
+                padding: 1rem 1.1rem;
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+              "
+            >
+              <p
+                style="
+                  font-size: var(--text-card);
+                  color: var(--muted);
+                  margin-bottom: 0.55rem;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                "
+              >
+                Output
+              </p>
+              <div
+                style="
+                  padding: 0.75rem 0.9rem;
+                  border-radius: 12px;
+                  background: rgba(34, 197, 94, 0.08);
+                  border: 1px solid rgba(34, 197, 94, 0.22);
+                  color: #fff;
+                  font-size: var(--text-body);
+                  text-align: center;
+                "
+              >
+                New Relation
+              </div>
+            </div>
+          </div>
+
+          <div class="story" style="max-width: 54rem; margin: 0 auto">
+            This is called <strong>closure</strong>: every operation produces
+            another relation, so its result can immediately be used in the next
+            operation.
+          </div>
+        </section>
+
+        <section data-title-en="Relation for Selection">
+          <div class="label">Working Relation</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            A Relation We Can Use<br />For <span class="accent">Selection</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            Before applying operators, we need a relation large enough to make the filtering visible.
+          </p>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-subheading); margin-bottom: 0.65rem"
+          >
+            Student(student_id, name, major, year)
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 60rem;
+              border: 1px solid rgba(34, 197, 94, 0.24);
+              border-radius: 12px;
+              overflow: hidden;
+              margin-bottom: 1rem;
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1.2fr 1fr 0.7fr;
+                background: rgba(34, 197, 94, 0.1);
+                border-bottom: 1px solid rgba(34, 197, 94, 0.24);
+              "
+            >
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">student_id</div>
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">name</div>
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">major</div>
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700; text-align: center;">year</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S01</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Ana</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">CS</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">2</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S02</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Luis</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Math</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">3</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S03</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Camila</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">CS</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">1</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S04</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Mateo</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Physics</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">4</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S05</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Sofia</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Math</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">2</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S06</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Diego</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">CS</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">3</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S07</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Valentina</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Biology</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">1</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S08</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Tomas</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Physics</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">2</div>
+            </div>
+          </div>
+
+          <div class="story" style="max-width: 48rem; margin: 0 auto">
+            We will use this relation in the next slides to show how <strong>selection</strong> keeps only the tuples that satisfy a condition.
+          </div>
+        </section>
+
+        <section data-title-en="Selection Example">
+          <div class="label">Selection</div>
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-heading); margin-bottom: 0.8rem"
+          >
+            Selection Filters<br /><span class="accent">Rows</span>
+          </div>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1rem">
+            We choose a condition and keep only the tuples that satisfy it.
+          </p>
+
+          <div
+            class="reveal-text"
+            style="font-size: var(--text-subheading); margin-bottom: 0.75rem"
+          >
+            σ<sub>major = 'CS'</sub>(Student)
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 60rem;
+              border: 1px solid rgba(34, 197, 94, 0.24);
+              border-radius: 12px;
+              overflow: hidden;
+              margin-bottom: 1rem;
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 1fr 1.2fr 1fr 0.7fr;
+                background: rgba(34, 197, 94, 0.1);
+                border-bottom: 1px solid rgba(34, 197, 94, 0.24);
+              "
+            >
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">student_id</div>
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700;">name</div>
+              <div
+                style="
+                  padding: 0.7rem 0.8rem;
+                  color: #fff;
+                  font-size: var(--text-card);
+                  font-weight: 700;
+                  background: rgba(124, 58, 237, 0.18);
+                  box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.45);
+                "
+              >
+                major
+              </div>
+              <div style="padding: 0.7rem 0.8rem; color: #fff; font-size: var(--text-card); font-weight: 700; text-align: center;">year</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S01</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Ana</div>
+              <div style="padding: 0.6rem 0.8rem; color: var(--accent-light); font-size: var(--text-card); font-weight: 700;">CS</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">2</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); opacity: 0.45;">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S02</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Luis</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Math</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">3</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S03</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Camila</div>
+              <div style="padding: 0.6rem 0.8rem; color: var(--accent-light); font-size: var(--text-card); font-weight: 700;">CS</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">1</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); opacity: 0.45;">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S04</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Mateo</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Physics</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">4</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); opacity: 0.45;">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S05</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Sofia</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Math</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">2</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border);">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S06</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Diego</div>
+              <div style="padding: 0.6rem 0.8rem; color: var(--accent-light); font-size: var(--text-card); font-weight: 700;">CS</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">3</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--border); opacity: 0.45;">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S07</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Valentina</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Biology</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">1</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr 0.7fr; background: rgba(255,255,255,0.02); opacity: 0.45;">
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">S08</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Tomas</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card);">Physics</div>
+              <div style="padding: 0.6rem 0.8rem; color: #c9d1d9; font-size: var(--text-card); text-align: center;">2</div>
+            </div>
+          </div>
+
+          <div class="story" style="max-width: 50rem; margin: 0 auto">
+            Here the condition is applied to the <strong>major</strong> attribute.
+            Selection keeps only the tuples where <strong>major = 'CS'</strong>.
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div id="filmstrip"></div>
+    <div id="strip-toggle">
+      <div id="toggle-pill">
+        <svg
+          class="toggle-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M7 10l5 5 5-5"></path>
+        </svg>
+      </div>
+    </div>
+
+    <div id="lang-toggle" aria-label="Language toggle">
+      <button class="lang-btn active" data-lang="en" type="button">EN</button>
+      <button class="lang-btn" data-lang="es" type="button">ES</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      const originalTitle = document.title;
+      const originalContent = new Map();
+      let currentLang = "en";
+      let revealReady = false;
+
+      function remember(el) {
+        if (!el || originalContent.has(el)) return;
+        originalContent.set(el, el.innerHTML);
+      }
+
+      function setText(selector, value) {
+        const el = document.querySelector(selector);
+        if (!el) return;
+        remember(el);
+        el.textContent = value;
+      }
+
+      function setHtml(selector, value) {
+        const el = document.querySelector(selector);
+        if (!el) return;
+        remember(el);
+        el.innerHTML = value;
+      }
+
+      function setTexts(selector, values) {
+        document.querySelectorAll(selector).forEach((el, index) => {
+          if (values[index] === undefined) return;
+          remember(el);
+          el.textContent = values[index];
+        });
+      }
+
+      function setHtmls(selector, values) {
+        document.querySelectorAll(selector).forEach((el, index) => {
+          if (values[index] === undefined) return;
+          remember(el);
+          el.innerHTML = values[index];
+        });
+      }
+
+      function restoreEnglish() {
+        document.title = originalTitle;
+        originalContent.forEach((html, el) => {
+          el.innerHTML = html;
+        });
+      }
+
+      function applySpanish() {
+        document.title = "Práctico 2 — TICS320";
+
+        setText('section[data-title-en="Title"] .label', "TICS320 · Práctico 2");
+        setHtml(
+          'section[data-title-en="Title"] h1',
+          "Del Modelo ER al Modelo Relacional<br />y Álgebra Relacional",
+        );
+
+        setText('section[data-title-en="Why a New Model?"] .label', "Por Qué El Cambio");
+        setText('section[data-title-en="Why a New Model?"] h2', "¿Por Qué Necesitamos Un Nuevo Modelo?");
+        setText(
+          'section[data-title-en="Why a New Model?"] .muted',
+          "El modelo ER nos ayuda a entender la realidad, pero la implementación necesita una estructura más estricta.",
+        );
+        setTexts('section[data-title-en="Why a New Model?"] h3', ["Modelo ER", "Pero"]);
+        setTexts('section[data-title-en="Why a New Model?"] li', [
+          "Intuitivo y visual",
+          "Útil para entender requerimientos",
+          "No es lo suficientemente preciso para la implementación",
+          "Carece de una estructura formal para consultar",
+        ]);
+        setHtml(
+          'section[data-title-en="Why a New Model?"] div[style*="border-left: 4px solid var(--accent)"] p',
+          "Necesitamos un modelo que sea <strong>preciso</strong>, pueda ser <strong>implementado en un SGBD</strong> y <strong>permita consultar</strong>.",
+        );
+
+        setText('section[data-title-en="Everything Becomes Tables"] .label', "Idea Central");
+        setText('section[data-title-en="Everything Becomes Tables"] h2', "Todo Se Convierte En Tablas");
+        setText(
+          'section[data-title-en="Everything Becomes Tables"] .muted',
+          "El modelo relacional representa los datos usando tablas. Cada tabla representa un conjunto de objetos similares.",
+        );
+        setTexts('section[data-title-en="Everything Becomes Tables"] h3', [
+          "Correspondencia",
+          "De Conceptos ER A Estructura Relacional",
+        ]);
+        setTexts(
+          'section[data-title-en="Everything Becomes Tables"] div[style*="grid-template-columns: 1fr 2.5rem 1fr"] strong',
+          ["Entidad", "Tabla", "Relación", "Tabla", "Atributo", "Columna"],
+        );
+        setTexts(
+          'section[data-title-en="Everything Becomes Tables"] div[style*="font-size: var(--text-card); color: var(--muted); margin-bottom: 0.2rem;"]',
+          ["Entidad ER", "Esquema Relacional", "Ejemplo 1", "Ejemplo 2"],
+        );
+        setHtml(
+          'section[data-title-en="Everything Becomes Tables"] div[style*="border-left: 4px solid var(--accent)"] p',
+          "Estamos traduciendo <strong>conceptos</strong> a <strong>estructura</strong>: desde entidades y relaciones hacia esquemas relacionales escritos como cadenas.",
+        );
+
+        setText('section[data-title-en="Entities to Tables"] .label', "Regla De Transformación 1");
+        setText('section[data-title-en="Entities to Tables"] h2', "Entidades → Tablas");
+        setText(
+          'section[data-title-en="Entities to Tables"] .muted',
+          "La primera regla de transformación es directa: cada entidad se convierte en una tabla y sus propiedades descriptivas se convierten en columnas.",
+        );
+        setTexts(
+          'section[data-title-en="Entities to Tables"] p[style*="text-transform: uppercase"]',
+          ["Entidad ER", "Esquema Relacional", "Tabla De Ejemplo"],
+        );
+        setHtml(
+          'section[data-title-en="Entities to Tables"] div[style*="border-left: 4px solid var(--accent)"] p',
+          "La entidad se convierte en una <strong>tabla</strong>, los atributos se convierten en <strong>columnas</strong> y la clave de la entidad se convierte en la <strong>clave primaria</strong>. La clave primaria identifica de forma única cada fila.",
+        );
+
+        setText('section[data-title-en="Relationships to Tables"] .label', "Regla De Transformación 2");
+        setText('section[data-title-en="Relationships to Tables"] h2', "Relaciones → Tablas");
+        setText(
+          'section[data-title-en="Relationships to Tables"] .muted',
+          "Cuando una relación debe representarse explícitamente, se convierte en una nueva tabla construida a partir de las claves de las entidades participantes más los atributos propios de la relación.",
+        );
+        setTexts(
+          'section[data-title-en="Relationships to Tables"] p[style*="text-transform: uppercase"]',
+          ["Relación", "Tabla"],
+        );
+        setHtml(
+          'section[data-title-en="Relationships to Tables"] div[style*="border-left: 4px solid var(--accent)"] p',
+          "Cada relación se convierte en una <strong>nueva tabla</strong>. Esa tabla incluye las <strong>claves primarias</strong> de las entidades participantes y cualquier <strong>atributo de la relación</strong>. Las claves que vienen desde las entidades se convierten en <strong>claves foráneas</strong>.",
+        );
+
+        setText('section[data-title-en="How Do We Tell Rows Apart?"] .label', "Una Pregunta");
+        setText('section[data-title-en="How Do We Tell Rows Apart?"] h2', "¿Cómo Distinguimos Las Filas?");
+        setText(
+          'section[data-title-en="How Do We Tell Rows Apart?"] .muted',
+          "Una vez que transformamos conceptos en tablas, aparece un nuevo problema.",
+        );
+        setHtml(
+          'section[data-title-en="How Do We Tell Rows Apart?"] .story',
+          'Imagina dos filas en <em>Product</em> con el mismo nombre, o dos filas en <em>Production</em> que involucren la misma empresa pero productos distintos. Si queremos actualizar, borrar o referenciar exactamente una fila, necesitamos una forma de decir: <em>esta y ninguna otra</em>.',
+        );
+        setHtml(
+          'section[data-title-en="How Do We Tell Rows Apart?"] .reveal-text',
+          'Ese es el trabajo de la <span class="accent">Clave Primaria</span>',
+        );
+        setHtml(
+          'section[data-title-en="How Do We Tell Rows Apart?"] .callout span:last-child',
+          'Sin una clave confiable, dos filas pueden volverse <strong>indistinguibles</strong>.',
+        );
+
+        setText('section[data-title-en="Primary Key Rule"] .label', "Claves Primarias");
+        setHtml(
+          'section[data-title-en="Primary Key Rule"] .reveal-text',
+          'No puede haber dos filas con la misma <span class="accent">Clave Primaria</span>',
+        );
+        setText(
+          'section[data-title-en="Primary Key Rule"] .muted',
+          "Una clave primaria identifica de forma única cada tupla, es decir, cada fila de una relación.",
+        );
+        setTexts('section[data-title-en="Primary Key Rule"] .story strong', [
+          "Tabla de Entidad",
+          "Tabla de Relación",
+        ]);
+        setHtmls('section[data-title-en="Primary Key Rule"] .story p', [
+          "La clave normalmente proviene de la <em>clave de la entidad</em>.",
+          "Product → id",
+          "La clave suele provenir de una <em>combinación de claves</em>.",
+          "Production → (product_id, company_id)",
+        ]);
+        setHtml(
+          'section[data-title-en="Primary Key Rule"] .callout span:last-child',
+          "En las tablas de entidad, la clave proviene de la entidad. En las tablas de relación, puede venir de la <strong>combinación</strong> de las claves participantes.",
+        );
+
+        setText('section[data-title-en="Foreign Keys Diagram"] .label', "Claves Foráneas");
+        setText('section[data-title-en="Foreign Keys Diagram"] h2', "Las Tablas Todavía Deben Conocerse");
+        setText(
+          'section[data-title-en="Foreign Keys Diagram"] .muted',
+          "Una clave foránea referencia una clave primaria en otra tabla. Así es como la relación sobrevive después de que el diagrama ER se convierte en tablas.",
+        );
+        setText(
+          'section[data-title-en="Foreign Keys Diagram"] div[style*="justify-content: center"][style*="color: var(--accent-light)"]',
+          "Claves Foráneas",
+        );
+        setHtml(
+          'section[data-title-en="Foreign Keys Diagram"] .callout span:last-child',
+          'En la relación generada, <strong>product_id</strong> apunta a <strong>Product</strong> y <strong>company_id</strong> apunta a <strong>Company</strong>.',
+        );
+
+        setText('section[data-title-en="Why Foreign Keys Matter"] .label', "Por Qué Importan");
+        setHtml(
+          'section[data-title-en="Why Foreign Keys Matter"] .reveal-text',
+          'Las Claves Foráneas <span class="accent">Protegen</span><br />El Significado De Los Datos',
+        );
+        setHtmls('section[data-title-en="Why Foreign Keys Matter"] .callout span:last-child', [
+          "Mantienen la <strong>consistencia</strong> entre tablas.",
+          "Hacen cumplir las <strong>relaciones</strong> en lugar de dejarlas implícitas.",
+        ]);
+        setHtml(
+          'section[data-title-en="Why Foreign Keys Matter"] .story',
+          'Sin claves foráneas, <em>Production</em> podría contener un <em>product_id</em> que no existe en <em>Product</em>, o un <em>company_id</em> que no apunta a nada. La fila seguiría almacenándose, pero la relación ya estaría rota.',
+        );
+
+        setText('section[data-title-en="What We Achieved"] .label', "Checkpoint");
+        setHtml(
+          'section[data-title-en="What We Achieved"] .reveal-text',
+          'Convertimos el <span class="accent">Modelo Conceptual</span><br />En un <span class="accent">Esquema Estructurado</span>',
+        );
+        setText(
+          'section[data-title-en="What We Achieved"] .muted',
+          "A esta altura, el trabajo principal de transformación ya está listo.",
+        );
+        setHtmls('section[data-title-en="What We Achieved"] .truth-list li span:last-child', [
+          "Definimos las <strong>tablas</strong>.",
+          "Definimos las <strong>claves primarias</strong>.",
+          "Definimos las <strong>claves foráneas</strong>.",
+        ]);
+        setHtml(
+          'section[data-title-en="What We Achieved"] .story',
+          'El resultado es simple pero importante: los datos ya están listos para <em>almacenarse en una base de datos</em>.',
+        );
+
+        setText('section[data-title-en="Session 3"] .label', "Sesión 3");
+        setHtml(
+          'section[data-title-en="Session 3"] .reveal-text',
+          "Casos Especiales<br />&amp; Decisiones De Diseño",
+        );
+        setText('section[data-title-en="Session 3"] .muted', "Reglas Avanzadas De Transformación");
+        setText(
+          'section[data-title-en="Session 3"] .story',
+          "Las reglas básicas nos llevan lejos, pero los modelos reales no siempre son tan simples. Algunas estructuras necesitan decisiones extra antes de poder transformarse correctamente.",
+        );
+
+        setText('section[data-title-en="Beyond Basic Transformation"] .label', "Más Allá De Lo Básico");
+        setText('section[data-title-en="Beyond Basic Transformation"] h2', "Más Allá De La Transformación Básica");
+        setText(
+          'section[data-title-en="Beyond Basic Transformation"] .muted',
+          "No todos los modelos ER encajan en las reglas simples que hemos usado hasta ahora.",
+        );
+        setHtmls('section[data-title-en="Beyond Basic Transformation"] .story p strong', [
+          "Los modelos reales incluyen:",
+          "Estos requieren:",
+        ]);
+        setTexts('section[data-title-en="Beyond Basic Transformation"] ul:first-of-type li', [
+          "Atributos multivaluados",
+          "Entidades débiles",
+          "Roles",
+          "Jerarquías",
+        ]);
+        setTexts('section[data-title-en="Beyond Basic Transformation"] ul:last-of-type li', [
+          "Tablas adicionales",
+          "Estructuras de clave distintas",
+          "Decisiones de diseño",
+        ]);
+        setHtml(
+          'section[data-title-en="Beyond Basic Transformation"] .callout span:last-child',
+          'Siguiente: manejar <strong>casos complejos</strong> y decidir cómo transformarlos correctamente.',
+        );
+
+        setText('section[data-title-en="Multivalued Attributes"] .label', "Caso Especial 1");
+        setHtml(
+          'section[data-title-en="Multivalued Attributes"] .reveal-text',
+          'Un Atributo<br /><span class="accent">Muchos Valores</span>',
+        );
+        setText(
+          'section[data-title-en="Multivalued Attributes"] .muted',
+          "Este es el primer caso donde la regla básica de transformación ya no alcanza.",
+        );
+        setHtml(
+          'section[data-title-en="Multivalued Attributes"] .story',
+          'Supongamos que una persona puede tener varias profesiones. Eso significa que un atributo ya no almacena un solo valor. Almacena <em>muchos</em>. Si forzamos esos valores en columnas extra, el esquema empieza a adivinar cuántas profesiones se le permite tener a una persona.',
+        );
+        setHtmls('section[data-title-en="Multivalued Attributes"] .callout span:last-child', [
+          "<strong>Incorrecto:</strong> crear múltiples columnas para la misma idea.",
+          "<strong>Correcto:</strong> crear una nueva tabla.",
+        ]);
+        setText(
+          'section[data-title-en="Multivalued Attributes"] p.muted:last-of-type',
+          "Cada profesión se convierte en una fila separada.",
+        );
+
+        setText('section[data-title-en="Why Not Multiple Columns?"] .label', "Por Qué Falla El Atajo");
+        setHtml(
+          'section[data-title-en="Why Not Multiple Columns?"] .reveal-text',
+          '¿Por Qué No<br /><span class="accent">Múltiples Columnas</span>?',
+        );
+        setHtmls('section[data-title-en="Why Not Multiple Columns?"] .callout span:last-child', [
+          "Produce <strong>valores nulos</strong>.",
+          "<strong>Limita la cantidad de valores</strong> por adelantado.",
+          "Rompe los <strong>principios del diseño relacional</strong>.",
+        ]);
+        setHtml(
+          'section[data-title-en="Why Not Multiple Columns?"] .story',
+          'Si una persona puede tener 1 profesión, 2 profesiones o 10 profesiones, el esquema no debería adivinar ese número por adelantado. El modelo relacional maneja valores repetidos creando <em>más filas</em>, no más columnas.',
+        );
+
+        setText('section[data-title-en="Weak Entities"] .label', "Caso Especial 2");
+        setHtml(
+          'section[data-title-en="Weak Entities"] .reveal-text',
+          'Una Entidad Débil<br />No Puede Estar <span class="accent">Sola</span>',
+        );
+        setText(
+          'section[data-title-en="Weak Entities"] .muted',
+          "Depende de otra entidad para poder identificarse.",
+        );
+        setHtml(
+          'section[data-title-en="Weak Entities"] .story',
+          'Piensa en una <em>Evaluation</em> dentro de un <em>Course</em>.<br /><em>Midterm</em> no basta por sí sola.<br />Solo adquiere significado cuando sabemos <em>a qué curso</em> pertenece.',
+        );
+        setHtml(
+          'section[data-title-en="Weak Entities"] .reveal-text:last-of-type',
+          'Evaluation <span class="accent">Depende De</span> Course',
+        );
+        setHtml(
+          'section[data-title-en="Weak Entities"] p.muted:last-of-type',
+          'Una entidad débil <strong>no puede identificarse de forma única por sí sola</strong>.',
+        );
+
+        setText('section[data-title-en="Transformation of Weak Entities"] .label', "Regla De Transformación");
+        setHtml(
+          'section[data-title-en="Transformation of Weak Entities"] .reveal-text',
+          'Para Almacenar Una Entidad Débil,<br />Llevamos <span class="accent">Dos Claves</span>',
+        );
+        setText(
+          'section[data-title-en="Transformation of Weak Entities"] .muted',
+          "La relación debe incluir la clave parcial de la entidad débil y la clave de su entidad padre.",
+        );
+        setHtmls('section[data-title-en="Transformation of Weak Entities"] .truth-list li span:last-child', [
+          "Crear una <strong>tabla</strong> para la entidad débil.",
+          "Incluir su <strong>clave parcial</strong> y la <strong>clave del padre</strong>.",
+        ]);
+        setText(
+          'section[data-title-en="Transformation of Weak Entities"] p.muted:last-of-type',
+          "Clave primaria: (name, course_id)",
+        );
+        setText(
+          'section[data-title-en="Transformation of Weak Entities"] .story',
+          "La fila se vuelve identificable solo cuando el identificador propio de la entidad débil se combina con la clave del padre.",
+        );
+
+        setText('section[data-title-en="Roles in Relationships"] .label', "Caso Especial 3");
+        setHtml(
+          'section[data-title-en="Roles in Relationships"] .reveal-text',
+          'La Misma Entidad Puede Aparecer<br />En <span class="accent">Dos Roles</span>',
+        );
+        setText(
+          'section[data-title-en="Roles in Relationships"] .muted',
+          "A veces una entidad participa más de una vez en la misma relación.",
+        );
+        setHtml(
+          'section[data-title-en="Roles in Relationships"] .story',
+          'Imagina una red social donde un <em>User</em> sigue a otro <em>User</em>. Sigue siendo un solo tipo de entidad, pero aparece dos veces en la relación con <em>significados distintos</em>.',
+        );
+        setHtml(
+          'section[data-title-en="Roles in Relationships"] .callout span:last-child',
+          '<strong>Problema:</strong> misma entidad, roles diferentes.',
+        );
+
+        setText('section[data-title-en="Handling Roles"] .label', "Decisión De Diseño");
+        setText('section[data-title-en="Handling Roles"] h2', "Manejo De Roles");
+        setText(
+          'section[data-title-en="Handling Roles"] .muted',
+          "La relación se almacena una sola vez, pero cada participación debe nombrarse según su rol.",
+        );
+        setTexts('section[data-title-en="Handling Roles"] .story strong', ["Rol 1", "Rol 2"]);
+        setHtmls('section[data-title-en="Handling Roles"] .story p:last-child', [
+          "<em>follower_id</em> identifica al usuario que sigue.",
+          "<em>followed_id</em> identifica al usuario que es seguido.",
+        ]);
+        setHtml(
+          'section[data-title-en="Handling Roles"] .callout span:last-child',
+          'Ambos atributos referencian la <strong>misma tabla</strong>, pero representan <strong>roles distintos</strong>.',
+        );
+
+        setText('section[data-title-en="Simplification of Relationships"] .label', "Atajo De Diseño");
+        setHtml(
+          'section[data-title-en="Simplification of Relationships"] .reveal-text',
+          'No Toda Relación<br />Necesita <span class="accent">Su Propia Tabla</span>',
+        );
+        setText(
+          'section[data-title-en="Simplification of Relationships"] .muted',
+          "A veces la relación puede simplificarse en lugar de mantenerse como una relación separada.",
+        );
+        setHtml(
+          'section[data-title-en="Simplification of Relationships"] .story',
+          'Esto ocurre cuando la multiplicidad incluye <em>1</em> y una entidad determina a la otra. En ese caso, la relación no siempre necesita su propia tabla.',
+        );
+        setHtmls('section[data-title-en="Simplification of Relationships"] .truth-list li span:last-child', [
+          'Cuando la multiplicidad incluye <strong>1</strong>.',
+          'Cuando una entidad <strong>determina</strong> a la otra.',
+        ]);
+
+        setText('section[data-title-en="Example of Simplification"] .label', "Antes Y Después");
+        setText('section[data-title-en="Example of Simplification"] h2', "Ejemplo De Simplificación");
+        setText(
+          'section[data-title-en="Example of Simplification"] .muted',
+          "En vez de mantener la relación como una tabla separada, a veces podemos mover la clave foránea dentro de una entidad.",
+        );
+        setTexts('section[data-title-en="Example of Simplification"] .story strong', [
+          "Estructura Original",
+          "Estructura Simplificada",
+        ]);
+        setText(
+          'section[data-title-en="Example of Simplification"] p.muted:last-of-type',
+          "La clave foránea se mueve dentro de la tabla de la entidad.",
+        );
+        setHtml(
+          'section[data-title-en="Example of Simplification"] .story:last-of-type',
+          'El resultado es un esquema con <strong>menos tablas</strong> y una <strong>estructura más simple</strong>.',
+        );
+
+        setText('section[data-title-en="Trade-off in Simplification"] .label', "Trade-off");
+        setHtml(
+          'section[data-title-en="Trade-off in Simplification"] .reveal-text',
+          'La Simplificación Es<br />Una <span class="accent">Decisión De Diseño</span>',
+        );
+        setText(
+          'section[data-title-en="Trade-off in Simplification"] .muted',
+          "El esquema se vuelve más fácil de leer, pero la decisión también cambia lo que el modelo podrá expresar después.",
+        );
+        setHtmls('section[data-title-en="Trade-off in Simplification"] .callout span:last-child', [
+          "<strong>Ventajas</strong><br />Esquema más simple<br />Menos joins",
+          "<strong>Desventajas</strong><br />Menos flexibilidad<br />Puede restringir cambios futuros",
+        ]);
+        setText(
+          'section[data-title-en="Trade-off in Simplification"] .story',
+          "Simplificar una relación no es solo un atajo técnico. Es una decisión de modelado, y esa decisión debe coincidir con el significado del dominio.",
+        );
+
+        setText('section[data-title-en="Hierarchies"] .label', "Caso Especial 4");
+        setHtml(
+          'section[data-title-en="Hierarchies"] .reveal-text',
+          'Una Entidad Puede Dividirse<br />En <span class="accent">Subtipos</span>',
+        );
+        setText(
+          'section[data-title-en="Hierarchies"] .muted',
+          "En una jerarquía IsA, una entidad general puede tener versiones más específicas.",
+        );
+        setHtml(
+          'section[data-title-en="Hierarchies"] .story',
+          'Por ejemplo, un <em>Athlete</em> puede convertirse en <em>Football Player</em> o <em>Tennis Player</em>. Las subclases heredan los atributos comunes del padre y agregan sus propiedades específicas.',
+        );
+        setHtml(
+          'section[data-title-en="Hierarchies"] p.muted:last-of-type',
+          'Las subclases <strong>heredan</strong> atributos compartidos y <strong>agregan</strong> los suyos.',
+        );
+
+        setText('section[data-title-en="Two Transformation Approaches"] .label', "Dos Caminos");
+        setHtml(
+          'section[data-title-en="Two Transformation Approaches"] .reveal-text',
+          'Hay Más De<br /><span class="accent">Una Traducción Válida</span>',
+        );
+        setText(
+          'section[data-title-en="Two Transformation Approaches"] .muted',
+          "Las jerarquías no se transforman con una sola regla universal.",
+        );
+        setText(
+          'section[data-title-en="Two Transformation Approaches"] .story',
+          "A veces mantenemos la tabla padre y agregamos una tabla por cada subclase. Otras veces omitimos la tabla padre y conservamos solo las tablas de las subclases, cada una con todos los atributos que necesita.",
+        );
+        setHtmls('section[data-title-en="Two Transformation Approaches"] .truth-list li span:last-child', [
+          'Tabla padre <strong>más</strong> una tabla por subclase.',
+          'Solo tablas de subclases, cada una con <strong>todos los atributos</strong>.',
+        ]);
+
+        setText('section[data-title-en="Choosing an Approach"] .label', "Decisión De Diseño");
+        setHtml(
+          'section[data-title-en="Choosing an Approach"] .reveal-text',
+          'La Transformación Correcta<br />Depende Del <span class="accent">Caso</span>',
+        );
+        setText(
+          'section[data-title-en="Choosing an Approach"] .muted',
+          "El diseño de la jerarquía debe reflejar tanto la semántica del modelo como la forma en que se usará la información.",
+        );
+        setHtmls('section[data-title-en="Choosing an Approach"] .truth-list li span:last-child', [
+          'Si todas las entidades pertenecen a una <strong>subclase</strong>.',
+          'La cantidad de <strong>superposición</strong> entre subclases.',
+          'El tipo de <strong>consultas</strong> que ejecutará el sistema.',
+        ]);
+        setText(
+          'section[data-title-en="Choosing an Approach"] .story',
+          "Elige el diseño que resulte más natural para el dominio y más eficiente para las consultas que esperas hacer.",
+        );
+
+        setText('section[data-title-en="Key Idea"] .label', "Idea Clave");
+        setHtml(
+          'section[data-title-en="Key Idea"] .reveal-text',
+          'La Transformación<br />Ya No Es <span class="accent">Mecánica</span>',
+        );
+        setText(
+          'section[data-title-en="Key Idea"] .muted',
+          "A esta altura, transformar el modelo ER ya no consiste solo en aplicar reglas.",
+        );
+        setText(
+          'section[data-title-en="Key Idea"] .story',
+          "Ahora necesitamos entender la estructura del modelo, reconocer los casos especiales y tomar decisiones de diseño que conserven el significado sin crear complejidad innecesaria.",
+        );
+        setHtmls('section[data-title-en="Key Idea"] .truth-list li span:last-child', [
+          '<strong>Comprensión</strong> del modelo.',
+          '<strong>Decisiones de diseño</strong> durante la transformación.',
+        ]);
+        setHtml(
+          'section[data-title-en="Key Idea"] .story:last-of-type',
+          'La meta es un esquema <strong>limpio</strong>, <strong>consistente</strong> y <strong>flexible</strong>.',
+        );
+
+        setText('section[data-title-en="Transition"] .label', "Siguiente Paso");
+        setHtmls('section[data-title-en="Transition"] .reveal-text', [
+          'Ahora Tenemos<br /><span class="accent">Un Esquema Relacional</span>',
+          'Siguiente Tema:<br /><span class="accent">Álgebra Relacional</span>',
+        ]);
+        setText(
+          'section[data-title-en="Transition"] .muted',
+          "La estructura ya está lista. Ahora la pregunta pasa a ser:",
+        );
+        setText(
+          'section[data-title-en="Transition"] .story',
+          "¿Cómo usamos esa estructura para hacer preguntas y obtener datos?",
+        );
+        setText(
+          'section[data-title-en="Transition"] p.muted:last-of-type',
+          "Las consultas comienzan después de que el esquema está definido.",
+        );
+      }
+
+      function refreshThumbs() {
+        strip.innerHTML = "";
+        buildThumbs();
+        syncNav({ indexh: Reveal.getIndices().h });
+      }
+
+      function applyLang(lang) {
+        if (lang === "es") {
+          applySpanish();
+        } else {
+          restoreEnglish();
+        }
+
+        document.documentElement.lang = lang;
+        document.querySelectorAll(".lang-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.lang === lang);
+        });
+        currentLang = lang;
+
+        if (revealReady) {
+          refreshThumbs();
+          Reveal.layout();
+        }
+      }
+
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        minScale: 1,
+        maxScale: 1,
+      });
+
+      const strip = document.getElementById("filmstrip");
+      const sections = document.querySelectorAll(".reveal .slides section");
+
+      function buildThumbs() {
+        const revealEl = document.querySelector(".reveal");
+        const slideW = revealEl.offsetWidth;
+        const slideH = revealEl.offsetHeight;
+        const thumbWidth = 120;
+        const scale = thumbWidth / slideW;
+
+        sections.forEach((section, index) => {
+          const number = String(index + 1).padStart(2, "0");
+          const thumb = document.createElement("div");
+          thumb.className = "thumb";
+
+          const wrap = document.createElement("div");
+          wrap.className = "slide-preview-wrap";
+
+          const preview = document.createElement("div");
+          preview.className = "slide-preview";
+          preview.style.width = slideW + "px";
+          preview.style.height = slideH + "px";
+          preview.style.transform = `scale(${scale})`;
+
+          Array.from(section.childNodes).forEach((node) => {
+            preview.appendChild(node.cloneNode(true));
+          });
+
+          wrap.appendChild(preview);
+          thumb.appendChild(wrap);
+
+          const numEl = document.createElement("span");
+          numEl.className = "thumb-num";
+          numEl.textContent = number;
+          thumb.appendChild(numEl);
+
+          thumb.addEventListener("click", () => Reveal.slide(index));
+          strip.appendChild(thumb);
+        });
+      }
+
+      function syncNav(event) {
+        const index = event.indexh;
+        const thumbs = strip.querySelectorAll(".thumb");
+        thumbs.forEach((thumb, thumbIndex) =>
+          thumb.classList.toggle("active", thumbIndex === index),
+        );
+        const active = thumbs[index];
+        if (active) {
+          strip.scrollLeft =
+            active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
+        }
+        document
+          .getElementById("arrow-prev")
+          .classList.toggle("hidden", index === 0);
+        document
+          .getElementById("arrow-next")
+          .classList.toggle("hidden", index === sections.length - 1);
+      }
+
+      Reveal.on("slidechanged", syncNav);
+      Reveal.on("ready", (event) => {
+        const initialLang =
+          new URLSearchParams(window.location.search).get("lang") === "es"
+            ? "es"
+            : "en";
+        applyLang(initialLang);
+        revealReady = true;
+        buildThumbs();
+        syncNav({ indexh: event.indexh });
+      });
+
+      document.querySelectorAll(".lang-btn").forEach((btn) => {
+        btn.addEventListener("click", () => applyLang(btn.dataset.lang));
+      });
+
+      document
+        .getElementById("arrow-prev")
+        .addEventListener("click", () => Reveal.prev());
+      document
+        .getElementById("arrow-next")
+        .addEventListener("click", () => Reveal.next());
+
+      let collapsed = false;
+      const filmstrip = document.getElementById("filmstrip");
+      const viewport = document.querySelector(".reveal-viewport");
+      const stripToggle = document.getElementById("strip-toggle");
+      const arrows = document.querySelectorAll(".nav-arrow");
+
+      stripToggle.addEventListener("click", () => {
+        collapsed = !collapsed;
+        filmstrip.classList.toggle("collapsed", collapsed);
+        viewport.classList.toggle("strip-collapsed", collapsed);
+        arrows.forEach((arrow) =>
+          arrow.classList.toggle("strip-collapsed", collapsed),
+        );
+        stripToggle.classList.toggle("is-collapsed", collapsed);
+        setTimeout(() => Reveal.layout(), 320);
+      });
+    </script>
+  </body>
+</html>

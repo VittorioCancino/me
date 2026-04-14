@@ -110,6 +110,13 @@ export const translations = {
           "ER diagrams, logical models, cardinality, and how to think when designing a database from scratch. Includes a hands-on exercise.",
         href: "/presentations/tics320/practicums/practicum-1/index.html",
       },
+      {
+        number: 2,
+        title: "From ER to Relational Models & Relational Algebra",
+        description:
+          "Transition from the ER model to the relational model, map entities and relationships into relations, and begin working with the core ideas of relational algebra.",
+        href: "/presentations/tics320/practicums/practicum-2/index.html",
+      },
     ],
     exerciseItems: [
       {
@@ -249,6 +256,13 @@ export const translations = {
         description:
           "Diagramas ER, modelos lógicos, cardinalidad y cómo pensar al diseñar una base de datos desde cero. Incluye un ejercicio práctico.",
         href: "/presentations/tics320/practicums/practicum-1/index.html",
+      },
+      {
+        number: 2,
+        title: "Del Modelo ER al Modelo Relacional y Álgebra Relacional",
+        description:
+          "Transición desde el modelo ER al modelo relacional, mapeo de entidades y relaciones a relaciones, e introducción a las ideas fundamentales del álgebra relacional.",
+        href: "/presentations/tics320/practicums/practicum-2/index.html",
       },
     ],
     exerciseItems: [
