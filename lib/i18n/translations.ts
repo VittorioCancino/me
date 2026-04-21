@@ -45,13 +45,15 @@ export const translations = {
         },
         practicum: {
           title: "Practicum",
-          description: "Weekly sessions I run with exercises, examples, and practice problems.",
+          description:
+            "Weekly sessions I run with exercises, examples, and practice problems.",
           empty: "Nothing here yet.",
           openSlides: "Open slides",
         },
         exercises: {
           title: "Exercises",
-          description: "Practice problems with solutions. Work through them on your own first.",
+          description:
+            "Practice problems with solutions. Work through them on your own first.",
           empty: "Nothing here yet.",
           openExercise: "Open exercise",
           openSolution: "Open solution",
@@ -81,7 +83,8 @@ export const translations = {
         label: "pgadmin.org",
       },
       {
-        title: "Database Design for Mere Mortals (4th ed.) — Michael J. Hernandez",
+        title:
+          "Database Design for Mere Mortals (4th ed.) — Michael J. Hernandez",
         description:
           "My personal recommendation for this course. A practical, hands-on guide to relational database design that doesn't assume prior experience. Hernandez walks you through the full design process — from understanding requirements to building a clean, normalised schema — at a pace that builds real intuition. The level of depth matches what we cover in class, and the examples are concrete enough to apply immediately.",
         href: "https://www.amazon.com/dp/0136788041",
@@ -117,6 +120,13 @@ export const translations = {
           "Transition from the ER model to the relational model, map entities and relationships into relations, and begin working with the core ideas of relational algebra.",
         href: "/presentations/tics320/practicums/practicum-2/index.html",
       },
+      {
+        number: 3,
+        title: "Introduction to SQL",
+        description:
+          "First contact with SQL: query structure, basic clauses, and how relational ideas turn into real database questions.",
+        href: "/presentations/tics320/practicums/practicum-3/index.html",
+      },
     ],
     exerciseItems: [
       {
@@ -125,7 +135,8 @@ export const translations = {
         description:
           "Design an ER diagram for a disco that sells tickets, runs themed events, and has an in-house bar where customers can order drinks.",
         href: "/presentations/tics320/exercises/exercise-1/index.html",
-        solutionHref: "/presentations/tics320/exercises/exercise-1/er-solution.html",
+        solutionHref:
+          "/presentations/tics320/exercises/exercise-1/er-solution.html",
       },
       {
         number: 2,
@@ -133,7 +144,8 @@ export const translations = {
         description:
           "Guided ER modeling practice with progressively harder case studies. This is an exercise deck rather than a lecture session.",
         href: "/presentations/tics320/exercises/exercise-2/index.html",
-        solutionHref: "/presentations/tics320/exercises/exercise-2/er-gallery.html?case=university",
+        solutionHref:
+          "/presentations/tics320/exercises/exercise-2/er-gallery.html?case=university",
       },
       {
         number: 3,
@@ -144,12 +156,22 @@ export const translations = {
         solutionHref:
           "/presentations/tics320/exercises/exercise-3/solutions-gallery.html?case=sailors",
       },
+      {
+        number: 4,
+        title: "SQL Exercises",
+        description:
+          "Practice both basic and advanced SQL with a wrapper that includes the introductory query deck and the grouped-query exercise deck.",
+        href: "/presentations/tics320/exercises/sql-exercises/index.html",
+        solutionHref:
+          "/presentations/tics320/exercises/sql-exercises/solutions-gallery.html?case=basic",
+      },
     ],
     courseList: [
       {
         code: "TICS320",
         name: "Databases",
-        description: "Relational and non-relational databases, query design, and data modelling.",
+        description:
+          "Relational and non-relational databases, query design, and data modelling.",
         slug: "tics320",
       },
     ],
@@ -201,13 +223,15 @@ export const translations = {
         },
         practicum: {
           title: "Practicum",
-          description: "Sesiones semanales que dirijo con ejercicios, ejemplos y problemas prácticos.",
+          description:
+            "Sesiones semanales que dirijo con ejercicios, ejemplos y problemas prácticos.",
           empty: "Nada aquí todavía.",
           openSlides: "Abrir diapositivas",
         },
         exercises: {
           title: "Ejercicios",
-          description: "Problemas prácticos con soluciones. Intenta resolverlos por tu cuenta primero.",
+          description:
+            "Problemas prácticos con soluciones. Intenta resolverlos por tu cuenta primero.",
           empty: "Nada aquí todavía.",
           openExercise: "Abrir ejercicio",
           openSolution: "Abrir solución",
@@ -237,7 +261,8 @@ export const translations = {
         label: "pgadmin.org",
       },
       {
-        title: "Database Design for Mere Mortals (4ª ed.) — Michael J. Hernandez",
+        title:
+          "Database Design for Mere Mortals (4ª ed.) — Michael J. Hernandez",
         description:
           "Mi recomendación personal para este curso. Una guía práctica y directa sobre diseño de bases de datos relacionales que no asume experiencia previa. Hernandez guía al lector por todo el proceso de diseño — desde entender los requisitos hasta construir un esquema limpio y normalizado — a un ritmo que desarrolla intuición real. El nivel de profundidad se alinea con lo que vemos en clases, y los ejemplos son concretos y aplicables de inmediato.",
         href: "https://www.amazon.com/dp/0136788041",
@@ -273,6 +298,13 @@ export const translations = {
           "Transición desde el modelo ER al modelo relacional, mapeo de entidades y relaciones a relaciones, e introducción a las ideas fundamentales del álgebra relacional.",
         href: "/presentations/tics320/practicums/practicum-2/index.html",
       },
+      {
+        number: 3,
+        title: "Introducción a SQL",
+        description:
+          "Primer contacto con SQL: estructura de consultas, cláusulas básicas y cómo las ideas relacionales se convierten en preguntas reales a la base de datos.",
+        href: "/presentations/tics320/practicums/practicum-3/index.html",
+      },
     ],
     exerciseItems: [
       {
@@ -281,7 +313,8 @@ export const translations = {
         description:
           "Diseña un diagrama ER para una discoteca que vende entradas, organiza eventos temáticos y tiene un bar donde los clientes pueden pedir bebidas.",
         href: "/presentations/tics320/exercises/exercise-1/index.html",
-        solutionHref: "/presentations/tics320/exercises/exercise-1/er-solution.html",
+        solutionHref:
+          "/presentations/tics320/exercises/exercise-1/er-solution.html",
       },
       {
         number: 2,
@@ -289,7 +322,8 @@ export const translations = {
         description:
           "Práctica guiada de modelado ER con casos de estudio de dificultad progresiva. Este material funciona mejor como ejercicio que como sesión expositiva.",
         href: "/presentations/tics320/exercises/exercise-2/index.html",
-        solutionHref: "/presentations/tics320/exercises/exercise-2/er-gallery.html?case=university",
+        solutionHref:
+          "/presentations/tics320/exercises/exercise-2/er-gallery.html?case=university",
       },
       {
         number: 3,
@@ -300,12 +334,22 @@ export const translations = {
         solutionHref:
           "/presentations/tics320/exercises/exercise-3/solutions-gallery.html?case=sailors",
       },
+      {
+        number: 4,
+        title: "Ejercicios de SQL",
+        description:
+          "Practica SQL básico y avanzado con un contenedor que incluye el deck introductorio de consultas y el deck de ejercicios de agrupación.",
+        href: "/presentations/tics320/exercises/sql-exercises/index.html",
+        solutionHref:
+          "/presentations/tics320/exercises/sql-exercises/solutions-gallery.html?case=basic",
+      },
     ],
     courseList: [
       {
         code: "TICS320",
         name: "Bases de Datos",
-        description: "Bases de datos relacionales y no relacionales, diseño de consultas y modelado de datos.",
+        description:
+          "Bases de datos relacionales y no relacionales, diseño de consultas y modelado de datos.",
         slug: "tics320",
       },
     ],
@@ -313,4 +357,4 @@ export const translations = {
 } as const;
 
 export type Language = keyof typeof translations;
-export type Translations = typeof translations[Language];
+export type Translations = (typeof translations)[Language];

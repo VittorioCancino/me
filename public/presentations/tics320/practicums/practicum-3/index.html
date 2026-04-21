@@ -1,0 +1,3424 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practicum 3 - TICS320</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <link rel="stylesheet" href="../../../shared/tokens.css" />
+
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+        --strip-h: 88px;
+        --toggle-h: 28px;
+        --arrow-w: 56px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+      }
+
+      .reveal-viewport {
+        background: var(--bg) !important;
+        height: calc(100vh - var(--strip-h) - var(--toggle-h)) !important;
+        transition: height var(--transition);
+      }
+
+      .reveal-viewport.strip-collapsed {
+        height: calc(100vh - var(--toggle-h)) !important;
+      }
+
+      .reveal {
+        height: 100% !important;
+      }
+
+      .reveal .slides {
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+      }
+
+      .reveal .slides section {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 3rem 10rem;
+        top: 0 !important;
+        left: 0 !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .reveal h1 {
+        font-size: var(--text-display);
+        line-height: 1.06;
+      }
+
+      .reveal p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.7;
+      }
+
+      .label {
+        display: inline-block;
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        border: 1px solid rgba(124, 58, 237, 0.45);
+        background: var(--accent-dim);
+        padding: 0.22em 0.85em;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+      }
+
+      .divider {
+        width: 2.5rem;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        margin: 0.9rem auto 1.2rem;
+      }
+
+      .muted {
+        color: var(--muted) !important;
+        font-size: var(--text-muted);
+      }
+
+      .story {
+        background: var(--surface);
+        border-left: 4px solid var(--accent);
+        border-radius: 0 10px 10px 0;
+        padding: 1.35rem 1.6rem;
+        text-align: left;
+        font-size: var(--text-body);
+        color: #c9d1d9;
+        line-height: 1.75;
+      }
+
+      .truth-list {
+        width: 100%;
+        max-width: 62rem;
+        display: grid;
+        gap: 0.85rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .truth-list li {
+        display: grid;
+        grid-template-columns: 2rem 1fr;
+        gap: 0.85rem;
+        align-items: start;
+        padding: 1rem 1.1rem;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        text-align: left;
+      }
+
+      .truth-list li span:first-child {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 999px;
+        background: var(--accent-dim);
+        color: var(--accent-light);
+        font-weight: 700;
+      }
+
+      .truth-list li span:last-child {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.65;
+      }
+
+      .truth-list strong {
+        color: #fff;
+      }
+
+      .code-panel {
+        width: 100%;
+        max-width: 56rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: #10151d;
+        overflow: hidden;
+        text-align: left;
+      }
+
+      .code-panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .code-panel-head span {
+        font-size: var(--text-small);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+      }
+
+      .code-panel-body {
+        padding: 1rem 1.2rem;
+        font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+        font-size: 1.15rem;
+        line-height: 1.9;
+        color: #e6edf3;
+      }
+
+      .sql-keyword {
+        color: #7dd3fc;
+        font-weight: 700;
+      }
+
+      .sql-table {
+        color: #86efac;
+      }
+
+      .sql-column {
+        color: #f5d0fe;
+      }
+
+      .result-card {
+        width: 100%;
+        max-width: 56rem;
+        padding: 1rem 1.2rem;
+        border-radius: 16px;
+        border: 1px solid rgba(34, 197, 94, 0.28);
+        background: rgba(34, 197, 94, 0.08);
+        text-align: left;
+      }
+
+      .result-card strong {
+        color: #fff;
+      }
+
+      .result-card p {
+        font-size: var(--text-card);
+        line-height: 1.65;
+      }
+
+      .question-story {
+        width: 100%;
+        max-width: 58rem;
+        text-align: left;
+      }
+
+      .story-kicker {
+        display: inline-block;
+        margin-bottom: 0.7rem;
+        color: var(--accent-light);
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .story-question {
+        display: block;
+        margin: 0.85rem 0 1rem;
+        font-size: var(--text-subheading);
+        font-weight: 700;
+        line-height: 1.25;
+        color: #fff;
+      }
+
+      .query-journey {
+        width: 100%;
+        max-width: 64rem;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        gap: 0.9rem;
+        align-items: center;
+        margin-top: 1.3rem;
+      }
+
+      .journey-node {
+        text-align: center;
+      }
+
+      .journey-node-label {
+        display: block;
+        margin-bottom: 0.45rem;
+        color: var(--accent-light);
+        font-size: var(--text-small);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .journey-node strong {
+        display: block;
+        color: #fff;
+        font-size: var(--text-subheading);
+        line-height: 1.28;
+      }
+
+      .journey-node p {
+        margin-top: 0.4rem;
+        color: var(--muted);
+        font-size: var(--text-body);
+        line-height: 1.6;
+      }
+
+      .journey-arrow {
+        color: var(--accent-light);
+        font-size: 2.4rem;
+        font-weight: 700;
+      }
+
+      .definition-block {
+        width: 100%;
+        max-width: 62rem;
+        text-align: left;
+      }
+
+      .definition-line {
+        font-size: var(--text-subheading);
+        line-height: 1.4;
+        color: #fff;
+        letter-spacing: -0.02em;
+      }
+
+      .definition-line .accent-word {
+        color: var(--accent-light);
+        font-weight: 700;
+      }
+
+      .definition-notes {
+        width: 100%;
+        max-width: 62rem;
+        display: grid;
+        gap: 1.15rem;
+        margin-top: 1.5rem;
+        padding-top: 1.2rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .definition-note {
+        text-align: left;
+        display: grid;
+        grid-template-columns: 11rem 1fr;
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .definition-note strong {
+        display: block;
+        color: var(--accent-light);
+        font-size: var(--text-small);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .definition-note p {
+        font-size: var(--text-body);
+        line-height: 1.65;
+      }
+
+      .definition-note .accent-word {
+        color: var(--accent-light);
+        font-weight: 700;
+      }
+
+      .scope-line {
+        margin-top: 1.5rem;
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+      }
+
+      .scope-line strong {
+        color: #fff;
+      }
+
+      .schema-stack {
+        width: 100%;
+        max-width: 64rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .schema-line {
+        text-align: left;
+        font-size: var(--text-case-study);
+        line-height: 1.55;
+        color: #e6edf3;
+        letter-spacing: -0.01em;
+      }
+
+      .schema-relation {
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .schema-key {
+        color: var(--accent-light);
+        font-weight: 700;
+      }
+
+      .schema-note {
+        width: 100%;
+        max-width: 64rem;
+        text-align: left;
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .data-preview-grid {
+        width: 100%;
+        max-width: 70rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .table-shell {
+        text-align: left;
+      }
+
+      .table-frame {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .table-name {
+        margin-bottom: 0.55rem;
+        color: var(--accent-light);
+        font-size: var(--text-small);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .mini-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+      }
+
+      .mini-table th {
+        padding: 0.6rem 0.75rem;
+        text-align: left;
+        color: var(--accent-light);
+        font-size: var(--text-small);
+        font-weight: 700;
+        border-bottom: 1px solid var(--border);
+        background: rgba(124, 58, 237, 0.08);
+      }
+
+      .mini-table td {
+        padding: 0.58rem 0.75rem;
+        color: #c9d1d9;
+        font-size: var(--text-card);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .mini-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .mini-table th:first-child,
+      .mini-table td:first-child {
+        border-left: none;
+      }
+
+      .mini-table thead tr:first-child th:first-child {
+        border-top-left-radius: 12px;
+      }
+
+      .mini-table thead tr:first-child th:last-child {
+        border-top-right-radius: 12px;
+      }
+
+      .mini-table tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 12px;
+      }
+
+      .mini-table tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 12px;
+      }
+
+      .mini-key {
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .question-grid {
+        width: 100%;
+        max-width: 66rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .question-panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+        text-align: left;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .question-panel h3 {
+        margin-bottom: 0.6rem;
+        color: var(--accent-light);
+        font-size: 2.1rem;
+        line-height: 1.15;
+      }
+
+      .question-panel ul {
+        padding-left: 1.35rem;
+        color: #c9d1d9;
+        line-height: 1.8;
+        font-size: var(--text-body);
+      }
+
+      .question-panel p {
+        margin-top: 0.8rem;
+        font-size: var(--text-body);
+        line-height: 1.7;
+      }
+
+      .query-example {
+        width: 100%;
+        max-width: 62rem;
+        text-align: left;
+      }
+
+      .query-prompt {
+        margin-bottom: 1rem;
+        color: #c9d1d9;
+        font-size: var(--text-case-study);
+        line-height: 1.6;
+      }
+
+      .query-reading {
+        width: 100%;
+        max-width: 62rem;
+        display: grid;
+        gap: 0.85rem;
+        margin-top: 1.2rem;
+      }
+
+      .query-reading-line {
+        display: grid;
+        grid-template-columns: 12rem 1fr;
+        gap: 1rem;
+        align-items: center;
+        text-align: left;
+      }
+
+      .query-reading-line strong {
+        color: var(--accent-light);
+        font-size: 1.45rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        line-height: 1;
+      }
+
+      .query-reading-line p {
+        font-size: var(--text-body);
+        line-height: 1.65;
+      }
+
+      .result-preview {
+        width: 100%;
+        max-width: 44rem;
+        text-align: left;
+      }
+
+      .result-preview .mini-table td,
+      .result-preview .mini-table th {
+        font-size: var(--text-body);
+      }
+
+      .result-note {
+        width: 100%;
+        max-width: 44rem;
+        margin-top: 1rem;
+        text-align: left;
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.7;
+      }
+
+      .logic-stack {
+        width: 100%;
+        max-width: 64rem;
+        display: grid;
+      }
+
+      .logic-line {
+        display: grid;
+        grid-template-columns: 4rem 1fr;
+        gap: 1rem;
+        align-items: center;
+        text-align: left;
+      }
+
+      .logic-line strong {
+        color: var(--accent-light);
+        font-size: 1.35rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      .logic-line p {
+        font-size: var(--text-body);
+        line-height: 1.65;
+      }
+
+      .logic-stack.logic-wide .logic-line {
+        grid-template-columns: 18rem 1fr;
+        gap: 2rem;
+        align-items: start;
+      }
+
+      .logic-stack.logic-wide .logic-line strong {
+        white-space: normal;
+        line-height: 1.2;
+      }
+
+      .logic-stack.summary-logic {
+        max-width: 62rem;
+        gap: 1.1rem;
+      }
+
+      .logic-stack.summary-logic .logic-line {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+        align-items: start;
+      }
+
+      .logic-stack.summary-logic .logic-line strong {
+        white-space: normal;
+        line-height: 1.2;
+      }
+
+      .logic-stack.aggregate-logic .logic-line {
+        align-items: center;
+      }
+
+      .logic-stack.aggregate-logic .logic-line strong,
+      .logic-stack.aggregate-logic .logic-line p {
+        line-height: 1.45;
+      }
+
+      .conditions-flow {
+        width: 100%;
+        max-width: 66rem;
+        display: grid;
+        gap: 1.1rem;
+      }
+
+      .condition-example {
+        text-align: left;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .condition-example:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .condition-label {
+        display: inline-block;
+        margin-bottom: 0.4rem;
+        color: var(--accent-light);
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .condition-example p {
+        font-size: var(--text-body);
+        line-height: 1.65;
+      }
+
+      .order-story {
+        width: 100%;
+        max-width: 64rem;
+        text-align: left;
+        color: #c9d1d9;
+        font-size: var(--text-case-study);
+        line-height: 1.65;
+      }
+
+      .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.95rem 2rem;
+        background: var(--accent);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: background 0.18s;
+      }
+
+      .cta-button:hover {
+        background: #6d28d9;
+      }
+
+      @media (max-width: 1100px) {
+        .definition-note {
+          grid-template-columns: 1fr;
+          gap: 0.35rem;
+        }
+      }
+
+      .nav-arrow {
+        position: fixed;
+        top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
+        transform: translateY(-50%);
+        z-index: 200;
+        width: var(--arrow-w);
+        height: var(--arrow-w);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        transition:
+          background 0.18s,
+          color 0.18s,
+          border-color 0.18s,
+          opacity 0.18s,
+          top var(--transition);
+      }
+
+      .nav-arrow:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent-light);
+      }
+
+      .nav-arrow.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .nav-arrow.strip-collapsed {
+        top: 50%;
+      }
+
+      #arrow-prev {
+        left: 1rem;
+      }
+
+      #arrow-next {
+        right: 1rem;
+      }
+
+      #strip-toggle {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--toggle-h);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 101;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+      }
+
+      #toggle-pill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: var(--muted);
+        transition:
+          background 0.18s,
+          color 0.18s;
+      }
+
+      #strip-toggle:hover #toggle-pill {
+        color: var(--accent-light);
+        background: color-mix(in srgb, var(--accent-dim) 42%, var(--surface));
+      }
+
+      .toggle-icon {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.18s;
+      }
+
+      #strip-toggle.is-collapsed .toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      #filmstrip {
+        position: fixed;
+        bottom: var(--toggle-h);
+        left: 0;
+        right: 0;
+        height: var(--strip-h);
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        z-index: 100;
+        padding: 0 1rem;
+        gap: 0.6rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        transform: translateY(0);
+        opacity: 1;
+        transition:
+          transform var(--transition),
+          opacity var(--transition);
+      }
+
+      #filmstrip::-webkit-scrollbar {
+        display: none;
+      }
+
+      #filmstrip.collapsed {
+        transform: translateY(100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .thumb {
+        flex-shrink: 0;
+        width: 120px;
+        height: 68px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.18s,
+          transform 0.18s;
+      }
+
+      .thumb:hover,
+      .thumb.active {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .thumb.active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+      }
+
+      .thumb-num {
+        position: absolute;
+        bottom: 4px;
+        left: 6px;
+        z-index: 2;
+        font-size: 0.58rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.75);
+        letter-spacing: 0.06em;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      }
+
+      .thumb.active .thumb-num {
+        color: var(--accent-light);
+      }
+
+      .slide-preview-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .slide-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
+        pointer-events: none;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 3rem 10rem;
+      }
+
+      .slide-preview h1,
+      .slide-preview h2,
+      .slide-preview h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .slide-preview h1 {
+        font-size: var(--text-display);
+        line-height: 1.06;
+      }
+
+      .slide-preview p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.7;
+      }
+
+      @media (max-width: 1100px) {
+        .reveal .slides section {
+          padding: 2.5rem 3rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button id="arrow-prev" class="nav-arrow hidden" aria-label="Previous">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </button>
+    <button id="arrow-next" class="nav-arrow hidden" aria-label="Next">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </button>
+
+    <div class="reveal">
+      <div class="slides">
+        <section data-title-en="Title">
+          <div class="label">TICS320 · Practicum 3</div>
+          <h1>Introduction to SQL</h1>
+          <div class="divider"></div>
+          <p class="muted">
+            Vittorio Cancino &nbsp;·&nbsp; Universidad Adolfo Ibáñez
+          </p>
+        </section>
+
+        <section data-title-en="Why SQL?">
+          <div class="label">From Model To Language</div>
+          <h2>Why Do We Need SQL?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Last time we studied how queries work conceptually. Now we need the
+            language that real database systems understand.
+          </p>
+
+          <div class="question-story story">
+            <span class="story-kicker">A familiar situation</span>
+            Imagine a coordinator asks:
+            <span class="story-question">
+              "Which first-year students are taking Databases?"
+            </span>
+            We already understand the <strong>logic</strong> behind that
+            question. We may need to <strong>pick columns</strong>,
+            <strong>filter rows</strong>, and <strong>combine tables</strong>.
+            What we still need is the language that turns that idea into
+            something a real database can execute.
+          </div>
+        </section>
+
+        <section data-title-en="Question To Answer">
+          <div class="label">The Path</div>
+          <h2>From Question To Answer</h2>
+          <p class="muted" style="margin-bottom: 1.4rem">
+            SQL is the bridge between a real question and the result we want to
+            read.
+          </p>
+
+          <div class="query-journey">
+            <div class="journey-node">
+              <span class="journey-node-label">Question</span>
+              <strong>Ask something meaningful</strong>
+              <p>Start from a real information need.</p>
+            </div>
+
+            <div class="journey-arrow">→</div>
+
+            <div class="journey-node">
+              <span class="journey-node-label">Language</span>
+              <strong>Write it in SQL</strong>
+              <p>Express the request in a form the DBMS understands.</p>
+            </div>
+
+            <div class="journey-arrow">→</div>
+
+            <div class="journey-node">
+              <span class="journey-node-label">Answer</span>
+              <strong>Read the result</strong>
+              <p>Let the system compute the rows we want.</p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="What Is SQL?">
+          <div class="label">Core Idea</div>
+          <h2>SQL In One Sentence</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            SQL is a declarative language for working with relational databases.
+          </p>
+
+          <div class="definition-block">
+            <p class="definition-line">
+              SQL is a <span class="accent-word">declarative</span> language for
+              working with <span class="accent-word">relational</span>
+              databases.
+            </p>
+
+            <div class="definition-notes">
+              <div class="definition-note">
+                <strong>Declarative means</strong>
+                <p>
+                  We describe <span class="accent-word">what we want</span>
+                  from the data instead of every low-level step the computer
+                  should follow.
+                </p>
+              </div>
+
+              <div class="definition-note">
+                <strong>Relational means</strong>
+                <p>
+                  Data is organized into structured
+                  <span class="accent-word">tables</span>. Those tables are
+                  connected through
+                  <span class="accent-word">relationships</span>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p class="scope-line">
+            <strong>For today:</strong> SQL can also create, insert, update, and
+            delete data, but in this practicum we focus on
+            <strong>querying with SELECT</strong>.
+          </p>
+        </section>
+
+        <section data-title-en="Running Schema">
+          <div class="label">Our Example Database</div>
+          <h2>The Running Example Schema</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            We will use the same small university database throughout the
+            practicum.
+          </p>
+
+          <div class="schema-stack">
+            <div class="schema-line">
+              <span class="schema-relation">students</span>(<span
+                class="schema-key"
+                >student_id</span
+              >, name, major, year)
+            </div>
+            <div class="schema-line">
+              <span class="schema-relation">courses</span>(<span
+                class="schema-key"
+                >course_id</span
+              >, title, credits)
+            </div>
+            <div class="schema-line">
+              <span class="schema-relation">enrollments</span>(<span
+                class="schema-key"
+                >student_id</span
+              >, <span class="schema-key">course_id</span>, grade)
+            </div>
+          </div>
+
+          <p class="schema-note">
+            `students` stores who the students are. `courses` stores the courses
+            that exist. `enrollments` connects both relations and tells us
+            <strong>which student takes which course</strong>. In the next
+            slides, we will populate these relations with example rows and start
+            querying them.
+          </p>
+        </section>
+
+        <section data-title-en="Example Rows">
+          <div class="label">The Same Database</div>
+          <h2>What Do These Relations Look Like?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Here is a small set of example rows that we will reuse in later
+            query slides.
+          </p>
+
+          <div class="data-preview-grid">
+            <div class="table-shell">
+              <div class="table-name">students</div>
+              <div class="table-frame">
+                <table class="mini-table">
+                  <thead>
+                    <tr>
+                      <th>student_id</th>
+                      <th>name</th>
+                      <th>major</th>
+                      <th>year</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mini-key">101</td>
+                      <td>Ana</td>
+                      <td>CS</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
+                      <td class="mini-key">102</td>
+                      <td>Lucas</td>
+                      <td>Business</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td class="mini-key">103</td>
+                      <td>Sofia</td>
+                      <td>CS</td>
+                      <td>1</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="table-shell">
+              <div class="table-name">courses</div>
+              <div class="table-frame">
+                <table class="mini-table">
+                  <thead>
+                    <tr>
+                      <th>course_id</th>
+                      <th>title</th>
+                      <th>credits</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mini-key">DB101</td>
+                      <td>Databases</td>
+                      <td>4</td>
+                    </tr>
+                    <tr>
+                      <td class="mini-key">PR201</td>
+                      <td>Programming</td>
+                      <td>5</td>
+                    </tr>
+                    <tr>
+                      <td class="mini-key">MA110</td>
+                      <td>Calculus</td>
+                      <td>4</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="table-shell">
+              <div class="table-name">enrollments</div>
+              <div class="table-frame">
+                <table class="mini-table">
+                  <thead>
+                    <tr>
+                      <th>student_id</th>
+                      <th>course_id</th>
+                      <th>grade</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mini-key">101</td>
+                      <td>DB101</td>
+                      <td>6.2</td>
+                    </tr>
+                    <tr>
+                      <td class="mini-key">102</td>
+                      <td>PR201</td>
+                      <td>5.8</td>
+                    </tr>
+                    <tr>
+                      <td class="mini-key">103</td>
+                      <td>DB101</td>
+                      <td>6.7</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <p class="schema-note">
+            Notice that each relation shows the same attributes we introduced in
+            the schema slide, but now with concrete values. This is the data we
+            will read when we start writing SQL queries.
+          </p>
+        </section>
+
+        <section data-title-en="Questions">
+          <div class="label">Start With Questions</div>
+          <h2>What Kind of Questions Do We Want To Ask?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Before learning syntax, think about the questions we can already ask
+            with the sample rows on the previous slide.
+          </p>
+
+          <div class="question-grid">
+            <div class="question-panel">
+              <h3>Questions from one relation</h3>
+              <ul>
+                <li>What are the names of all students in `students`?</li>
+                <li>Which students are in year 1?</li>
+                <li>Which courses have 4 credits?</li>
+                <li>What grade does student 101 have?</li>
+              </ul>
+            </div>
+
+            <div class="question-panel">
+              <h3>Questions across relations</h3>
+              <ul>
+                <li>Which students are enrolled in Databases?</li>
+                <li>Which course is Ana taking?</li>
+                <li>Which grades belong to first-year CS students?</li>
+              </ul>
+              <p>
+                Once a question needs names from `students` and course titles
+                from `courses`, one table is no longer enough.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="First Query Shape">
+          <div class="label">First Syntax</div>
+          <h2>The Shape of a First Query</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            A basic query starts by saying what we want to see and where the
+            data comes from.
+          </p>
+
+          <div class="query-example">
+            <p class="query-prompt">
+              Suppose we want to answer the question:
+              <strong>"What are the names and majors of all students?"</strong>
+            </p>
+          </div>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-column">name</span>,
+              <span class="sql-column">major</span><br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span>;
+            </div>
+          </div>
+
+          <p class="schema-note" style="max-width: 62rem">
+            This is the first shape to remember: choose the columns you want,
+            then say which relation they come from.
+          </p>
+        </section>
+
+        <section data-title-en="Reading The Query">
+          <div class="label">How To Read It</div>
+          <h2>Reading the Query Step by Step</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Once the query is written, we can explain what each part is doing.
+          </p>
+
+          <div class="query-reading">
+            <div class="query-reading-line">
+              <strong>SELECT</strong>
+              <p>Tells us which columns we want to see in the result.</p>
+            </div>
+            <div class="query-reading-line">
+              <strong>FROM</strong>
+              <p>Tells us which relation we are reading from.</p>
+            </div>
+            <div class="query-reading-line">
+              <strong>Result</strong>
+              <p>
+                The output is still a table-shaped result, even if it is not
+                stored permanently.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Query Result">
+          <div class="label">First Result</div>
+          <h2>What Does This Query Return?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            The query reads `students` and returns only the columns we asked
+            for.
+          </p>
+
+          <div class="result-preview">
+            <div class="table-name">result</div>
+            <div class="table-frame">
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>name</th>
+                    <th>major</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Ana</td>
+                    <td>CS</td>
+                  </tr>
+                  <tr>
+                    <td>Lucas</td>
+                    <td>Business</td>
+                  </tr>
+                  <tr>
+                    <td>Sofia</td>
+                    <td>CS</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="result-note">
+            Notice that `student_id` and `year` do not appear here. They exist
+            in the original relation, but we did not ask for them in `SELECT`.
+          </p>
+        </section>
+
+        <section data-title-en="Where Clause">
+          <div class="label">Filtering Rows</div>
+          <h2>When We Want Only Some Rows</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            `SELECT` chooses columns. `WHERE` lets us filter which rows stay in
+            the result.
+          </p>
+
+          <div class="query-example">
+            <p class="query-prompt">
+              Suppose we want to answer:
+              <strong>"Which students are in year 1?"</strong>
+            </p>
+          </div>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-column">name</span>,
+              <span class="sql-column">year</span><br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span><br />
+              <span class="sql-keyword">WHERE</span>
+              <span class="sql-column">year</span> = 1;
+            </div>
+          </div>
+
+          <p class="schema-note" style="max-width: 62rem">
+            This adds one new idea: after choosing the relation, we can keep
+            only the rows that satisfy a condition.
+          </p>
+        </section>
+
+        <section data-title-en="Reading Where">
+          <div class="label">How To Read WHERE</div>
+          <h2>Reading a Query With WHERE</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            We can now read the query as a short sequence of decisions.
+          </p>
+
+          <div class="logic-stack logic-wide aggregate-logic">
+            <div class="logic-line">
+              <strong>FROM</strong>
+              <p>Start from the `students` relation.</p>
+            </div>
+            <div class="logic-line">
+              <strong>WHERE</strong>
+              <p>Keep only the rows where `year = 1`.</p>
+            </div>
+            <div class="logic-line">
+              <strong>SELECT</strong>
+              <p>
+                Show only the `name` and `year` columns from those remaining
+                rows.
+              </p>
+            </div>
+            <div class="logic-line">
+              <strong>RESULT</strong>
+              <p>
+                The output now includes Ana and Sofia, because they are the
+                students in first year.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Combining Conditions">
+          <div class="label">More Precise Filters</div>
+          <h2>Using AND</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            `AND` helps when all conditions must be true at the same time.
+          </p>
+
+          <div class="conditions-flow">
+            <div class="condition-example">
+              <span class="condition-label">AND</span>
+              <p style="margin-bottom: 0.7rem">
+                Use `AND` when both conditions must be true.
+              </p>
+              <div class="code-panel">
+                <div class="code-panel-body">
+                  <span class="sql-keyword">SELECT</span>
+                  <span class="sql-column">name</span><br />
+                  <span class="sql-keyword">FROM</span>
+                  <span class="sql-table">students</span><br />
+                  <span class="sql-keyword">WHERE</span>
+                  <span class="sql-column">year</span> = 1 AND
+                  <span class="sql-column">major</span> = 'CS';
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Using OR">
+          <div class="label">More Precise Filters</div>
+          <h2>Using OR</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            `OR` helps when more than one possible condition can match the rows
+            we want.
+          </p>
+
+          <div class="conditions-flow">
+            <div class="condition-example">
+              <span class="condition-label">OR</span>
+              <p style="margin-bottom: 0.7rem">
+                Use `OR` when at least one condition can be true.
+              </p>
+              <div class="code-panel">
+                <div class="code-panel-body">
+                  <span class="sql-keyword">SELECT</span>
+                  <span class="sql-column">title</span><br />
+                  <span class="sql-keyword">FROM</span>
+                  <span class="sql-table">courses</span><br />
+                  <span class="sql-keyword">WHERE</span>
+                  <span class="sql-column">credits</span> = 4 OR
+                  <span class="sql-column">credits</span> = 5;
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Order By">
+          <div class="label">Presentation Matters</div>
+          <h2>Ordering Results with ORDER BY</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Even if the right rows are returned, we may want them in a
+            meaningful order.
+          </p>
+
+          <div class="order-story" style="margin-bottom: 1rem">
+            If we list students by name, the result is easier to read than if
+            rows appear in an arbitrary order.
+          </div>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-column">name</span>,
+              <span class="sql-column">major</span><br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span><br />
+              <span class="sql-keyword">ORDER BY</span>
+              <span class="sql-column">name</span> ASC;
+            </div>
+          </div>
+
+          <div class="logic-stack logic-wide">
+            <div class="logic-line">
+              <strong>ASC</strong>
+              <p>
+                Ascending order: A to Z, or smaller values to larger values.
+              </p>
+            </div>
+            <div class="logic-line">
+              <strong>DESC</strong>
+              <p>
+                Descending order: Z to A, or larger values to smaller values.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Duplicates In SQL">
+          <div class="label">A Difference From Relational Algebra</div>
+          <h2>SQL Does Not Remove Duplicates By Default</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            This is one important difference between relational algebra and SQL.
+          </p>
+
+          <div class="story" style="width: 100%; max-width: 62rem">
+            In relational algebra, we usually think in terms of
+            <strong>sets</strong>, so duplicate tuples disappear automatically.
+            In SQL, query results can contain
+            <strong>repeated rows</strong> unless we explicitly remove them.
+          </div>
+
+          <div class="logic-stack" style="margin-top: 1.2rem">
+            <div class="logic-line">
+              <strong>R.A.</strong>
+              <p>Results behave like sets, so duplicates are not kept.</p>
+            </div>
+            <div class="logic-line">
+              <strong>SQL</strong>
+              <p>
+                Results can keep repeated values unless we ask for uniqueness.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Duplicate Example">
+          <div class="label">A Concrete Example</div>
+          <h2>A Query That Produces Duplicates</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            If we project only one column, repeated values may appear in the
+            result.
+          </p>
+
+          <div class="query-example">
+            <p class="query-prompt">
+              Suppose we ask:
+              <strong>"What majors exist among our students?"</strong>
+            </p>
+          </div>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-column">major</span><br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span>;
+            </div>
+          </div>
+
+          <p class="schema-note" style="max-width: 62rem">
+            This query is valid, but because two students share the same major,
+            the result can contain repeated values.
+          </p>
+        </section>
+
+        <section data-title-en="Duplicate Result">
+          <div class="label">The Result</div>
+          <h2>Why Do Duplicates Appear?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Once we remove identifying columns, repeated values can become
+            visible.
+          </p>
+
+          <div class="result-preview">
+            <div class="table-name">result</div>
+            <div class="table-frame">
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>major</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>CS</td>
+                  </tr>
+                  <tr>
+                    <td>Business</td>
+                  </tr>
+                  <tr>
+                    <td>CS</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="result-note">
+            `CS` appears twice because two different students share that same
+            value. We removed `student_id` and `name`, so the repeated major is
+            now visible.
+          </p>
+        </section>
+
+        <section data-title-en="Distinct">
+          <div class="label">Unique Values</div>
+          <h2>Using DISTINCT</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            When we want unique values only, SQL gives us `DISTINCT`.
+          </p>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT DISTINCT</span>
+              <span class="sql-column">major</span><br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span>;
+            </div>
+          </div>
+
+          <p class="schema-note" style="max-width: 62rem">
+            `DISTINCT` removes repeated rows from the final result. In this
+            case, each major appears only once.
+          </p>
+        </section>
+
+        <section data-title-en="Distinct Result">
+          <div class="label">The Result</div>
+          <h2>What Does DISTINCT Return?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            The repeated `CS` value disappears, so each major appears only once.
+          </p>
+
+          <div class="result-preview">
+            <div class="table-name">result</div>
+            <div class="table-frame">
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>major</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>CS</td>
+                  </tr>
+                  <tr>
+                    <td>Business</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <p class="result-note">
+            This is the same query result after SQL removes duplicate rows from
+            the final output.
+          </p>
+        </section>
+
+        <section data-title-en="One Relation Is Not Enough">
+          <div class="label">A New Kind Of Question</div>
+          <h2>A Question One Relation Cannot Answer</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Up to now, we have worked with one relation at a time. Now we want a
+            richer answer.
+          </p>
+
+          <div class="story" style="width: 100%; max-width: 62rem">
+            Suppose we ask:
+            <strong>"Which students are enrolled in Databases?"</strong>
+            The answer clearly exists in the database, but it does not live
+            inside just one relation.
+          </div>
+
+          <p class="schema-note" style="max-width: 62rem">
+            This is the moment where SQL has to combine information from
+            multiple relations.
+          </p>
+        </section>
+
+        <section data-title-en="Why One Relation Is Not Enough">
+          <div class="label">Locate The Information</div>
+          <h2>Why One Relation Is Not Enough</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Each relation gives us part of the answer, but not the whole answer.
+          </p>
+
+          <div class="logic-stack logic-wide">
+            <div class="logic-line">
+              <strong>students</strong>
+              <p>
+                Gives us the student names, but not the course titles they take.
+              </p>
+            </div>
+            <div class="logic-line">
+              <strong>courses</strong>
+              <p>
+                Gives us course titles like `Databases`, but not the names of
+                enrolled students.
+              </p>
+            </div>
+            <div class="logic-line">
+              <strong>enrollments</strong>
+              <p>
+                Connects `student_id` and `course_id`, but stores ids instead of
+                the descriptive names we want to show.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Combine Relations">
+          <div class="label">The Core Idea</div>
+          <h2>We Need To Combine Relations</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            A join matches rows that belong together through shared attributes.
+          </p>
+
+          <div class="logic-stack">
+            <div class="logic-line">
+              <strong>Step 1</strong>
+              <p>Match `students.student_id` with `enrollments.student_id`.</p>
+            </div>
+            <div class="logic-line">
+              <strong>Step 2</strong>
+              <p>Match `enrollments.course_id` with `courses.course_id`.</p>
+            </div>
+            <div class="logic-line">
+              <strong>Result</strong>
+              <p>
+                Now student names and course titles can appear together in the
+                same query result.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="First Join Query">
+          <div class="label">First JOIN</div>
+          <h2>A First JOIN Query</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Here is the basic shape of a query that combines multiple relations.
+          </p>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-table">students</span>.<span class="sql-column"
+                >name</span
+              >, <span class="sql-table">courses</span>.<span class="sql-column"
+                >title</span
+              ><br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span><br />
+              <span class="sql-keyword">JOIN</span>
+              <span class="sql-table">enrollments</span>
+              <span class="sql-keyword">ON</span>
+              <span class="sql-table">students</span>.<span class="sql-column"
+                >student_id</span
+              >
+              = <span class="sql-table">enrollments</span>.<span
+                class="sql-column"
+                >student_id</span
+              ><br />
+              <span class="sql-keyword">JOIN</span>
+              <span class="sql-table">courses</span>
+              <span class="sql-keyword">ON</span>
+              <span class="sql-table">enrollments</span>.<span
+                class="sql-column"
+                >course_id</span
+              >
+              = <span class="sql-table">courses</span>.<span class="sql-column"
+                >course_id</span
+              >;
+            </div>
+          </div>
+
+          <p class="schema-note" style="max-width: 62rem">
+            `JOIN ... ON ...` tells SQL exactly which rows should be matched
+            together.
+          </p>
+        </section>
+
+        <section data-title-en="Reading The Join">
+          <div class="label">How To Read It</div>
+          <h2>Reading the JOIN Step by Step</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            The query becomes easier once we explain one clause at a time.
+          </p>
+
+          <div class="logic-stack">
+            <div class="logic-line">
+              <strong>FROM</strong>
+              <p>Start from the `students` relation.</p>
+            </div>
+            <div class="logic-line">
+              <strong>JOIN</strong>
+              <p>Add `enrollments` by matching the same `student_id` values.</p>
+            </div>
+            <div class="logic-line">
+              <strong>JOIN</strong>
+              <p>Add `courses` by matching the same `course_id` values.</p>
+            </div>
+            <div class="logic-line">
+              <strong>SELECT</strong>
+              <p>Show the student name together with the course title.</p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Join With Filter">
+          <div class="label">The Payoff</div>
+          <h2>Now We Can Answer the Original Question</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Once the relations are joined, `WHERE` can focus on the exact course
+            we care about.
+          </p>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-table">students</span>.<span class="sql-column"
+                >name</span
+              ><br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span><br />
+              <span class="sql-keyword">JOIN</span>
+              <span class="sql-table">enrollments</span>
+              <span class="sql-keyword">ON</span>
+              <span class="sql-table">students</span>.<span class="sql-column"
+                >student_id</span
+              >
+              = <span class="sql-table">enrollments</span>.<span
+                class="sql-column"
+                >student_id</span
+              ><br />
+              <span class="sql-keyword">JOIN</span>
+              <span class="sql-table">courses</span>
+              <span class="sql-keyword">ON</span>
+              <span class="sql-table">enrollments</span>.<span
+                class="sql-column"
+                >course_id</span
+              >
+              = <span class="sql-table">courses</span>.<span class="sql-column"
+                >course_id</span
+              ><br />
+              <span class="sql-keyword">WHERE</span>
+              <span class="sql-table">courses</span>.<span class="sql-column"
+                >title</span
+              >
+              = 'Databases';
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Join Result">
+          <div class="label">The Result</div>
+          <h2>Which Students Are Enrolled in Databases?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            The final result contains the names of the students enrolled in that
+            course.
+          </p>
+
+          <div class="result-preview">
+            <div class="table-name">result</div>
+            <div class="table-frame">
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Ana</td>
+                  </tr>
+                  <tr>
+                    <td>Sofia</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Practice">
+          <div class="label">Practice Time</div>
+          <h2>Basic SQL Exercises</h2>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1.1rem">
+            You have now seen the basic toolbox: `SELECT`, `FROM`, `WHERE`,
+            `ORDER BY`, `DISTINCT`, and `JOIN`.
+          </p>
+
+          <div
+            class="story"
+            style="width: 100%; max-width: 62rem; margin-bottom: 1.4rem"
+          >
+            This is a good stopping point to practice reading and writing basic
+            SQL queries before moving on to aggregation, grouping, and more
+            advanced summaries.
+          </div>
+
+          <a class="cta-button" href="../../exercises/sql-basic/index.html">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            <span>Open SQL Basics Exercises</span>
+          </a>
+        </section>
+
+        <section data-title-en="Aggregation Motivation">
+          <div class="label">A New Kind Of Question</div>
+          <h2>Sometimes We Need Summaries, Not Rows</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            So far, our queries returned individual rows. Now we want answers
+            that summarize the data.
+          </p>
+
+          <div
+            class="story"
+            style="width: 100%; max-width: 62rem; margin-bottom: 1.2rem"
+          >
+            Questions like <strong>"How many students are there?"</strong> or
+            <strong>"What is the average grade?"</strong> do not ask for tuples
+            one by one. They ask SQL to compute a single summary value from many
+            rows.
+          </div>
+
+          <div class="logic-stack summary-logic">
+            <div class="logic-line">
+              <strong>Row questions</strong>
+              <p>Return tuples such as names, titles, or grades.</p>
+            </div>
+            <div class="logic-line">
+              <strong>Summary questions</strong>
+              <p>
+                Return values such as counts, averages, totals, minima, or
+                maxima.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Aggregate Scope">
+          <div class="label">How Aggregates Read Data</div>
+          <h2>First SQL Determines Which Rows Are In Scope</h2>
+          <p class="muted" style="margin-bottom: 1.35rem">
+            Before an aggregate can count or average anything, SQL must first
+            determine which rows the query is talking about.
+          </p>
+
+          <div style="max-width: 66rem; margin: 0 auto; text-align: left">
+            <div
+              style="font-size: 1.5rem; line-height: 1.5; margin-bottom: 0.9rem"
+            >
+              <strong>`FROM`</strong> chooses the relation we start from
+            </div>
+            <div
+              style="font-size: 1.5rem; line-height: 1.5; margin-bottom: 0.9rem"
+            >
+              <strong>`JOIN`</strong> adds matching rows from other relations
+            </div>
+            <div
+              style="
+                font-size: 1.5rem;
+                line-height: 1.5;
+                margin-bottom: 1.25rem;
+              "
+            >
+              <strong>`WHERE`</strong> removes rows that do not satisfy the
+              condition
+            </div>
+
+            <div
+              class="story"
+              style="width: 100%; max-width: 66rem; margin-bottom: 0"
+            >
+              The result is a temporary set of rows produced by the query so
+              far. This is the set that aggregate functions summarize.
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Aggregate Working Set">
+          <div class="label">Intermediate Result</div>
+          <h2>Think Of It As A Working Table</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            After `FROM`, `JOIN`, and `WHERE`, SQL has rows available to work
+            with, even if that table is not shown directly to us.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 0.95fr 1.05fr;
+              gap: 1.6rem;
+              align-items: start;
+            "
+          >
+            <div style="text-align: left">
+              <div class="code-panel" style="margin-bottom: 0.8rem">
+                <div class="code-panel-head">
+                  <span>Example query</span>
+                  <span>Read-only</span>
+                </div>
+                <div class="code-panel-body">
+                  <span class="sql-keyword">SELECT</span>
+                  <span class="sql-keyword">AVG</span>(<span class="sql-column"
+                    >grade</span
+                  >)<br />
+                  <span class="sql-keyword">FROM</span>
+                  <span class="sql-table">students</span><br />
+                  <span class="sql-keyword">WHERE</span>
+                  <span class="sql-column">grade</span> &gt;= 10;
+                </div>
+              </div>
+
+              <p class="muted" style="margin: 0">
+                We do not average the whole database. We average the rows that
+                remain after the condition is applied.
+              </p>
+            </div>
+
+            <div class="result-preview" style="margin: 0">
+              <div class="table-name">working rows</div>
+              <div class="table-frame">
+                <table class="mini-table">
+                  <thead>
+                    <tr>
+                      <th>student</th>
+                      <th>grade</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Ana</td>
+                      <td>16</td>
+                    </tr>
+                    <tr>
+                      <td>Sofia</td>
+                      <td>14</td>
+                    </tr>
+                    <tr>
+                      <td>Leo</td>
+                      <td>18</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Aggregate Summary Step">
+          <div class="label">Summary Step</div>
+          <h2>Then The Aggregate Reads That Working Table</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            An aggregate function looks at the rows in the working table and
+            produces one summary value.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              gap: 1.4rem;
+              align-items: start;
+              margin-bottom: 1rem;
+              text-align: left;
+            "
+          >
+            <div>
+              <div style="font-size: 1.45rem; margin-bottom: 0.45rem">
+                <strong>`COUNT(*)`</strong>
+              </div>
+              <p class="muted" style="margin-bottom: 0.9rem">
+                Counts how many rows are in the working table.
+              </p>
+              <div style="font-size: 1.9rem; line-height: 1.3">
+                3 rows -&gt; <strong>3</strong>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size: 1.45rem; margin-bottom: 0.45rem">
+                <strong>`AVG(grade)`</strong>
+              </div>
+              <p class="muted" style="margin-bottom: 0.9rem">
+                Uses the values from one column in those rows.
+              </p>
+              <div style="font-size: 1.9rem; line-height: 1.3">
+                (16 + 14 + 18) / 3 -&gt; <strong>16</strong>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="story"
+            style="width: 100%; max-width: 66rem; margin-bottom: 0"
+          >
+            Aggregate functions do not work on the raw database directly. They
+            work on the rows produced by the query so far.
+          </div>
+        </section>
+
+        <section data-title-en="Aggregate Functions">
+          <div class="label">Aggregate Functions</div>
+          <h2>The Basic Aggregate Functions</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Aggregate functions combine many rows into one result value.
+          </p>
+
+          <div class="logic-stack logic-wide">
+            <div class="logic-line">
+              <strong>COUNT(*)</strong>
+              <p>Counts how many rows are in the result.</p>
+            </div>
+            <div class="logic-line">
+              <strong>AVG(column)</strong>
+              <p>Computes the average of a numeric column.</p>
+            </div>
+            <div class="logic-line">
+              <strong>SUM(column)</strong>
+              <p>Adds together the numeric values of a column.</p>
+            </div>
+            <div class="logic-line">
+              <strong>MIN / MAX</strong>
+              <p>Return the smallest or largest value in a column.</p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="First Aggregate Query">
+          <div class="label">First Summary Query</div>
+          <h2>A First Aggregate Query</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            A simple aggregate query asks for one summary value over a relation.
+          </p>
+
+          <div class="query-example">
+            <p class="query-prompt">
+              Suppose we ask:
+              <strong>"How many students are in the relation?"</strong>
+            </p>
+          </div>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-keyword">COUNT</span>(*)<br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span>;
+            </div>
+          </div>
+
+          <div class="result-preview">
+            <div class="table-name">result</div>
+            <div class="table-frame">
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>3</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Aggregate With Where">
+          <div class="label">Filtering Before Aggregating</div>
+          <h2>Aggregation After Filtering</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            `WHERE` still works before the aggregate is computed.
+          </p>
+
+          <div class="query-example">
+            <p class="query-prompt">
+              Suppose we ask:
+              <strong>"How many first-year students are there?"</strong>
+            </p>
+          </div>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-keyword">COUNT</span>(*)<br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span><br />
+              <span class="sql-keyword">WHERE</span>
+              <span class="sql-column">year</span> = 1;
+            </div>
+          </div>
+
+          <div class="result-preview">
+            <div class="table-name">result</div>
+            <div class="table-frame">
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Group By Idea">
+          <div class="label">Grouping Rows</div>
+          <h2>What If We Want One Summary Per Group?</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Sometimes one total is not enough. We may want one summary for each
+            category of rows.
+          </p>
+
+          <div
+            class="story"
+            style="width: 100%; max-width: 62rem; margin-bottom: 1.2rem"
+          >
+            For example, instead of asking
+            <strong>"How many students are there?"</strong>, we may ask
+            <strong>"How many students are there in each year?"</strong>
+            That means SQL must first divide the rows into groups and then
+            summarize each group.
+          </div>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 62rem;
+              margin: 0 auto;
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.1rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.05rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >One total</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                `COUNT(*)` over the whole relation gives one answer.
+              </p>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.1rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.05rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Many totals</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                `GROUP BY` gives one answer for each distinct value of the
+                grouping column.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Group By Working Table">
+          <div class="label">Grouping Rows</div>
+          <h2>Start With The Working Table As Usual</h2>
+          <p class="muted" style="margin-bottom: 1.1rem">
+            Before grouping, SQL still has a normal working table with one row
+            per tuple in the current result.
+          </p>
+
+          <div style="max-width: 62rem; margin: 0 auto">
+            <div class="result-preview" style="margin: 0">
+              <div class="table-name">working rows</div>
+              <div class="table-frame">
+                <table class="mini-table">
+                  <thead>
+                    <tr>
+                      <th>year</th>
+                      <th>student</th>
+                      <th>course</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Ana</td>
+                      <td>Programming</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Leo</td>
+                      <td>Databases</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Mia</td>
+                      <td>Math</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Sofia</td>
+                      <td>Networks</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Omar</td>
+                      <td>Databases</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p class="muted" style="margin-top: 0.8rem; margin-bottom: 0">
+              Notice that the value in `year` repeats across several rows. That
+              repeated value is exactly what `GROUP BY year` will use to divide
+              the table.
+            </p>
+          </div>
+        </section>
+
+        <section data-title-en="Group By Partition">
+          <div class="label">Grouping Rows</div>
+          <h2>`GROUP BY` Divides The Working Table Into Subgroups</h2>
+          <p class="muted" style="margin-bottom: 1.1rem">
+            Rows with the same value in the grouping column belong to the same
+            group. Then the aggregate function runs once for each group.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1.15fr 0.85fr;
+              gap: 1.5rem;
+              align-items: start;
+            "
+          >
+            <div>
+              <div class="result-preview" style="margin: 0">
+                <div class="table-name">working rows</div>
+                <div class="table-frame">
+                  <table class="mini-table">
+                    <thead>
+                      <tr>
+                        <th>year</th>
+                        <th>student</th>
+                        <th>course</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Ana</td>
+                        <td>Programming</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>Leo</td>
+                        <td>Databases</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>Mia</td>
+                        <td>Math</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Sofia</td>
+                        <td>Networks</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td>Omar</td>
+                        <td>Databases</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <p
+                class="muted"
+                style="margin-top: 0.7rem; margin-bottom: 0; font-size: 0.92rem"
+              >
+                Here we grouped by `year`. The blank cells help us visualize
+                that consecutive rows belong to the same subgroup.
+              </p>
+            </div>
+
+            <div style="text-align: left">
+              <div style="font-size: 1.35rem; margin-bottom: 0.65rem">
+                <strong>What SQL is doing</strong>
+              </div>
+              <div
+                style="
+                  font-size: 1.08rem;
+                  line-height: 1.55;
+                  margin-bottom: 1rem;
+                  color: rgba(255, 255, 255, 0.84);
+                "
+              >
+                `GROUP BY year` separates the rows into:
+              </div>
+              <div
+                style="
+                  font-size: 1.12rem;
+                  line-height: 1.65;
+                  color: rgba(255, 255, 255, 0.84);
+                  margin-bottom: 1.1rem;
+                "
+              >
+                <strong>Group 1:</strong> all rows where `year = 1`<br />
+                <strong>Group 2:</strong> all rows where `year = 2`
+              </div>
+              <div
+                style="
+                  font-size: 1.08rem;
+                  line-height: 1.55;
+                  color: rgba(255, 255, 255, 0.84);
+                  margin-bottom: 1.1rem;
+                "
+              >
+                Then an aggregate such as `COUNT(*)` or `AVG(grade)` runs over
+                each subgroup independently.
+              </div>
+              <div
+                class="story"
+                style="width: 100%; max-width: none; margin-bottom: 0"
+              >
+                The final result contains one row per existing group, not one
+                row per original tuple.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Group By Query">
+          <div class="label">First GROUP BY</div>
+          <h2>A First GROUP BY Query</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Using the same `year` values from the working table, `GROUP BY`
+            creates one count for each existing group.
+          </p>
+
+          <div class="code-panel" style="margin-bottom: 0.8rem">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-column">year</span>,
+              <span class="sql-keyword">COUNT</span>(*)<br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span><br />
+              <span class="sql-keyword">GROUP BY</span>
+              <span class="sql-column">year</span>;
+            </div>
+          </div>
+
+          <div class="result-preview">
+            <div class="table-name">result</div>
+            <div class="table-frame">
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>year</th>
+                    <th>count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>3</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Reading Group By">
+          <div class="label">How To Read It</div>
+          <h2>Reading GROUP BY Step by Step</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            The grouped query becomes easier when we read it as a process.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 64rem;
+              margin: 0 auto;
+              display: flex;
+              flex-direction: column;
+              gap: 1.15rem;
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >From</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Start from all rows in the `students` relation.
+              </p>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Group By</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Separate the rows into groups that share the same `year` value.
+              </p>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Count</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Count how many rows are inside each of those groups.
+              </p>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Result</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Return one row per year, together with the number of students in
+                that year.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Having">
+          <div class="label">Filtering Groups</div>
+          <h2>Filtering Groups with HAVING</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            After grouping, we may want to keep only some of the groups.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 62rem;
+              margin: 0 auto 1rem;
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Where</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Filters rows <strong>before</strong> the groups are formed.
+              </p>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Having</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Filters groups <strong>after</strong> the aggregation has been
+                computed.
+              </p>
+            </div>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-column">year</span>,
+              <span class="sql-keyword">COUNT</span>(*)<br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">students</span><br />
+              <span class="sql-keyword">GROUP BY</span>
+              <span class="sql-column">year</span><br />
+              <span class="sql-keyword">HAVING</span>
+              <span class="sql-keyword">COUNT</span>(*) &gt; 1;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Combined Aggregate Example">
+          <div class="label">Putting It Together</div>
+          <h2>WHERE, GROUP BY, HAVING, and ORDER BY</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            A full aggregation query often combines all these ideas in one
+            pipeline.
+          </p>
+
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span>Example query</span>
+              <span>Read-only</span>
+            </div>
+            <div class="code-panel-body">
+              <span class="sql-keyword">SELECT</span>
+              <span class="sql-column">course_id</span>,
+              <span class="sql-keyword">AVG</span>(<span class="sql-column"
+                >grade</span
+              >)<br />
+              <span class="sql-keyword">FROM</span>
+              <span class="sql-table">enrollments</span><br />
+              <span class="sql-keyword">WHERE</span>
+              <span class="sql-column">grade</span> &gt;= 6.0<br />
+              <span class="sql-keyword">GROUP BY</span>
+              <span class="sql-column">course_id</span><br />
+              <span class="sql-keyword">HAVING</span>
+              <span class="sql-keyword">COUNT</span>(*) &gt; 0<br />
+              <span class="sql-keyword">ORDER BY</span>
+              <span class="sql-keyword">AVG</span>(<span class="sql-column"
+                >grade</span
+              >) DESC;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Combined Aggregate Explanation">
+          <div class="label">Putting It Together</div>
+          <h2>What Each Part Of The Query Does</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            We can read the same query as a sequence of operations over the
+            data.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 64rem;
+              margin: 0 auto;
+              display: flex;
+              flex-direction: column;
+              gap: 1.05rem;
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Where</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Keeps only rows with grades at least 6.0 before grouping.
+              </p>
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Group By</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Builds one group for each course.
+              </p>
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Having</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Keeps only groups that satisfy an aggregate condition.
+              </p>
+            </div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 12rem minmax(0, 1fr);
+                gap: 1.2rem;
+                align-items: start;
+                text-align: left;
+              "
+            >
+              <strong
+                style="
+                  font-size: 1.08rem;
+                  letter-spacing: 0.12em;
+                  text-transform: uppercase;
+                  color: #b197fc;
+                "
+                >Order By</strong
+              >
+              <p style="margin: 0; color: rgba(255, 255, 255, 0.82)">
+                Sorts the grouped results after the averages are computed.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="SQL Mental Map Intro">
+          <div class="label">Mental Model</div>
+          <h2>Do Not Read SQL Only From Top To Bottom</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Beginners often read the query in written order, but the easiest
+            mental model is to follow how the DBMS builds the result step by
+            step.
+          </p>
+
+          <div style="max-width: 64rem; margin: 0 auto; text-align: left">
+            <div
+              class="story"
+              style="
+                width: 100%;
+                max-width: none;
+                margin-bottom: 1.2rem;
+                border-left-color: #60a5fa;
+              "
+            >
+              The query <strong>starts by finding rows</strong>, then possibly
+              <strong>filters</strong>, then maybe <strong>groups</strong>, then
+              computes summaries, and only at the end decides what to show.
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 1.2rem;
+              "
+            >
+              <div
+                style="
+                  padding: 1rem 1.1rem;
+                  border-radius: 20px;
+                  border: 1px solid rgba(255, 255, 255, 0.08);
+                  background: linear-gradient(
+                    180deg,
+                    rgba(255, 255, 255, 0.04),
+                    rgba(255, 255, 255, 0.02)
+                  );
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.82rem;
+                    letter-spacing: 0.14em;
+                    text-transform: uppercase;
+                    color: #b197fc;
+                    margin-bottom: 0.8rem;
+                  "
+                >
+                  Written order
+                </div>
+                <div
+                  style="
+                    font-size: 1.16rem;
+                    line-height: 1.8;
+                    color: rgba(255, 255, 255, 0.82);
+                  "
+                >
+                  `SELECT` -> `FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` ->
+                  `ORDER BY`
+                </div>
+              </div>
+              <div
+                style="
+                  padding: 1rem 1.1rem;
+                  border-radius: 20px;
+                  border: 1px solid rgba(96, 165, 250, 0.24);
+                  background: linear-gradient(
+                    180deg,
+                    rgba(96, 165, 250, 0.12),
+                    rgba(96, 165, 250, 0.04)
+                  );
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.82rem;
+                    letter-spacing: 0.14em;
+                    text-transform: uppercase;
+                    color: #93c5fd;
+                    margin-bottom: 0.8rem;
+                  "
+                >
+                  Mental order
+                </div>
+                <div
+                  style="
+                    font-size: 1.16rem;
+                    line-height: 1.8;
+                    color: rgba(255, 255, 255, 0.92);
+                  "
+                >
+                  `FROM` -> `WHERE` -> `GROUP BY` -> `HAVING` -> `SELECT` ->
+                  `ORDER BY`
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="SQL Mental Map Pipeline">
+          <div class="label">Mental Model</div>
+          <h2>Build A Pipeline In Your Head</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            When you see a query, imagine the data moving through these stages.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 66rem;
+              margin: 0 auto;
+              text-align: center;
+              font-size: 1.28rem;
+              line-height: 2.1;
+              color: rgba(255, 255, 255, 0.82);
+            "
+          >
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >1. FROM / JOIN</span
+            >
+            <span> build the working table </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >2. WHERE</span
+            >
+            <span> remove rows that do not match </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >3. GROUP BY</span
+            >
+            <span> divide the rows into groups </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >4. HAVING + aggregates</span
+            >
+            <span> compute summaries and keep the groups we want </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >5. SELECT</span
+            >
+            <span> choose what appears in the result </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >6. ORDER BY</span
+            >
+            <span> sort the final result for presentation </span>
+          </div>
+        </section>
+
+        <section data-title-en="SQL Mental Map Questions">
+          <div class="label">Mental Model</div>
+          <h2>Ask These Questions In This Order</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            These questions help you decode almost any beginner SQL query.
+          </p>
+
+          <div
+            style="
+              width: 100%;
+              max-width: 64rem;
+              margin: 0 auto;
+              text-align: center;
+              font-size: 1.22rem;
+              line-height: 2.05;
+              color: rgba(255, 255, 255, 0.82);
+            "
+          >
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >What rows start the process?</span
+            >
+            <span> Look at `FROM` and `JOIN`. </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >Which rows survive?</span
+            >
+            <span> Look at `WHERE`. </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >Are rows grouped?</span
+            >
+            <span> Look for `GROUP BY`. </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >Are groups filtered?</span
+            >
+            <span> Look for `HAVING`. </span>
+            <span style="color: rgba(255, 255, 255, 0.34)">-></span>
+            <span
+              style="
+                color: #b197fc;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+              "
+              >What is finally shown?</span
+            >
+            <span>
+              Look at `SELECT`, then `ORDER BY` if the result is sorted.
+            </span>
+          </div>
+        </section>
+
+        <section data-title-en="SQL Mental Map Closing">
+          <div class="label">Mental Model</div>
+          <h2>A Good Beginner Habit</h2>
+          <p class="muted" style="margin-bottom: 1.2rem">
+            Before solving exercises, pause and translate the query into a data
+            transformation story.
+          </p>
+
+          <div
+            class="story"
+            style="
+              width: 100%;
+              max-width: 64rem;
+              margin-bottom: 1.15rem;
+              border-left-color: #34d399;
+            "
+          >
+            Instead of saying
+            <strong>"I read `SELECT` first because it is at the top"</strong>,
+            say
+            <strong
+              >"The DBMS starts from these rows, filters them, maybe groups
+              them, computes summaries, and only then shows the final
+              columns."</strong
+            >
+          </div>
+
+          <div
+            style="
+              max-width: 66rem;
+              margin: 0 auto;
+              text-align: center;
+              font-size: 1.9rem;
+              line-height: 1.85;
+              color: rgba(255, 255, 255, 0.9);
+            "
+          >
+            <span>Query text</span>
+            <span style="color: rgba(255, 255, 255, 0.32)"> -> </span>
+            <span style="color: #93c5fd">working rows</span>
+            <span style="color: rgba(255, 255, 255, 0.32)"> -> </span>
+            <span>filtered rows</span>
+            <span style="color: rgba(255, 255, 255, 0.32)"> -> </span>
+            <span>groups</span>
+            <span style="color: rgba(255, 255, 255, 0.32)"> -> </span>
+            <span style="color: #6ee7b7">summaries</span>
+            <span style="color: rgba(255, 255, 255, 0.32)"> -> </span>
+            <span>final result</span>
+          </div>
+        </section>
+
+        <section data-title-en="Advanced Practice">
+          <div class="label">Practice Time</div>
+          <h2>Advanced SQL Exercises</h2>
+          <div class="divider"></div>
+          <p class="muted" style="margin-bottom: 1.1rem">
+            You now have the mental map for reading grouped and aggregated SQL
+            queries.
+          </p>
+
+          <div
+            class="story"
+            style="
+              width: 100%;
+              max-width: 62rem;
+              margin-bottom: 1.4rem;
+              border-left-color: #60a5fa;
+            "
+          >
+            Continue with advanced practice using the same `students`,
+            `courses`, and `enrollments` database from this practicum.
+          </div>
+
+          <a class="cta-button" href="../../exercises/sql-advanced/index.html">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            <span>Open Advanced SQL Exercises</span>
+          </a>
+        </section>
+      </div>
+    </div>
+
+    <div id="filmstrip"></div>
+    <div id="strip-toggle">
+      <div id="toggle-pill">
+        <svg
+          class="toggle-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M7 10l5 5 5-5"></path>
+        </svg>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        minScale: 1,
+        maxScale: 1,
+      });
+
+      const strip = document.getElementById("filmstrip");
+      const sections = document.querySelectorAll(".reveal .slides section");
+
+      function buildThumbs() {
+        const revealEl = document.querySelector(".reveal");
+        const slideW = revealEl.offsetWidth;
+        const slideH = revealEl.offsetHeight;
+        const THUMB_W = 120;
+        const scale = THUMB_W / slideW;
+
+        sections.forEach((section, index) => {
+          const number = String(index + 1).padStart(2, "0");
+          const thumb = document.createElement("div");
+          thumb.className = "thumb";
+
+          const wrap = document.createElement("div");
+          wrap.className = "slide-preview-wrap";
+
+          const preview = document.createElement("div");
+          preview.className = "slide-preview";
+          preview.style.width = slideW + "px";
+          preview.style.height = slideH + "px";
+          preview.style.transform = `scale(${scale})`;
+
+          Array.from(section.childNodes).forEach((node) => {
+            preview.appendChild(node.cloneNode(true));
+          });
+
+          wrap.appendChild(preview);
+          thumb.appendChild(wrap);
+
+          const numEl = document.createElement("span");
+          numEl.className = "thumb-num";
+          numEl.textContent = number;
+          thumb.appendChild(numEl);
+
+          thumb.addEventListener("click", () => Reveal.slide(index));
+          strip.appendChild(thumb);
+        });
+      }
+
+      function syncNav(event) {
+        const index = event.indexh;
+        const thumbs = strip.querySelectorAll(".thumb");
+        thumbs.forEach((thumb, thumbIndex) => {
+          thumb.classList.toggle("active", thumbIndex === index);
+        });
+        const active = thumbs[index];
+        if (active) {
+          strip.scrollLeft =
+            active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
+        }
+        document
+          .getElementById("arrow-prev")
+          .classList.toggle("hidden", index === 0);
+        document
+          .getElementById("arrow-next")
+          .classList.toggle("hidden", index === sections.length - 1);
+      }
+
+      Reveal.on("slidechanged", syncNav);
+      Reveal.on("ready", (event) => {
+        buildThumbs();
+        syncNav({ indexh: event.indexh });
+      });
+
+      document
+        .getElementById("arrow-prev")
+        .addEventListener("click", () => Reveal.prev());
+      document
+        .getElementById("arrow-next")
+        .addEventListener("click", () => Reveal.next());
+
+      let collapsed = false;
+      const filmstrip = document.getElementById("filmstrip");
+      const viewport = document.querySelector(".reveal-viewport");
+      const stripToggle = document.getElementById("strip-toggle");
+      const arrows = document.querySelectorAll(".nav-arrow");
+
+      stripToggle.addEventListener("click", () => {
+        collapsed = !collapsed;
+        filmstrip.classList.toggle("collapsed", collapsed);
+        viewport.classList.toggle("strip-collapsed", collapsed);
+        arrows.forEach((arrow) => {
+          arrow.classList.toggle("strip-collapsed", collapsed);
+        });
+        stripToggle.classList.toggle("is-collapsed", collapsed);
+        setTimeout(() => Reveal.layout(), 320);
+      });
+    </script>
+  </body>
+</html>

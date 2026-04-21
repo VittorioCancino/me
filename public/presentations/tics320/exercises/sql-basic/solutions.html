@@ -1,0 +1,1409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SQL Basics Exercises - TICS320</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css"
+    />
+    <link rel="stylesheet" href="../../../shared/tokens.css" />
+
+    <style>
+      :root {
+        --accent: #7c3aed;
+        --accent-light: #a78bfa;
+        --accent-dim: rgba(124, 58, 237, 0.18);
+        --bg: #0d1117;
+        --surface: #161b22;
+        --border: #21262d;
+        --muted: #848d97;
+        --strip-h: 88px;
+        --toggle-h: 28px;
+        --arrow-w: 56px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        overflow: hidden;
+      }
+
+      .reveal-viewport {
+        background: var(--bg) !important;
+        height: calc(100vh - var(--strip-h) - var(--toggle-h)) !important;
+        transition: height var(--transition);
+      }
+
+      .reveal-viewport.strip-collapsed {
+        height: calc(100vh - var(--toggle-h)) !important;
+      }
+
+      .reveal {
+        height: 100% !important;
+      }
+
+      .reveal .slides {
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        transform: none !important;
+      }
+
+      .reveal .slides section {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 3rem 10rem;
+        top: 0 !important;
+        left: 0 !important;
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .reveal h1,
+      .reveal h2,
+      .reveal h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .reveal h1 {
+        font-size: var(--text-display);
+        line-height: 1.1;
+      }
+
+      .reveal h2 {
+        font-size: var(--text-heading);
+        line-height: 1.15;
+      }
+
+      .reveal h3 {
+        font-size: var(--text-subheading);
+        color: var(--accent-light);
+      }
+
+      .reveal p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.75;
+      }
+
+      .label {
+        display: inline-block;
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-light);
+        border: 1px solid rgba(124, 58, 237, 0.45);
+        background: var(--accent-dim);
+        padding: 0.22em 0.85em;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+      }
+
+      .divider {
+        width: 2.5rem;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        margin: 0.8rem auto 1.1rem;
+      }
+
+      .muted {
+        color: var(--muted) !important;
+        font-size: var(--text-muted);
+      }
+
+      .story {
+        width: 100%;
+        max-width: 62rem;
+        background: var(--surface);
+        border-left: 4px solid var(--accent);
+        border-radius: 0 10px 10px 0;
+        padding: 1.35rem 1.6rem;
+        text-align: left;
+        font-size: var(--text-body);
+        color: #c9d1d9;
+        line-height: 1.75;
+      }
+
+      .schema-card {
+        width: 100%;
+        max-width: 68rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 1.6rem 1.8rem;
+        text-align: left;
+      }
+
+      .schema-list {
+        list-style: none;
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .schema-list li {
+        padding: 0.9rem 1rem;
+        border-radius: 12px;
+        border: 1px solid rgba(124, 58, 237, 0.22);
+        background: rgba(124, 58, 237, 0.08);
+        color: #e5e7eb;
+        font-size: var(--text-body);
+        line-height: 1.6;
+      }
+
+      .relation-name {
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .relation-key {
+        color: var(--accent-light);
+        font-weight: 700;
+      }
+
+      .schema-stack {
+        width: 100%;
+        max-width: 64rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .schema-line {
+        text-align: left;
+        font-size: var(--text-case-study);
+        line-height: 1.55;
+        color: #e6edf3;
+        letter-spacing: -0.01em;
+      }
+
+      .split-stage {
+        width: 100%;
+        max-width: 72rem;
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.95fr);
+        gap: 3rem;
+        align-items: start;
+        text-align: left;
+        margin-top: 1rem;
+      }
+
+      .split-copy {
+        max-width: 26rem;
+      }
+
+      .query-stage-full {
+        width: 100%;
+        max-width: 72rem;
+        text-align: left;
+        margin-top: 1rem;
+      }
+
+      .query-sequence {
+        position: relative;
+        list-style: none;
+        margin: 0;
+        padding: 0 0 0 2.2rem;
+        display: grid;
+        gap: 0;
+        text-align: left;
+        transform: translateY(-1.65rem);
+      }
+
+      .query-sequence::before {
+        content: "";
+        position: absolute;
+        left: 0.66rem;
+        top: 1.12rem;
+        bottom: 0.4rem;
+        width: 1px;
+        background: linear-gradient(
+          180deg,
+          rgba(124, 58, 237, 0.85) 0%,
+          rgba(124, 58, 237, 0.22) 100%
+        );
+      }
+
+      .query-sequence li {
+        position: relative;
+        padding: 0 0 1.15rem 1.2rem;
+      }
+
+      .query-sequence li::marker {
+        content: "";
+      }
+
+      .query-sequence li::before {
+        content: "";
+        position: absolute;
+        left: -1.85rem;
+        top: 0.52rem;
+        width: 0.68rem;
+        height: 0.68rem;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.12);
+      }
+
+      .query-sequence li:last-child {
+        padding-bottom: 0;
+      }
+
+      .query-step {
+        display: block;
+        margin-bottom: 0.28rem;
+        color: var(--accent-light);
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .query-sequence p {
+        margin: 0;
+        color: #e5e7eb;
+        font-size: calc(var(--text-body) * 1.2);
+        line-height: 1.7;
+      }
+
+      .hint-card {
+        background: color-mix(in srgb, var(--surface) 86%, var(--accent-dim));
+        border: 1px solid rgba(124, 58, 237, 0.22);
+        border-radius: 16px;
+        padding: 1.25rem 1.35rem;
+        box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.05);
+        text-align: left;
+      }
+
+      .hint-head {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .hint-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(124, 58, 237, 0.18);
+        color: var(--accent-light);
+        font-size: 1rem;
+      }
+
+      .hint-title {
+        color: var(--accent-light);
+        font-size: var(--text-label);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .split-copy p {
+        font-size: var(--text-body);
+      }
+
+      .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.9rem 2rem;
+        background: var(--accent);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 10px;
+        text-decoration: none;
+      }
+
+      .inline-link {
+        color: var(--accent-light);
+        font-size: var(--text-body);
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-color: rgba(167, 139, 250, 0.7);
+        text-underline-offset: 0.18em;
+      }
+
+      .inline-link:visited {
+        color: var(--accent-light);
+      }
+
+      .inline-link:hover {
+        color: #c4b5fd;
+      }
+
+      .nav-arrow {
+        position: fixed;
+        top: calc((100vh - var(--strip-h) - var(--toggle-h)) / 2);
+        transform: translateY(-50%);
+        z-index: 200;
+        width: var(--arrow-w);
+        height: var(--arrow-w);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--muted);
+        transition:
+          background 0.18s,
+          color 0.18s,
+          border-color 0.18s,
+          opacity 0.18s,
+          top var(--transition);
+      }
+
+      .nav-arrow:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent-light);
+      }
+
+      .nav-arrow.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .nav-arrow.strip-collapsed {
+        top: 50%;
+      }
+
+      #arrow-prev {
+        left: 1rem;
+      }
+      #arrow-next {
+        right: 1rem;
+      }
+
+      #strip-toggle {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--toggle-h);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 101;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+      }
+
+      #toggle-pill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: var(--muted);
+      }
+
+      .toggle-icon {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.18s;
+      }
+
+      #strip-toggle.is-collapsed .toggle-icon {
+        transform: rotate(180deg);
+      }
+
+      #filmstrip {
+        position: fixed;
+        bottom: var(--toggle-h);
+        left: 0;
+        right: 0;
+        height: var(--strip-h);
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        z-index: 100;
+        padding: 0 1rem;
+        gap: 0.6rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+        transition:
+          transform var(--transition),
+          opacity var(--transition);
+      }
+
+      #filmstrip::-webkit-scrollbar {
+        display: none;
+      }
+      #filmstrip.collapsed {
+        transform: translateY(100%);
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .thumb {
+        flex-shrink: 0;
+        width: 120px;
+        height: 68px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color 0.18s,
+          transform 0.18s;
+      }
+
+      .thumb:hover,
+      .thumb.active {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .thumb.active::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+      }
+
+      .thumb-num {
+        position: absolute;
+        bottom: 4px;
+        left: 6px;
+        z-index: 2;
+        font-size: 0.58rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.75);
+        letter-spacing: 0.06em;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      }
+
+      .slide-preview-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .slide-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: top left;
+        pointer-events: none;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 3rem 10rem;
+      }
+
+      .slide-preview h1,
+      .slide-preview h2,
+      .slide-preview h3 {
+        text-transform: none;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .slide-preview h1 {
+        font-size: var(--text-display);
+        line-height: 1.1;
+      }
+      .slide-preview p {
+        color: #c9d1d9;
+        font-size: var(--text-body);
+        line-height: 1.7;
+      }
+
+      @media (max-width: 1100px) {
+        .reveal .slides section {
+          padding: 2.5rem 3rem;
+        }
+        .split-stage {
+          grid-template-columns: 1fr;
+          gap: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <button id="arrow-prev" class="nav-arrow hidden" aria-label="Previous">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </button>
+    <button id="arrow-next" class="nav-arrow" aria-label="Next">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </button>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <section data-title-en="Title">
+          <div class="label">TICS320 · SQL Solutions</div>
+          <h1>SQL Basics<br />Solutions</h1>
+          <div class="divider"></div>
+          <p class="muted">One slide per exercise with the statement and a reference query.</p>
+        </section>
+
+        <section data-title-en="Solution 1">
+          <div class="label">Solution 1</div>
+          <h2>Query 1</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            List the titles and ratings of all films.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title, rating<br />
+FROM film;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 2">
+          <div class="label">Solution 2</div>
+          <h2>Query 2</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films with rating <code style="color:#c4b5fd">PG</code>.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title<br />
+FROM film<br />
+WHERE rating = &#x27;PG&#x27;;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 3">
+          <div class="label">Solution 3</div>
+          <h2>Query 3</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            List the customer first names and last names ordered alphabetically by last name.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT first_name, last_name<br />
+FROM customer<br />
+ORDER BY last_name, first_name;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 4">
+          <div class="label">Solution 4</div>
+          <h2>Query 4</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the film titles with rental rate greater than 4.00.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title<br />
+FROM film<br />
+WHERE rental_rate &gt; 4.00;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 5">
+          <div class="label">Solution 5</div>
+          <h2>Query 5</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            List all film ratings that appear in the <code style="color:#c4b5fd">film</code> relation.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT rating<br />
+FROM film;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 6">
+          <div class="label">Solution 6</div>
+          <h2>Query 6</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            List each film rating only once.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT DISTINCT rating<br />
+FROM film;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 7">
+          <div class="label">Solution 7</div>
+          <h2>Query 7</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films with rating <code style="color:#c4b5fd">PG</code> and rental rate greater than 4.00.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title<br />
+FROM film<br />
+WHERE rating = &#x27;PG&#x27; AND rental_rate &gt; 4.00;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 8">
+          <div class="label">Solution 8</div>
+          <h2>Query 8</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films with rating <code style="color:#c4b5fd">PG</code> or <code style="color:#c4b5fd">G</code>.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title<br />
+FROM film<br />
+WHERE rating IN (&#x27;PG&#x27;, &#x27;G&#x27;);
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 9">
+          <div class="label">Solution 9</div>
+          <h2>Query 9</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the customer names together with their rental dates.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT c.first_name, c.last_name, r.rental_date<br />
+FROM customer c<br />
+JOIN rental r ON c.customer_id = r.customer_id;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 10">
+          <div class="label">Solution 10</div>
+          <h2>Query 10</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the film titles that appear in the inventory.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT DISTINCT f.title<br />
+FROM film f<br />
+JOIN inventory i ON f.film_id = i.film_id;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 11">
+          <div class="label">Solution 11</div>
+          <h2>Query 11</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the film titles together with the categories they belong to.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT f.title, c.name AS category_name<br />
+FROM film f<br />
+JOIN film_category fc ON f.film_id = fc.film_id<br />
+JOIN category c ON fc.category_id = c.category_id;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 12">
+          <div class="label">Solution 12</div>
+          <h2>Query 12</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the customer names and the inventory ids they rented.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT c.first_name, c.last_name, r.inventory_id<br />
+FROM customer c<br />
+JOIN rental r ON c.customer_id = r.customer_id;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 13">
+          <div class="label">Solution 13</div>
+          <h2>Query 13</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            List the titles and lengths of films ordered from longest to shortest.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title, length<br />
+FROM film<br />
+ORDER BY length DESC;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 14">
+          <div class="label">Solution 14</div>
+          <h2>Query 14</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films released in 2006.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title<br />
+FROM film<br />
+WHERE release_year = 2006;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 15">
+          <div class="label">Solution 15</div>
+          <h2>Query 15</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            List the first name, last name, and email of all customers.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT first_name, last_name, email<br />
+FROM customer;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 16">
+          <div class="label">Solution 16</div>
+          <h2>Query 16</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films whose length is greater than 120 minutes.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title<br />
+FROM film<br />
+WHERE length &gt; 120;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 17">
+          <div class="label">Solution 17</div>
+          <h2>Query 17</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            List the store ids that appear in the <code style="color:#c4b5fd">customer</code> relation.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT store_id<br />
+FROM customer;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 18">
+          <div class="label">Solution 18</div>
+          <h2>Query 18</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            List each store id only once from the <code style="color:#c4b5fd">customer</code> relation.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT DISTINCT store_id<br />
+FROM customer;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 19">
+          <div class="label">Solution 19</div>
+          <h2>Query 19</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films with rating <code style="color:#c4b5fd">R</code> ordered alphabetically.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title<br />
+FROM film<br />
+WHERE rating = &#x27;R&#x27;<br />
+ORDER BY title;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 20">
+          <div class="label">Solution 20</div>
+          <h2>Query 20</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films with rental rate between 2.99 and 4.99.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT title<br />
+FROM film<br />
+WHERE rental_rate BETWEEN 2.99 AND 4.99;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 21">
+          <div class="label">Solution 21</div>
+          <h2>Query 21</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the customer first and last names together with the rental ids they made.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT c.first_name, c.last_name, r.rental_id<br />
+FROM customer c<br />
+JOIN rental r ON c.customer_id = r.customer_id;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 22">
+          <div class="label">Solution 22</div>
+          <h2>Query 22</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the rental ids together with the inventory ids involved in each rental.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT rental_id, inventory_id<br />
+FROM rental;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 23">
+          <div class="label">Solution 23</div>
+          <h2>Query 23</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the customer names and inventory ids for rentals that have already been returned.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT c.first_name, c.last_name, r.inventory_id<br />
+FROM customer c<br />
+JOIN rental r ON c.customer_id = r.customer_id<br />
+WHERE r.return_date IS NOT NULL;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 24">
+          <div class="label">Solution 24</div>
+          <h2>Query 24</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the rental dates and customer names ordered by rental date.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT r.rental_date, c.first_name, c.last_name<br />
+FROM rental r<br />
+JOIN customer c ON r.customer_id = c.customer_id<br />
+ORDER BY r.rental_date;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 25">
+          <div class="label">Solution 25</div>
+          <h2>Query 25</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films that belong to the <code style="color:#c4b5fd">Action</code> category.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT DISTINCT f.title<br />
+FROM film f<br />
+JOIN film_category fc ON f.film_id = fc.film_id<br />
+JOIN category c ON fc.category_id = c.category_id<br />
+WHERE c.name = &#x27;Action&#x27;;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 26">
+          <div class="label">Solution 26</div>
+          <h2>Query 26</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the film titles together with their category names ordered by category name.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT f.title, c.name AS category_name<br />
+FROM film f<br />
+JOIN film_category fc ON f.film_id = fc.film_id<br />
+JOIN category c ON fc.category_id = c.category_id<br />
+ORDER BY c.name, f.title;
+            </div>
+          </div>
+        </section>
+
+        <section data-title-en="Solution 27">
+          <div class="label">Solution 27</div>
+          <h2>Query 27</h2>
+          <p class="muted" style="max-width: 56rem; margin-bottom: 1.2rem">
+            Show the titles of films that belong to the <code style="color:#c4b5fd">Comedy</code> or <code style="color:#c4b5fd">Family</code> categories.
+          </p>
+
+          <div
+            style="width: 100%; max-width: 56rem; background: #10151d; border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.35rem; text-align: left"
+          >
+            <div
+              style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 0.9rem"
+            >
+              SQL query
+            </div>
+            <div
+              style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 1.02rem; line-height: 1.7; color: #e6edf3"
+            >
+              SELECT DISTINCT f.title<br />
+FROM film f<br />
+JOIN film_category fc ON f.film_id = fc.film_id<br />
+JOIN category c ON fc.category_id = c.category_id<br />
+WHERE c.name IN (&#x27;Comedy&#x27;, &#x27;Family&#x27;);
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div id="filmstrip"></div>
+    <div id="strip-toggle">
+      <div id="toggle-pill">
+        <svg
+          class="toggle-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M7 10l5 5 5-5"></path>
+        </svg>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: false,
+        progress: false,
+        hash: true,
+        transition: "fade",
+        transitionSpeed: "fast",
+        width: "100%",
+        height: "100%",
+        margin: 0,
+        minScale: 1,
+        maxScale: 1,
+      });
+
+      const strip = document.getElementById("filmstrip");
+      const sections = document.querySelectorAll(".reveal .slides section");
+
+      function buildThumbs() {
+        const revealEl = document.querySelector(".reveal");
+        const slideW = revealEl.offsetWidth;
+        const slideH = revealEl.offsetHeight;
+        const THUMB_W = 120;
+        const scale = THUMB_W / slideW;
+
+        sections.forEach((section, index) => {
+          const number = String(index + 1).padStart(2, "0");
+          const thumb = document.createElement("div");
+          thumb.className = "thumb";
+
+          const wrap = document.createElement("div");
+          wrap.className = "slide-preview-wrap";
+
+          const preview = document.createElement("div");
+          preview.className = "slide-preview";
+          preview.style.width = slideW + "px";
+          preview.style.height = slideH + "px";
+          preview.style.transform = `scale(${scale})`;
+
+          Array.from(section.childNodes).forEach((node) => {
+            preview.appendChild(node.cloneNode(true));
+          });
+
+          wrap.appendChild(preview);
+          thumb.appendChild(wrap);
+
+          const numEl = document.createElement("span");
+          numEl.className = "thumb-num";
+          numEl.textContent = number;
+          thumb.appendChild(numEl);
+
+          thumb.addEventListener("click", () => Reveal.slide(index));
+          strip.appendChild(thumb);
+        });
+      }
+
+      function syncNav(event) {
+        const index = event.indexh;
+        const thumbs = strip.querySelectorAll(".thumb");
+        thumbs.forEach((thumb, thumbIndex) => {
+          thumb.classList.toggle("active", thumbIndex === index);
+        });
+        const active = thumbs[index];
+        if (active) {
+          strip.scrollLeft =
+            active.offsetLeft + active.offsetWidth / 2 - strip.offsetWidth / 2;
+        }
+        document
+          .getElementById("arrow-prev")
+          .classList.toggle("hidden", index === 0);
+        document
+          .getElementById("arrow-next")
+          .classList.toggle("hidden", index === sections.length - 1);
+      }
+
+      Reveal.on("slidechanged", syncNav);
+      Reveal.on("ready", (event) => {
+        buildThumbs();
+        syncNav({ indexh: event.indexh });
+      });
+
+      document
+        .getElementById("arrow-prev")
+        .addEventListener("click", () => Reveal.prev());
+      document
+        .getElementById("arrow-next")
+        .addEventListener("click", () => Reveal.next());
+
+      let collapsed = false;
+      const filmstrip = document.getElementById("filmstrip");
+      const viewport = document.querySelector(".reveal-viewport");
+      const stripToggle = document.getElementById("strip-toggle");
+      const arrows = document.querySelectorAll(".nav-arrow");
+
+      stripToggle.addEventListener("click", () => {
+        collapsed = !collapsed;
+        filmstrip.classList.toggle("collapsed", collapsed);
+        viewport.classList.toggle("strip-collapsed", collapsed);
+        arrows.forEach((arrow) =>
+          arrow.classList.toggle("strip-collapsed", collapsed),
+        );
+        stripToggle.classList.toggle("is-collapsed", collapsed);
+        setTimeout(() => Reveal.layout(), 320);
+      });
+    </script>
+  </body>
+</html>
