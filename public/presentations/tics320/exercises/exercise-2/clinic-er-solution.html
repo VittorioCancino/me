@@ -281,7 +281,7 @@
         {
           source: "PATIENT",
           target: "books",
-          label: "(0,N)",
+          label: "(1,1)",
           labelPos: 0.28,
           labelDx: 28,
           labelDy: -4,
@@ -289,7 +289,7 @@
         {
           source: "books",
           target: "APPOINTMENT",
-          label: "(1,1)",
+          label: "(0,N)",
           labelPos: 0.72,
           labelDx: -28,
           labelDy: -4,
@@ -298,7 +298,7 @@
         {
           source: "DOCTOR",
           target: "attends",
-          label: "(0,N)",
+          label: "(1,1)",
           labelPos: 0.26,
           labelDx: 14,
           labelDy: 10,
@@ -306,7 +306,7 @@
         {
           source: "attends",
           target: "APPOINTMENT",
-          label: "(1,1)",
+          label: "(0,N)",
           labelPos: 0.72,
           labelDx: -30,
           labelDy: 6,
@@ -315,7 +315,7 @@
         {
           source: "DOCTOR",
           target: "belongs_to",
-          label: "(1,1)",
+          label: "(0,N)",
           labelPos: 0.28,
           labelDx: 44,
           labelDy: -4,
@@ -323,7 +323,7 @@
         {
           source: "belongs_to",
           target: "SPECIALTY",
-          label: "(0,N)",
+          label: "(0,1)",
           labelPos: 0.72,
           labelDx: -44,
           labelDy: -4,
@@ -332,7 +332,7 @@
         {
           source: "APPOINTMENT",
           target: "takes_place_in",
-          label: "(1,1)",
+          label: "(0,N)",
           labelPos: 0.32,
           labelDx: -6,
           labelDy: -14,
@@ -340,7 +340,7 @@
         {
           source: "takes_place_in",
           target: "CONSULTATION_ROOM",
-          label: "(0,N)",
+          label: "(1,1)",
           labelPos: 0.72,
           labelDx: 34,
           labelDy: 10,
